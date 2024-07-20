@@ -1,4 +1,5 @@
 #include "coordinate.hpp"
+#include <iostream>
 
 namespace lin_alg
 {
@@ -20,20 +21,21 @@ namespace lin_alg
         return Coordinate(x + b.x, y + b.y, z + b.z);
     };
 
-    bool operator==(Coordinate a, Coordinate b)
+    Coordinate Coordinate::operator-(Coordinate& b)
     {
-        a.normalise();
+        normalise();
         b.normalise();
 
-        return a.x == b.x && a.y == b.y && a.z == b.z && a.a == b.a;
-    }
+        return *this + b * -1;
+    };
 
     bool operator==(Coordinate &a, Coordinate &b)
     {
         a.normalise();
         b.normalise();
+        std::cout << "Hello THERE";
 
-        return a.x == b.x && a.y == b.y && a.z == b.z && a.a == b.a;
+        return a.x == b.x && a.y == b.y && a.z == b.z;
     }
 
     double Coordinate::operator[](int __n)

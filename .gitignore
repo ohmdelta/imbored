@@ -499,3 +499,5 @@ FodyWeavers.xsd
 out
 
 CMakePresets.json
+Main
+test/lin_alg_test
