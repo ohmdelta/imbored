@@ -12,5 +12,10 @@ int main()
     auto coord2 = coord * coord;
     std::cout << coord2 << std::endl;
 
+    auto coord3 = coord + coord;
+    std::cout << coord3 << std::endl;
+    auto coord4 = coord * 4.5;
+    std::cout << coord4 << std::endl;
+
     std::cout << "Hello" << std::endl;
 }

@@ -10,4 +10,4 @@ add_subdirectory(lin_alg)
 # target_link_libraries(main lin_alg)
 
 add_executable(Main main.cpp)
-target_link_libraries(Main lin_alg )
+target_link_libraries(Main lin_alg)

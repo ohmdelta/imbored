@@ -20,9 +20,13 @@ namespace lin_alg
 
         double operator[](int __n);
 
-        Coordinate operator*(Coordinate b);
+        void normalise();
 
-        friend std::ostream & operator<<(std::ostream & Str, Coordinate const & mc);
+        Coordinate operator*(const Coordinate &b);
+        Coordinate operator*(double p);
+        Coordinate operator+(Coordinate b);
+
+        friend std::ostream &operator<<(std::ostream &Str, Coordinate &mc);
 
         double x;
         double y;

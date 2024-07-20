@@ -2,9 +2,22 @@
 
 namespace lin_alg
 {
-    Coordinate Coordinate::operator*(Coordinate b)
+    Coordinate Coordinate::operator*(const Coordinate& b)
     {
         return Coordinate(x * b.x, y * b.y, z * b.z, a * b.a);
+    };
+
+    Coordinate Coordinate::operator*(double p)
+    {
+        return Coordinate(x * p, y * p, z * p, a);
+    };
+
+    Coordinate Coordinate::operator+(Coordinate b)
+    {
+        normalise();
+        b.normalise();
+
+        return Coordinate(x + b.x, y +  b.y, z + b.z);
     };
 
     double Coordinate::operator[](int __n)
@@ -24,8 +37,17 @@ namespace lin_alg
         }
     }
 
-    std::ostream &operator<<(std::ostream &Str, Coordinate const &mc)
+    void Coordinate::normalise(){
+        x /= a;
+        y /= a;
+        z /= a;
+        a = 1;
+    }
+
+    std::ostream &operator<<(std::ostream &Str, Coordinate &mc)
     {
+        mc.normalise();
+
         Str << "[ " << mc.x << ", ";
         Str << mc.y << ", ";
         Str << mc.z << ", " << mc.a << " ]";
