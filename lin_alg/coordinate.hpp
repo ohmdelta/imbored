@@ -26,6 +26,9 @@ namespace lin_alg
         Coordinate operator*(double p);
         Coordinate operator+(Coordinate b);
 
+        friend bool operator==(Coordinate a, Coordinate b);
+        friend bool operator==(Coordinate &a, Coordinate &b);
+
         friend std::ostream &operator<<(std::ostream &Str, Coordinate &mc);
 
         double x;

@@ -2,7 +2,7 @@
 
 namespace lin_alg
 {
-    Coordinate Coordinate::operator*(const Coordinate& b)
+    Coordinate Coordinate::operator*(const Coordinate &b)
     {
         return Coordinate(x * b.x, y * b.y, z * b.z, a * b.a);
     };
@@ -17,8 +17,24 @@ namespace lin_alg
         normalise();
         b.normalise();
 
-        return Coordinate(x + b.x, y +  b.y, z + b.z);
+        return Coordinate(x + b.x, y + b.y, z + b.z);
     };
+
+    bool operator==(Coordinate a, Coordinate b)
+    {
+        a.normalise();
+        b.normalise();
+
+        return a.x == b.x && a.y == b.y && a.z == b.z && a.a == b.a;
+    }
+
+    bool operator==(Coordinate &a, Coordinate &b)
+    {
+        a.normalise();
+        b.normalise();
+
+        return a.x == b.x && a.y == b.y && a.z == b.z && a.a == b.a;
+    }
 
     double Coordinate::operator[](int __n)
     {
@@ -37,7 +53,8 @@ namespace lin_alg
         }
     }
 
-    void Coordinate::normalise(){
+    void Coordinate::normalise()
+    {
         x /= a;
         y /= a;
         z /= a;
