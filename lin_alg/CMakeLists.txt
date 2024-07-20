@@ -7,8 +7,9 @@ endif()
 
 add_library(
     lin_alg
-    coordinate.hpp
+    SHARED
     coordinate.cpp
+    coordinate.hpp
 )
 
 target_include_directories(

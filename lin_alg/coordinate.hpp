@@ -1,3 +1,6 @@
+#ifndef COORDINATE_HPP
+#define COORDINATE_HPP
+
 #include <vector>
 #include <cassert>
 #include <ostream>
@@ -15,34 +18,11 @@ namespace lin_alg
         {
         }
 
-        double operator[](int __n)
-        {
-            assert(__n < 4 && __n >= 0);
+        double operator[](int __n);
 
-            switch (__n)
-            {
-            case 0:
-                return x;
-            case 1:
-                return y;
-            case 2:
-                return z;
-            default:
-                return a;
-            }
-        }
+        Coordinate operator*(Coordinate b);
 
-        Coordinate operator*(Coordinate b)
-        {
-            return Coordinate(x * b.x, y * b.y, z * b.z, a * b.a);
-        };
-
-        friend std::ostream & operator<<(std::ostream & Str, Coordinate const & mc) { 
-            Str << "[ " << mc.x << ", ";
-            Str << mc.y << ", " ;
-            Str << mc.z << ", " << mc.a << " ]";
-            return Str;
-        }
+        friend std::ostream & operator<<(std::ostream & Str, Coordinate const & mc);
 
         double x;
         double y;
@@ -50,3 +30,5 @@ namespace lin_alg
         double a;
     };
 }
+
+#endif

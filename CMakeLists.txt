@@ -6,5 +6,8 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 endif()
 
 add_subdirectory(lin_alg)
+# find_library(lin_alg lin_alg)
+# target_link_libraries(main lin_alg)
 
-add_executable(main main.cpp)
+add_executable(Main main.cpp)
+target_link_libraries(Main lin_alg )
