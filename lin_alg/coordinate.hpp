@@ -27,6 +27,9 @@ namespace lin_alg
         double z;
         double a;
 
+        double dot(const Vector & vector);
+        double sum();
+
         double &operator[](int __n);
         const double &operator[](int __n) const;
 
@@ -63,8 +66,6 @@ namespace lin_alg
         Vector &operator-=(const Vector &b);
         Vector &operator*=(const Vector &b);
         Vector &operator/=(const Vector &b);
-
-        double sum();
 
         friend bool operator==(const Vector &a, const Vector &b);
 

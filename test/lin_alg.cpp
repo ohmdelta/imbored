@@ -9,6 +9,28 @@
 
 using namespace lin_alg;
 
+BOOST_AUTO_TEST_CASE(dotproduct)
+{
+    Vector coord1(1, 2, 3);
+    Vector coord2(2, 3, 4);
+
+    auto dot1 = coord1.dot(coord2);
+
+    BOOST_CHECK(dot1 == (2 + 6 + 12 + 1));
+    auto dot2 = coord2.dot(coord1);
+    BOOST_CHECK(dot1 == dot2);
+}
+
+BOOST_AUTO_TEST_CASE(sum)
+{
+    Vector coord1(1, 2, 3);
+
+    auto sum = coord1.sum();
+
+    BOOST_CHECK(sum == 7);
+}
+
+
 BOOST_AUTO_TEST_CASE(addition)
 {
     Vector coord1(1, 2, 3);

@@ -6,6 +6,22 @@
 
 namespace lin_alg
 {
+    double Vector::dot(const Vector &vector)
+    {
+        double s = 0;
+        for (size_t i = 0; i < 4; i++)
+        {
+            s += vector[i] * (*this)[i];
+        }
+
+        return s;
+    }
+
+    double Vector::sum()
+    {
+        return x + y + z + a;
+    }
+
     Vector Vector::operator*(const Vector &b)
     {
         Vector n(x * b.x, y * b.y, z * b.z, a * b.a);
