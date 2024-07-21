@@ -23,12 +23,19 @@ int main()
 
     // double row[4][4]{{4,2,4,5}};
     // std::cout << "R: " << row[0][0] << " " << row[0][3] << std::endl;
-    
+
     TransformationMatrix ident = Identity();
     std::cout << ident << std::endl;
     TransformationMatrix v = ident / 10;
 
     std::cout << v << std::endl;
     std::cout << ident << std::endl;
-    
+
+    ident(2, 0) = 2;
+    std::cout << ident << std::endl;
+
+    ident.transpose();
+    std::cout << ident << std::endl;
+    ident.transpose();
+    std::cout << ident << std::endl;
 }

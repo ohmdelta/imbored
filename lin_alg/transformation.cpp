@@ -119,7 +119,7 @@ namespace lin_alg
 
     void TransformationMatrix::transpose()
     {
-        transposed = false;
+        transposed ^= 1;
     }
 
     std::ostream &operator<<(
