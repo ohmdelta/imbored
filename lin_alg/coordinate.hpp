@@ -18,21 +18,39 @@ namespace lin_alg
         {
         }
 
-        double& operator[](int __n);
-        const double& operator[](int __n) const;
+        double &operator[](int __n);
+        const double &operator[](int __n) const;
 
         void normalise();
 
-        Coordinate operator*(const Coordinate &b);
         Coordinate operator*(double p);
-        Coordinate operator+(Coordinate b);
-        Coordinate operator-(Coordinate &b);
+        Coordinate operator*(double p) const;
+
+        Coordinate operator+(double p);
+        Coordinate operator-(double p);
+
+        Coordinate operator/(double p);
+
+        Coordinate operator+(const Coordinate &b);
+        Coordinate operator-(const Coordinate &b);
+        Coordinate operator*(const Coordinate &b);
+        Coordinate operator/(const Coordinate &b);
 
         bool operator>(const Coordinate &b);
         bool operator<(const Coordinate &b);
         bool operator>=(const Coordinate &b);
         bool operator<=(const Coordinate &b);
         bool operator==(const Coordinate &b);
+
+        Coordinate &operator+=(double b);
+        Coordinate &operator-=(double b);
+        Coordinate &operator*=(double b);
+        Coordinate &operator/=(double b);
+
+        Coordinate &operator+=(const Coordinate &b);
+        Coordinate &operator-=(const Coordinate &b);
+        Coordinate &operator*=(const Coordinate &b);
+        Coordinate &operator/=(const Coordinate &b);
 
         double sum();
 

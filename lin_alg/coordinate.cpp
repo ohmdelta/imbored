@@ -7,25 +7,52 @@ namespace lin_alg
     Coordinate Coordinate::operator*(const Coordinate &b)
     {
         Coordinate n(x * b.x, y * b.y, z * b.z, a * b.a);
-        n.normalise();
 
         return n;
     };
 
     Coordinate Coordinate::operator*(double p)
     {
-        return Coordinate(x * p, y * p, z * p, a);
+        return Coordinate(x * p, y * p, z * p);
     };
 
-    Coordinate Coordinate::operator+(Coordinate b)
+    Coordinate Coordinate::operator*(double p) const
+    {
+        return Coordinate(x * p, y * p, z * p);
+    };
+
+    Coordinate Coordinate::operator+(double p)
+    {
+        return Coordinate(x + p, y + p, z + p);
+    }
+
+    Coordinate Coordinate::operator-(double p)
+    {
+        return operator+(-p);
+    }
+
+    Coordinate Coordinate::operator/(double p)
+    {
+        assert(p != 0);
+        return operator*(1 / p);
+    }
+
+    Coordinate Coordinate::operator+(const Coordinate &b)
     {
         return Coordinate(x + b.x, y + b.y, z + b.z);
     };
 
-    Coordinate Coordinate::operator-(Coordinate &b)
+    Coordinate Coordinate::operator-(const Coordinate &b)
     {
-        return *this + b * -1;
+        auto v = b * -1.0;
+        return *this + v;
     };
+
+    Coordinate Coordinate::operator/(const Coordinate &b)
+    {
+        assert(b.x != 0 && b.y != 0 && b.z != 0);
+        return Coordinate(x / b.x, y / b.y, z / b.z);
+    }
 
     bool operator==(const Coordinate &a, const Coordinate &b)
     {
@@ -70,7 +97,7 @@ namespace lin_alg
         return true;
     }
 
-    const double& Coordinate::operator[](int __n) const
+    const double &Coordinate::operator[](int __n) const
     {
         assert(__n < 4 && __n >= 0);
 
@@ -87,7 +114,7 @@ namespace lin_alg
         }
     }
 
-    double& Coordinate::operator[](int __n)
+    double &Coordinate::operator[](int __n)
     {
         assert(__n < 3 && __n >= 0);
 
@@ -102,7 +129,6 @@ namespace lin_alg
         default:
             throw std::range_error("Error getting operator");
         }
-
     }
 
     void Coordinate::normalise()
@@ -121,4 +147,79 @@ namespace lin_alg
         Str << mc.z << ", " << mc.a << " ]";
         return Str;
     }
+
+    Coordinate &Coordinate::operator+=(double b)
+    {
+        for (size_t i = 0; i < 3; i++)
+        {
+            operator[](i) += b;
+        }
+
+        return *this;
+    }
+
+    Coordinate &Coordinate::operator-=(double b)
+    {
+        return operator+=(-b);
+    }
+
+    Coordinate &Coordinate::operator*=(double b)
+    {
+        for (size_t i = 0; i < 3; i++)
+        {
+            operator[](i) *= b;
+        }
+
+        return *this;
+    }
+
+    Coordinate &Coordinate::operator/=(double b)
+    {
+        assert(b != 0);
+
+        for (size_t i = 0; i < 3; i++)
+        {
+            operator[](i) /= b;
+        }
+
+        return *this;
+    }
+
+    Coordinate &Coordinate::operator+=(const Coordinate &b)
+    {
+        for (size_t i = 0; i < 3; i++)
+        {
+            operator[](i) += b[i];
+        }
+
+        return *this;
+    }
+
+    Coordinate &Coordinate::operator-=(const Coordinate &b)
+    {
+        operator+=(b * -1);
+        return *this;
+    }
+
+    Coordinate &Coordinate::operator*=(const Coordinate &b)
+    {
+        for (size_t i = 0; i < 3; i++)
+        {
+            operator[](i) *= b[i];
+        }
+
+        return *this;
+    }
+
+    Coordinate &Coordinate::operator/=(const Coordinate &b)
+    {
+        for (size_t i = 0; i < 3; i++)
+        {
+            assert(b[i] != 0.0);
+            operator[](i) /= b[i];
+        }
+
+        return *this;
+    }
+
 }
