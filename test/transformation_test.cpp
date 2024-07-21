@@ -34,3 +34,24 @@ BOOST_AUTO_TEST_CASE(transpose)
 
     BOOST_CHECK(matrix == matrix_2);
 }
+
+BOOST_AUTO_TEST_CASE(identity)
+{
+    TransformationMatrix matrix = Identity();
+    Coordinate coord(1, 2, 3);
+
+    auto coord2 = matrix * coord;
+    BOOST_CHECK(coord == coord2);
+}
+
+BOOST_AUTO_TEST_CASE(multiplication)
+{
+    TransformationMatrix matrix = Identity();
+    Coordinate coord(1, 2, 3);
+
+    auto coord2 = matrix * coord;
+    BOOST_CHECK(coord == coord2);
+    matrix(0, 3) = 1;
+
+    BOOST_CHECK(Coordinate(2, 2, 3, 1) == matrix * coord);
+}

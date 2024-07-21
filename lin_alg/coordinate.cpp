@@ -123,7 +123,7 @@ namespace lin_alg
 
     double &Coordinate::operator[](int __n)
     {
-        assert(__n < 3 && __n >= 0);
+        assert(__n < 4 && __n >= 0);
 
         switch (__n)
         {
@@ -134,15 +134,18 @@ namespace lin_alg
         case 2:
             return z;
         default:
-            throw std::range_error("Error getting operator");
+            return a;
         }
     }
 
     void Coordinate::normalise()
     {
-        x /= a;
-        y /= a;
-        z /= a;
+        if (a != 0 && a != 1)
+        {
+            x /= a;
+            y /= a;
+            z /= a;
+        }
     }
 
     std::ostream &operator<<(std::ostream &Str, Coordinate &mc)

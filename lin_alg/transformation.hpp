@@ -17,12 +17,14 @@ namespace lin_alg
         double &operator()(int r, int c) { return index(r, c); }
         const double &operator()(int r, int c) const { return index(r, c); };
 
-        Coordinate operator*(const Coordinate &coord);
+        // Coordinate operator*(const Coordinate &coord);
 
         friend TransformationMatrix operator+(TransformationMatrix t, double p);
         friend TransformationMatrix operator-(TransformationMatrix t, double p);
         friend TransformationMatrix operator*(TransformationMatrix t, double p);
         friend TransformationMatrix operator/(TransformationMatrix t, double p);
+
+        friend Coordinate operator*(const TransformationMatrix &t, const Coordinate &p);
 
         TransformationMatrix &operator*=(double p);
         TransformationMatrix &operator+=(const TransformationMatrix &matrix);

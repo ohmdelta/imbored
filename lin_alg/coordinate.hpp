@@ -11,13 +11,15 @@ namespace lin_alg
     {
     public:
         Coordinate(
-            double x,
-            double y,
-            double z,
-            double a = 1.0) : x(x), y(y), z(z), a(a)
+            double x_,
+            double y_,
+            double z_,
+            double a_ = 1.0) : x(x_), y(y_), z(z_), a(a_)
         {
             if (a != 0)
+            {
                 normalise();
+            }
         }
 
         double x;
@@ -27,7 +29,7 @@ namespace lin_alg
 
         double &operator[](int __n);
         const double &operator[](int __n) const;
-        
+
         double &operator()(int __n) { return operator[](__n); };
         const double &operator()(int __n) const { return operator[](__n); };
 

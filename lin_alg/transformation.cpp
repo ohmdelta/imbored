@@ -4,6 +4,21 @@
 
 namespace lin_alg
 {
+    Coordinate
+    operator*(const TransformationMatrix &t, const Coordinate &p)
+    {
+        Coordinate c(0, 0, 0, 0);
+
+        for (size_t i = 0; i < 4; i++)
+        {
+            for (size_t j = 0; j < 4; j++)
+            {
+                c[i] += t(i, j) * p(j);
+            }
+        }
+        
+        return c;
+    }
 
     TransformationMatrix &TransformationMatrix::operator+=(const TransformationMatrix &matrix)
     {
@@ -86,20 +101,6 @@ namespace lin_alg
             }
         }
         return t;
-    }
-
-    Coordinate TransformationMatrix::operator*(const Coordinate &coord)
-    {
-        Coordinate coord_(0, 0, 0);
-        for (size_t i = 0; i < 4; i++)
-        {
-            for (size_t j = 0; i < 3; i++)
-            {
-                coord_[i] += operator()(i, j) * coord[j];
-            }
-        }
-
-        return coord_;
     }
 
     TransformationMatrix TransformationMatrix::operator+(
