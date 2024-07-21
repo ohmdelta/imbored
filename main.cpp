@@ -16,6 +16,8 @@ int main()
     std::cout << coord3 << std::endl;
     auto coord4 = coord * 4.5;
     std::cout << coord4 << std::endl;
+    coord4[2] = 5;
+    std::cout << coord4 << std::endl;
 
     std::cout << "Hello" << std::endl;
 }

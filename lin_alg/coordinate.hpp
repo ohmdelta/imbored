@@ -14,11 +14,12 @@ namespace lin_alg
             double x,
             double y,
             double z,
-            double a = 1.0) : x(x), y(y), z(z), a(a)
+            double a = 1.0) : x(x / a), y(y / a), z(z / a)
         {
         }
 
-        double operator[](int __n);
+        double& operator[](int __n);
+        const double& operator[](int __n) const;
 
         void normalise();
 
@@ -27,14 +28,22 @@ namespace lin_alg
         Coordinate operator+(Coordinate b);
         Coordinate operator-(Coordinate &b);
 
-        friend bool operator==(Coordinate &a, Coordinate &b);
+        bool operator>(const Coordinate &b);
+        bool operator<(const Coordinate &b);
+        bool operator>=(const Coordinate &b);
+        bool operator<=(const Coordinate &b);
+        bool operator==(const Coordinate &b);
+
+        double sum();
+
+        friend bool operator==(const Coordinate &a, const Coordinate &b);
 
         friend std::ostream &operator<<(std::ostream &Str, Coordinate &mc);
 
         double x;
         double y;
         double z;
-        double a;
+        const double a = 1.0;
     };
 }
 
