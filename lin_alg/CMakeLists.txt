@@ -8,6 +8,7 @@ endif()
 add_library(
     lin_alg
     SHARED
+    lin_alg.hpp
     coordinate.cpp
     coordinate.hpp
     transformation.hpp
