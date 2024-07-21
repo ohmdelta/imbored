@@ -9,7 +9,7 @@
 
 using namespace lin_alg;
 
-BOOST_AUTO_TEST_CASE(la)
+BOOST_AUTO_TEST_CASE(addition)
 {
     Coordinate coord1(1, 2, 3);
     Coordinate coord2(2, 3, 4);
@@ -128,4 +128,6 @@ BOOST_AUTO_TEST_CASE(deq)
     {
         BOOST_CHECK_EQUAL(coord2[i], expected[i]);
     }
+
+    BOOST_CHECK_THROW(coord2 /= 0, std::runtime_error);
 }

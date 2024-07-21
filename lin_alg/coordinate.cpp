@@ -1,6 +1,8 @@
-#include "coordinate.hpp"
 #include <iostream>
 #include <vector>
+#include <stdexcept>
+
+#include "coordinate.hpp"
 
 namespace lin_alg
 {
@@ -33,7 +35,10 @@ namespace lin_alg
 
     Coordinate Coordinate::operator/(double p)
     {
-        assert(p != 0);
+        if (p == 0)
+        {
+            throw std::runtime_error("Math error: Attempted to divide by Zero\n");
+        }
         return operator*(1 / p);
     }
 
@@ -50,13 +55,15 @@ namespace lin_alg
 
     Coordinate Coordinate::operator/(const Coordinate &b)
     {
-        assert(b.x != 0 && b.y != 0 && b.z != 0);
+        if (b.x == 0 || b.y == 0 || b.z == 0)
+        {
+            throw std::runtime_error("Math error: Attempted to divide by Zero\n");
+        }
         return Coordinate(x / b.x, y / b.y, z / b.z);
     }
 
     bool operator==(const Coordinate &a, const Coordinate &b)
     {
-        // std::cout << "Hello THERE";
         return a.x == b.x && a.y == b.y && a.z == b.z;
     }
 
@@ -175,7 +182,10 @@ namespace lin_alg
 
     Coordinate &Coordinate::operator/=(double b)
     {
-        assert(b != 0);
+        if (b == 0)
+        {
+            throw std::runtime_error("Math error: Attempted to divide by Zero\n");
+        }
 
         for (size_t i = 0; i < 3; i++)
         {
@@ -215,7 +225,10 @@ namespace lin_alg
     {
         for (size_t i = 0; i < 3; i++)
         {
-            assert(b[i] != 0.0);
+            if (b[i] == 0)
+            {
+                throw std::runtime_error("Math error: Attempted to divide by Zero\n");
+            }
             operator[](i) /= b[i];
         }
 

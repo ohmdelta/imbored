@@ -26,5 +26,9 @@ int main()
     
     TransformationMatrix ident = Identity();
     std::cout << ident << std::endl;
+    TransformationMatrix v = ident / 10;
 
+    std::cout << v << std::endl;
+    std::cout << ident << std::endl;
+    
 }

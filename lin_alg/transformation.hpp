@@ -19,6 +19,17 @@ namespace lin_alg
 
         Coordinate operator*(const Coordinate &coord);
 
+        friend TransformationMatrix operator+(TransformationMatrix t, double p);
+        friend TransformationMatrix operator-(TransformationMatrix t, double p);
+        friend TransformationMatrix operator*(TransformationMatrix t, double p);
+        friend TransformationMatrix operator/(TransformationMatrix t, double p);
+
+        TransformationMatrix &operator*=(double p);
+        TransformationMatrix &operator+=(const TransformationMatrix &matrix);
+        TransformationMatrix &operator-=(const TransformationMatrix &matrix);
+
+        TransformationMatrix &operator*=(const TransformationMatrix &t);
+
         TransformationMatrix operator+(const TransformationMatrix &matrix);
 
         void transpose();
@@ -30,7 +41,7 @@ namespace lin_alg
         bool transposed = false;
         double matrix[4][4]{0};
 
-    protected:
+    public:
         double &index(int i, int j)
         {
             return !transposed ? matrix[i][j] : matrix[j][i];
