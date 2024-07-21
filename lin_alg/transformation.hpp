@@ -24,7 +24,7 @@ namespace lin_alg
         friend TransformationMatrix operator*(TransformationMatrix t, double p);
         friend TransformationMatrix operator/(TransformationMatrix t, double p);
 
-        friend Coordinate operator*(const TransformationMatrix &t, const Coordinate &p);
+        friend Vector operator*(const TransformationMatrix &t, const Vector &p);
 
         TransformationMatrix &operator*=(double p);
         TransformationMatrix &operator+=(const TransformationMatrix &matrix);

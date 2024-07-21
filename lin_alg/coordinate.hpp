@@ -7,10 +7,10 @@
 
 namespace lin_alg
 {
-    class Coordinate
+    class Vector
     {
     public:
-        Coordinate(
+        Vector(
             double x_,
             double y_,
             double z_,
@@ -35,40 +35,40 @@ namespace lin_alg
 
         void normalise();
 
-        Coordinate operator*(double p);
-        Coordinate operator*(double p) const;
+        Vector operator*(double p);
+        Vector operator*(double p) const;
 
-        Coordinate operator+(double p);
-        Coordinate operator-(double p);
+        Vector operator+(double p);
+        Vector operator-(double p);
 
-        Coordinate operator/(double p);
+        Vector operator/(double p);
 
-        Coordinate operator+(const Coordinate &b);
-        Coordinate operator-(const Coordinate &b);
-        Coordinate operator*(const Coordinate &b);
-        Coordinate operator/(const Coordinate &b);
+        Vector operator+(const Vector &b);
+        Vector operator-(const Vector &b);
+        Vector operator*(const Vector &b);
+        Vector operator/(const Vector &b);
 
-        bool operator>(const Coordinate &b);
-        bool operator<(const Coordinate &b);
-        bool operator>=(const Coordinate &b);
-        bool operator<=(const Coordinate &b);
-        bool operator==(const Coordinate &b);
+        bool operator>(const Vector &b);
+        bool operator<(const Vector &b);
+        bool operator>=(const Vector &b);
+        bool operator<=(const Vector &b);
+        bool operator==(const Vector &b);
 
-        Coordinate &operator+=(double b);
-        Coordinate &operator-=(double b);
-        Coordinate &operator*=(double b);
-        Coordinate &operator/=(double b);
+        Vector &operator+=(double b);
+        Vector &operator-=(double b);
+        Vector &operator*=(double b);
+        Vector &operator/=(double b);
 
-        Coordinate &operator+=(const Coordinate &b);
-        Coordinate &operator-=(const Coordinate &b);
-        Coordinate &operator*=(const Coordinate &b);
-        Coordinate &operator/=(const Coordinate &b);
+        Vector &operator+=(const Vector &b);
+        Vector &operator-=(const Vector &b);
+        Vector &operator*=(const Vector &b);
+        Vector &operator/=(const Vector &b);
 
         double sum();
 
-        friend bool operator==(const Coordinate &a, const Coordinate &b);
+        friend bool operator==(const Vector &a, const Vector &b);
 
-        friend std::ostream &operator<<(std::ostream &Str, Coordinate &mc);
+        friend std::ostream &operator<<(std::ostream &Str, Vector &mc);
     };
 }
 

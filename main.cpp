@@ -5,7 +5,7 @@ using namespace lin_alg;
 
 int main()
 {
-    auto coord = lin_alg::Coordinate(1.0, 2.0, 3.0);
+    auto coord = lin_alg::Vector(1.0, 2.0, 3.0);
     std::cout << coord[0] << std::endl;
     std::cout << coord[2] << std::endl;
     std::cout << coord.a << std::endl;

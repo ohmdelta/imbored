@@ -6,34 +6,34 @@
 
 namespace lin_alg
 {
-    Coordinate Coordinate::operator*(const Coordinate &b)
+    Vector Vector::operator*(const Vector &b)
     {
-        Coordinate n(x * b.x, y * b.y, z * b.z, a * b.a);
+        Vector n(x * b.x, y * b.y, z * b.z, a * b.a);
 
         return n;
     };
 
-    Coordinate Coordinate::operator*(double p)
+    Vector Vector::operator*(double p)
     {
-        return Coordinate(x * p, y * p, z * p);
+        return Vector(x * p, y * p, z * p);
     };
 
-    Coordinate Coordinate::operator*(double p) const
+    Vector Vector::operator*(double p) const
     {
-        return Coordinate(x * p, y * p, z * p);
+        return Vector(x * p, y * p, z * p);
     };
 
-    Coordinate Coordinate::operator+(double p)
+    Vector Vector::operator+(double p)
     {
-        return Coordinate(x + p, y + p, z + p);
+        return Vector(x + p, y + p, z + p);
     }
 
-    Coordinate Coordinate::operator-(double p)
+    Vector Vector::operator-(double p)
     {
         return operator+(-p);
     }
 
-    Coordinate Coordinate::operator/(double p)
+    Vector Vector::operator/(double p)
     {
         if (p == 0)
         {
@@ -42,42 +42,42 @@ namespace lin_alg
         return operator*(1 / p);
     }
 
-    Coordinate Coordinate::operator+(const Coordinate &b)
+    Vector Vector::operator+(const Vector &b)
     {
-        return Coordinate(x + b.x, y + b.y, z + b.z);
+        return Vector(x + b.x, y + b.y, z + b.z);
     };
 
-    Coordinate Coordinate::operator-(const Coordinate &b)
+    Vector Vector::operator-(const Vector &b)
     {
         auto v = b * -1.0;
         return *this + v;
     };
 
-    Coordinate Coordinate::operator/(const Coordinate &b)
+    Vector Vector::operator/(const Vector &b)
     {
         if (b.x == 0 || b.y == 0 || b.z == 0)
         {
             throw std::runtime_error("Math error: Attempted to divide by Zero\n");
         }
-        return Coordinate(x / b.x, y / b.y, z / b.z);
+        return Vector(x / b.x, y / b.y, z / b.z);
     }
 
-    bool operator==(const Coordinate &a, const Coordinate &b)
+    bool operator==(const Vector &a, const Vector &b)
     {
         return a.x == b.x && a.y == b.y && a.z == b.z;
     }
 
-    bool Coordinate::operator==(const Coordinate &b)
+    bool Vector::operator==(const Vector &b)
     {
         return x == b.x && y == b.y && z == b.z;
     }
 
-    bool Coordinate::operator>(const Coordinate &b)
+    bool Vector::operator>(const Vector &b)
     {
         return x > b.x && y > b.y && z > b.z;
     }
 
-    bool Coordinate::operator>=(const Coordinate &coord2)
+    bool Vector::operator>=(const Vector &coord2)
     {
         for (size_t i = 0; i < 3; i++)
         {
@@ -88,12 +88,12 @@ namespace lin_alg
         return true;
     }
 
-    bool Coordinate::operator<(const Coordinate &b)
+    bool Vector::operator<(const Vector &b)
     {
         return x < b.x && y < b.y && z < b.z;
     }
 
-    bool Coordinate::operator<=(const Coordinate &coord2)
+    bool Vector::operator<=(const Vector &coord2)
     {
         for (size_t i = 0; i < 3; i++)
         {
@@ -104,7 +104,7 @@ namespace lin_alg
         return true;
     }
 
-    const double &Coordinate::operator[](int __n) const
+    const double &Vector::operator[](int __n) const
     {
         assert(__n < 4 && __n >= 0);
 
@@ -121,7 +121,7 @@ namespace lin_alg
         }
     }
 
-    double &Coordinate::operator[](int __n)
+    double &Vector::operator[](int __n)
     {
         assert(__n < 4 && __n >= 0);
 
@@ -138,7 +138,7 @@ namespace lin_alg
         }
     }
 
-    void Coordinate::normalise()
+    void Vector::normalise()
     {
         if (a != 0 && a != 1)
         {
@@ -148,7 +148,7 @@ namespace lin_alg
         }
     }
 
-    std::ostream &operator<<(std::ostream &Str, Coordinate &mc)
+    std::ostream &operator<<(std::ostream &Str, Vector &mc)
     {
         mc.normalise();
 
@@ -158,7 +158,7 @@ namespace lin_alg
         return Str;
     }
 
-    Coordinate &Coordinate::operator+=(double b)
+    Vector &Vector::operator+=(double b)
     {
         for (size_t i = 0; i < 3; i++)
         {
@@ -168,12 +168,12 @@ namespace lin_alg
         return *this;
     }
 
-    Coordinate &Coordinate::operator-=(double b)
+    Vector &Vector::operator-=(double b)
     {
         return operator+=(-b);
     }
 
-    Coordinate &Coordinate::operator*=(double b)
+    Vector &Vector::operator*=(double b)
     {
         for (size_t i = 0; i < 3; i++)
         {
@@ -183,7 +183,7 @@ namespace lin_alg
         return *this;
     }
 
-    Coordinate &Coordinate::operator/=(double b)
+    Vector &Vector::operator/=(double b)
     {
         if (b == 0)
         {
@@ -198,7 +198,7 @@ namespace lin_alg
         return *this;
     }
 
-    Coordinate &Coordinate::operator+=(const Coordinate &b)
+    Vector &Vector::operator+=(const Vector &b)
     {
         for (size_t i = 0; i < 3; i++)
         {
@@ -208,13 +208,13 @@ namespace lin_alg
         return *this;
     }
 
-    Coordinate &Coordinate::operator-=(const Coordinate &b)
+    Vector &Vector::operator-=(const Vector &b)
     {
         operator+=(b * -1);
         return *this;
     }
 
-    Coordinate &Coordinate::operator*=(const Coordinate &b)
+    Vector &Vector::operator*=(const Vector &b)
     {
         for (size_t i = 0; i < 3; i++)
         {
@@ -224,7 +224,7 @@ namespace lin_alg
         return *this;
     }
 
-    Coordinate &Coordinate::operator/=(const Coordinate &b)
+    Vector &Vector::operator/=(const Vector &b)
     {
         for (size_t i = 0; i < 3; i++)
         {

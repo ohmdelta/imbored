@@ -4,10 +4,10 @@
 
 namespace lin_alg
 {
-    Coordinate
-    operator*(const TransformationMatrix &t, const Coordinate &p)
+    Vector
+    operator*(const TransformationMatrix &t, const Vector &p)
     {
-        Coordinate c(0, 0, 0, 0);
+        Vector c(0, 0, 0, 0);
 
         for (size_t i = 0; i < 4; i++)
         {
