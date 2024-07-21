@@ -10,6 +10,8 @@ add_library(
     SHARED
     coordinate.cpp
     coordinate.hpp
+    transformation.hpp
+    transformation.cpp
 )
 
 target_include_directories(

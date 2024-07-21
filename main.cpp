@@ -1,5 +1,6 @@
 #include <iostream>
 #include "lin_alg/coordinate.hpp"
+#include "lin_alg/transformation.hpp"
 
 using namespace lin_alg;
 
@@ -20,4 +21,11 @@ int main()
     std::cout << coord4 << std::endl;
 
     std::cout << "Hello" << std::endl;
+
+    // double row[4][4]{{4,2,4,5}};
+    // std::cout << "R: " << row[0][0] << " " << row[0][3] << std::endl;
+    
+    Identity ident;
+    std::cout << ident << std::endl;
+
 }
