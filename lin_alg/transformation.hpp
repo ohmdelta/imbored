@@ -53,6 +53,22 @@ namespace lin_alg
         }
     };
 
+    inline bool operator==(const TransformationMatrix &lhs, const TransformationMatrix &rhs)
+    {
+        for (size_t i = 0; i < 4; i++)
+        {
+            for (size_t j = 0; j < 4; j++)
+            {
+                if (lhs(i, j) != rhs(i, j))
+                    return false;
+            }
+        }
+
+        return true;
+    }
+
+    inline bool operator!=(const TransformationMatrix &lhs, const TransformationMatrix &rhs) { return !(lhs == rhs); }
+
     class Identity : public TransformationMatrix
     {
     public:
