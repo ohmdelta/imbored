@@ -4,6 +4,7 @@
 #include <vector>
 #include <cassert>
 #include <ostream>
+#include <cmath>
 
 namespace lin_alg
 {
@@ -16,10 +17,7 @@ namespace lin_alg
             double z_,
             double a_ = 1.0) : x(x_), y(y_), z(z_), a(a_)
         {
-            if (a != 0)
-            {
-                normalise();
-            }
+
         }
 
         double x;
@@ -37,6 +35,9 @@ namespace lin_alg
         const double &operator()(int __n) const { return operator[](__n); };
 
         void normalise();
+
+        double norm();
+        double norm_sq();
 
         Vector operator*(double p);
         Vector operator*(double p) const;

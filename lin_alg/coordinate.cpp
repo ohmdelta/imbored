@@ -154,19 +154,30 @@ namespace lin_alg
         }
     }
 
+    double Vector::norm_sq()
+    {
+        return x * x + y * y + z * z + a * a;
+    }
+
+    double Vector::norm()
+    {
+        return sqrt(norm_sq());
+    }
+
     void Vector::normalise()
     {
-        if (a != 0 && a != 1)
+        double norm_ = norm();
+        if (norm_ == 0)
         {
-            x /= a;
-            y /= a;
-            z /= a;
+            throw std::runtime_error("Math error: Attempted to divide by Zero\n");
         }
+
+        operator/=(norm_);
     }
 
     std::ostream &operator<<(std::ostream &Str, Vector &mc)
     {
-        mc.normalise();
+        // mc.normalise();
 
         Str << "[ " << mc.x << ", ";
         Str << mc.y << ", ";
