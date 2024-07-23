@@ -62,9 +62,9 @@ namespace renderer
             case 3:
                 return ':';
             case 4:
-                return '|';
+                return '=';
             case 5:
-                return '9';
+                return '7';
             case 6:
                 return '8';
             case 7:
