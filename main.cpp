@@ -1,9 +1,23 @@
 #include <iostream>
+#include <sys/ioctl.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <chrono>
+#include <thread>
+#include "renderer/renderer.hpp"
 #include "lin_alg/lin_alg.hpp"
 
-using namespace lin_alg;
+#include <opencv2/opencv.hpp>
+#include <opencv2/video.hpp>
+#include <opencv2/imgproc.hpp>
+#include <opencv2/videoio.hpp>
+#include <opencv2/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
 
-int main()
+using namespace lin_alg;
+using namespace renderer;
+
+int main(int argc, char **argv)
 {
     auto coord = lin_alg::Vector(1.0, 2.0, 3.0);
     std::cout << coord[0] << std::endl;
@@ -42,4 +56,50 @@ int main()
         auto coord = lin_alg::Coordinate(1.0, 2.0, 3.0, 2.0);
         std::cout << coord << std::endl;
     }
+
+    for (size_t i = 0; i < 8; i++)
+    {
+        std::cout << ((32 * i + 1) >> 5) << std::endl;
+    }
+
+    struct winsize w;
+    ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+
+    size_t rows = w.ws_row - 1;
+    size_t cols = w.ws_col - 1;
+    std::cout << "lines " << rows << std::endl;
+    std::cout << "columns " << cols << std::endl;
+
+    renderer::TerminalRenderer t(cols, rows);
+
+    cv::VideoCapture cap("./videoplayback.mp4");
+    if (!cap.isOpened()) // check if we succeeded
+        return 1;
+
+    cv::Mat frame;
+
+    while (cap.read(frame))
+    {
+        cv::Mat temp;
+        cv::cvtColor(frame, temp, cv::COLOR_BGR2GRAY);
+
+        // std::cout << frame.size << " " << frame.rows << " " << frame.cols << " " << frame.channels() << std::endl;
+        cv::resize(temp, temp, cv::Size(rows, cols), 0, 0, cv::INTER_AREA);
+        auto s = temp.size;
+        std::cout << temp.size << " " << cols << " " << rows;
+        for (int i = 0; i < s[1]; i++)
+        {
+            for (int j = 0; j < s[0]; j++)
+            {
+                t(i, j) = frame.at<unsigned char>(i, j);
+                // t(i, j) = v;
+            }
+        }
+        std::cout << t.render_to_str().str();
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));
+
+        t.clear();
+    }
+
+    return 0; // make sure your main returns int
 }
