@@ -502,3 +502,9 @@ CMakePresets.json
 Main
 test/lin_alg_test
 test/transformation_test
+
+*.jpg
+*.png
+*.jpeg
+*.mp4
+*.webm
