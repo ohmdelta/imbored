@@ -38,4 +38,8 @@ int main()
     std::cout << ident << std::endl;
     ident.transpose();
     std::cout << ident << std::endl;
+    {
+        auto coord = lin_alg::Coordinate(1.0, 2.0, 3.0, 2.0);
+        std::cout << coord << std::endl;
+    }
 }

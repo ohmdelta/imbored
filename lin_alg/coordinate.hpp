@@ -8,9 +8,8 @@
 
 namespace lin_alg
 {
-    class Vector
+    struct Vector
     {
-    public:
         Vector(
             double x_,
             double y_,
@@ -72,15 +71,15 @@ namespace lin_alg
         friend std::ostream &operator<<(std::ostream &Str, Vector &mc);
     };
 
-    class Coordinate : public Vector
+    struct Coordinate : public Vector
     {
-    public:
         Coordinate(
             double x_,
             double y_,
             double z_,
             double a_ = 1.0) : Vector(x_, y_, z_, a_)
         {
+            normalise();
         }
 
         void normalise()
@@ -96,6 +95,7 @@ namespace lin_alg
             x /= a;
             y /= a;
             z /= a;
+            a = 1;
         }
 
         double norm_sq()
@@ -107,6 +107,16 @@ namespace lin_alg
         double norm()
         {
             return sqrt(norm_sq());
+        }
+
+        friend std::ostream &operator<<(std::ostream &Str, Coordinate &mc)
+        {
+            mc.normalise();
+
+            Str << "[ " << mc.x << ", ";
+            Str << mc.y << ", ";
+            Str << mc.z <<  " ], " << mc.a;
+            return Str;
         }
     };
 
