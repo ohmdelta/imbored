@@ -80,19 +80,19 @@ int main(int argc, char **argv)
 
     while (cap.read(frame))
     {
-        cv::Mat temp;
-        cv::cvtColor(frame, temp, cv::COLOR_BGR2GRAY);
+        cv::Mat temp_;
+        cv::cvtColor(frame, temp_, cv::COLOR_BGR2GRAY);
 
-        // std::cout << frame.size << " " << frame.rows << " " << frame.cols << " " << frame.channels() << std::endl;
-        cv::resize(temp, temp, cv::Size(rows, cols), 0, 0, cv::INTER_AREA);
+        cv::Mat temp;
+        cv::resize(temp_, temp, cv::Size(cols, rows), 0, 0, cv::INTER_AREA);
+
         auto s = temp.size;
-        std::cout << temp.size << " " << cols << " " << rows;
-        for (int i = 0; i < s[1]; i++)
+
+        for (int i = 0; i < rows; i++)
         {
-            for (int j = 0; j < s[0]; j++)
+            for (int j = 0; j < cols; j++)
             {
-                t(i, j) = frame.at<unsigned char>(i, j);
-                // t(i, j) = v;
+                t(i, j) = temp.at<unsigned char>(i, j);
             }
         }
         std::cout << t.render_to_str().str();
