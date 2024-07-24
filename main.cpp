@@ -70,7 +70,7 @@ int main(int argc, char **argv)
     std::cout << "lines " << rows << std::endl;
     std::cout << "columns " << cols << std::endl;
 
-    renderer::TerminalRenderer t(cols, rows);
+    renderer::TerminalDisplay t(cols, rows);
 
     cv::VideoCapture cap("./videoplayback.mp4");
     if (!cap.isOpened()) // check if we succeeded
@@ -96,7 +96,7 @@ int main(int argc, char **argv)
             }
         }
         std::cout << t.render_to_str().str();
-        std::this_thread::sleep_for(std::chrono::milliseconds(50));
+        std::this_thread::sleep_for(std::chrono::milliseconds(42));
 
         t.clear();
     }
