@@ -8,6 +8,8 @@ endif()
 add_library(
     renderer
     STATIC
+    world.hpp
+    shapes.hpp
     renderer.hpp
     renderer.cpp
 )
@@ -17,3 +19,4 @@ target_include_directories(
     PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
+target_link_libraries(renderer lin_alg)

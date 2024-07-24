@@ -17,7 +17,7 @@
 using namespace lin_alg;
 using namespace renderer;
 
-int main(int argc, char **argv)
+int main()
 {
     auto coord = lin_alg::Vector(1.0, 2.0, 3.0);
     std::cout << coord[0] << std::endl;
@@ -57,20 +57,17 @@ int main(int argc, char **argv)
         std::cout << coord << std::endl;
     }
 
-    for (size_t i = 0; i < 8; i++)
-    {
-        std::cout << ((32 * i + 1) >> 5) << std::endl;
-    }
 
     struct winsize w;
     ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
 
-    size_t rows = w.ws_row - 1;
+    size_t rows = w.ws_row - 1; 
     size_t cols = w.ws_col - 1;
     std::cout << "lines " << rows << std::endl;
     std::cout << "columns " << cols << std::endl;
 
     renderer::TerminalDisplay t(cols, rows);
+    renderer::TerminalDisplay clear(cols, rows);
 
     cv::VideoCapture cap("./videoplayback.mp4");
     if (!cap.isOpened()) // check if we succeeded
@@ -85,8 +82,6 @@ int main(int argc, char **argv)
 
         cv::Mat temp;
         cv::resize(temp_, temp, cv::Size(cols, rows), 0, 0, cv::INTER_AREA);
-
-        auto s = temp.size;
 
         for (int i = 0; i < rows; i++)
         {

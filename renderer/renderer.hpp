@@ -9,7 +9,12 @@
 
 namespace renderer
 {
-    class TerminalDisplay
+    struct Display
+    {
+        virtual unsigned char &operator()(size_t r, size_t c) = 0;
+    };
+
+    class TerminalDisplay : public Display
     {
     public:
         TerminalDisplay(size_t width_, size_t height_) : width(width_), height(height_), matrix(width_ * height_, 0)

@@ -23,6 +23,8 @@ namespace lin_alg
         double z;
         double a;
 
+        virtual bool valid() { return true; };
+
         double dot(const Vector &vector);
         double sum();
 
@@ -115,8 +117,13 @@ namespace lin_alg
 
             Str << "[ " << mc.x << ", ";
             Str << mc.y << ", ";
-            Str << mc.z <<  " ], " << mc.a;
+            Str << mc.z << " ], " << mc.a;
             return Str;
+        }
+
+        bool valid()
+        {
+            return a != 0;
         }
     };
 
