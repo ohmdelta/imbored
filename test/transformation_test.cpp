@@ -3,7 +3,7 @@
 #endif
 
 #include <boost/test/unit_test.hpp>
-#include "../lin_alg/lin_alg.hpp"
+#include "lin_alg.hpp"
 
 using namespace lin_alg;
 

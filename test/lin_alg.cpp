@@ -3,7 +3,7 @@
 #endif
 
 #include <boost/test/unit_test.hpp>
-#include "../lin_alg/coordinate.hpp"
+#include "lin_alg.hpp"
 
 BOOST_AUTO_TEST_SUITE(lin_alg_suite)
 

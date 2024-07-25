@@ -3,7 +3,7 @@
 #endif
 
 #include <boost/test/unit_test.hpp>
-#include "../renderer/renderer.hpp"
+#include "renderer.hpp"
 
 using namespace renderer;
 

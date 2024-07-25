@@ -5,7 +5,7 @@
 
 #include "shapes.hpp"
 #include "display.hpp"
-#include <lin_alg.hpp>
+#include "lin_alg.hpp"
 
 namespace renderer
 {
