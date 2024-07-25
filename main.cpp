@@ -4,8 +4,6 @@
 #include <unistd.h>
 #include <chrono>
 #include <thread>
-#include "renderer/renderer.hpp"
-#include "lin_alg/lin_alg.hpp"
 
 #include <opencv2/opencv.hpp>
 #include <opencv2/video.hpp>
@@ -13,6 +11,9 @@
 #include <opencv2/videoio.hpp>
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
+
+#include "renderer/renderer.hpp"
+#include "lin_alg/lin_alg.hpp"
 
 using namespace lin_alg;
 using namespace renderer;
@@ -67,7 +68,6 @@ int main()
     std::cout << "columns " << cols << std::endl;
 
     renderer::TerminalDisplay t(cols, rows);
-    renderer::TerminalDisplay clear(cols, rows);
 
     cv::VideoCapture cap("./videoplayback.mp4");
     if (!cap.isOpened()) // check if we succeeded

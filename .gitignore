@@ -509,3 +509,4 @@ test/test_unit_tests
 *.jpeg
 *.mp4
 *.webm
+render_balls

@@ -7,7 +7,7 @@ endif()
 
 add_library(
     renderer
-    STATIC
+    SHARED
     renderer.hpp
     world.hpp
     shapes.hpp

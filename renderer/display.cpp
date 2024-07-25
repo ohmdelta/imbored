@@ -31,19 +31,24 @@ namespace renderer
         }
     }
 
-    void TerminalDisplay::resize(size_t width_, size_t height_)
+    void TerminalDisplay::resize(size_t width__, size_t height__)
     {
+        width_ = width__ / char_per_pixel_;
+        height_ = height__;
         matrix.resize(width_ * height_);
     }
 
     std::stringstream TerminalDisplay::render_to_str()
     {
         std::stringstream ss;
-        for (size_t r = 0; r < height; r++)
+        for (size_t r = 0; r < height_; r++)
         {
-            for (size_t c = 0; c < width; c++)
+            for (size_t c = 0; c < width_; c++)
             {
-                ss << val_to_char(matrix[c + r * width]);
+                for (size_t i = 0; i < char_per_pixel_; i++)
+                {
+                    ss << val_to_char(matrix[c + r * width_]);
+                }            
             }
             ss << std::endl;
         }
@@ -52,7 +57,7 @@ namespace renderer
 
     unsigned char &TerminalDisplay::operator()(size_t r, size_t c)
     {
-        return matrix[c + r * width];
+        return matrix[c + r * width_];
     };
 
     void TerminalDisplay::clear()

@@ -15,6 +15,7 @@ namespace renderer
     struct Object
     {
         Object() = default;
+
         virtual void set_origin(const lin_alg::Coordinate &) = 0;
         virtual lin_alg::Vector normal(const lin_alg::Coordinate &c) = 0;
 
