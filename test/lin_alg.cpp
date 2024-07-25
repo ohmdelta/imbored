@@ -1,11 +1,11 @@
-#define BOOST_TEST_MAIN
-#if !defined(WIN32)
-#define BOOST_TEST_DYN_LINK
+#ifdef STAND_ALONE
+#define BOOST_TEST_MODULE Tests
 #endif
 
 #include <boost/test/unit_test.hpp>
-
 #include "../lin_alg/coordinate.hpp"
+
+BOOST_AUTO_TEST_SUITE(lin_alg_suite)
 
 using namespace lin_alg;
 
@@ -29,7 +29,6 @@ BOOST_AUTO_TEST_CASE(sum)
 
     BOOST_CHECK(sum == 7);
 }
-
 
 BOOST_AUTO_TEST_CASE(addition)
 {
@@ -153,3 +152,5 @@ BOOST_AUTO_TEST_CASE(deq)
 
     BOOST_CHECK_THROW(coord2 /= 0, std::runtime_error);
 }
+
+BOOST_AUTO_TEST_SUITE_END();

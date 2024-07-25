@@ -1,13 +1,13 @@
-#define BOOST_TEST_MAIN
-#if !defined(WIN32)
-#define BOOST_TEST_DYN_LINK
+#ifdef STAND_ALONE
+#define BOOST_TEST_MODULE Tests
 #endif
 
 #include <boost/test/unit_test.hpp>
-
 #include "../lin_alg/lin_alg.hpp"
 
 using namespace lin_alg;
+
+BOOST_AUTO_TEST_SUITE(transformation_suite);
 
 BOOST_AUTO_TEST_CASE(transformation_equality)
 {
@@ -55,3 +55,5 @@ BOOST_AUTO_TEST_CASE(multiplication)
 
     BOOST_CHECK(Vector(2, 2, 3, 1) == matrix * coord);
 }
+
+BOOST_AUTO_TEST_SUITE_END();
