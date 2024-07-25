@@ -25,7 +25,7 @@ namespace lin_alg
 
         virtual bool valid() { return true; };
 
-        double dot(const Vector &vector);
+        virtual double dot(const Vector &vector);
         double sum();
 
         double &operator[](int __n);
@@ -131,10 +131,20 @@ namespace lin_alg
             return Str;
         }
 
+
         bool valid()
         {
             return a != 0;
         }
+
+        double dot(Coordinate coordinate)
+        {
+            coordinate.normalise();
+            normalise();
+
+            return x * coordinate.x + y * coordinate.y + coordinate.z * z;
+        }
+
     };
 
 }

@@ -19,8 +19,8 @@ namespace renderer
         virtual lin_alg::Vector normal(const lin_alg::Coordinate &c) = 0;
 
         virtual lin_alg::Coordinate line_intersection(
-            const lin_alg::Coordinate &line_origin,
-            const lin_alg::Coordinate &line_gradient) = 0;
+            lin_alg::Coordinate line_origin,
+            lin_alg::Coordinate line_gradient) = 0;
     };
 
     struct Sphere : public Object
@@ -41,7 +41,9 @@ namespace renderer
             return (origin - c) * -1;
         }
 
-        lin_alg::Coordinate line_intersection(const lin_alg::Coordinate &p0, const lin_alg::Coordinate &d);
+        lin_alg::Coordinate line_intersection(
+            lin_alg::Coordinate p0,
+            lin_alg::Coordinate d);
 
     private:
         double radius;
