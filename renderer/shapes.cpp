@@ -2,7 +2,9 @@
 
 namespace renderer
 {
-    lin_alg::Coordinate Sphere::line_intersection(const lin_alg::Coordinate &p0, const lin_alg::Coordinate &d)
+    lin_alg::Coordinate Sphere::line_intersection(
+        const lin_alg::Coordinate &p0,
+        const lin_alg::Coordinate &d)
     {
         lin_alg::Coordinate result(0, 0, 0);
         auto ps = origin;

@@ -17,3 +17,5 @@ target_link_libraries(Main lin_alg)
 target_link_libraries(Main renderer)
 target_link_libraries(Main ${OpenCV_LIBS} )
 
+enable_testing()
+

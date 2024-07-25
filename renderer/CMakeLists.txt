@@ -8,11 +8,12 @@ endif()
 add_library(
     renderer
     STATIC
+    renderer.hpp
     world.hpp
     shapes.hpp
     shapes.cpp
-    renderer.hpp
-    renderer.cpp
+    display.hpp
+    display.cpp
 )
 
 target_include_directories(

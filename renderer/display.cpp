@@ -2,7 +2,7 @@
 #include <vector>
 #include <stdexcept>
 
-#include "renderer.hpp"
+#include "display.hpp"
 
 namespace renderer
 {
