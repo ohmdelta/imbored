@@ -37,15 +37,25 @@ namespace renderer
             {
                 for (size_t j = 0; j < min_width; j++)
                 {
-                    for (auto &obj : objects)
+                    for (size_t c = 0; c < super_sampling; c++)
                     {
-                        auto inter_ = obj->line_intersection(
-                            lin_alg::Coordinate(0, i, j),
-                            dir);
-                        if (inter_.a)
+                        for (size_t d = 0; d < super_sampling; d++)
                         {
-                            display(i, j) = 255;
-                            break;
+                            for (auto &obj : objects)
+                            {
+                                auto inter_ = obj->line_intersection(
+                                    lin_alg::Coordinate(
+                                        0,
+                                        (double) i + ((double)c / super_sampling),
+                                        (double) j + ((double)d / super_sampling)),
+                                    dir);
+
+                                if (inter_.a)
+                                {
+                                    display(i, j) += 255 / (super_sampling * super_sampling);
+                                    break;
+                                }
+                            }
                         }
                     }
                 }

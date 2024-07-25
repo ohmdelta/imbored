@@ -21,12 +21,12 @@ int main()
     std::cout << "lines " << rows << std::endl;
     std::cout << "columns " << cols << std::endl;
 
-    World world(cols, rows);
+    World world(cols, rows, 3);
     TerminalDisplay t(cols, rows, 2);
 
     auto z= 40;
     auto sphere = std::make_shared<Sphere>(
-        20,
+        40,
         Coordinate(500, 30, z));
 
     auto y = 10;
