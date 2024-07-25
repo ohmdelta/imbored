@@ -265,4 +265,28 @@ namespace lin_alg
         return *this;
     }
 
+    Vector operator+(const Vector &t, const Vector &p)
+    {
+        return Vector(t.x + p.x, t.y + p.y, t.z + p.z);
+    }
+
+    Vector operator-(const Vector &t, const Vector &p)
+    {
+        return Vector(t.x - p.x, t.y - p.y, t.z - p.z);
+    }
+
+    Vector operator*(const Vector &t, const Vector &p)
+    {
+        return Vector(t.x * p.x, t.y * p.y, t.z * p.z);
+    }
+
+    Vector operator/(const Vector &t, const Vector &p)
+    {
+        if (p.x == 0 || p.y == 0 || p.z == 0)
+        {
+            throw std::runtime_error("Math error: Attempted to divide by Zero\n");
+        }
+
+        return Vector(t.x * p.x, t.y * p.y, t.z * p.z);
+    }
 }

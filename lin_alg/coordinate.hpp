@@ -52,6 +52,11 @@ namespace lin_alg
         Vector operator*(const Vector &b);
         Vector operator/(const Vector &b);
 
+        friend Vector operator+(const Vector &t, const Vector &p);
+        friend Vector operator-(const Vector &t, const Vector &p);
+        friend Vector operator*(const Vector &t, const Vector &p);
+        friend Vector operator/(const Vector &t, const Vector &p);
+
         bool operator>(const Vector &b);
         bool operator<(const Vector &b);
         bool operator>=(const Vector &b);
@@ -80,6 +85,11 @@ namespace lin_alg
             double y_,
             double z_,
             double a_ = 1.0) : Vector(x_, y_, z_, a_)
+        {
+            normalise();
+        }
+
+        Coordinate(Vector const &v) : Vector(v)
         {
             normalise();
         }

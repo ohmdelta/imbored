@@ -10,6 +10,7 @@ add_library(
     STATIC
     world.hpp
     shapes.hpp
+    shapes.cpp
     renderer.hpp
     renderer.cpp
 )

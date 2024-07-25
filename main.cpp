@@ -83,9 +83,9 @@ int main()
         cv::Mat temp;
         cv::resize(temp_, temp, cv::Size(cols, rows), 0, 0, cv::INTER_AREA);
 
-        for (int i = 0; i < rows; i++)
+        for (size_t i = 0; i < rows; i++)
         {
-            for (int j = 0; j < cols; j++)
+            for (size_t j = 0; j < cols; j++)
             {
                 t(i, j) = temp.at<unsigned char>(i, j);
             }
