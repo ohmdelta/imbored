@@ -21,31 +21,33 @@ int main()
     std::cout << "lines " << rows << std::endl;
     std::cout << "columns " << cols << std::endl;
 
-    World world(cols, rows, 3);
+    World world(cols, rows, 3, 500);
     TerminalDisplay t(cols, rows, 2);
 
-    auto z= 40;
+    auto z= 50;
     auto sphere = std::make_shared<Sphere>(
         40,
-        Coordinate(500, 30, z));
+        Coordinate(5000, 0, z));
 
-    auto y = 10;
+    // auto y = -50;
+    auto depth = 5000;
     auto sphere2 = std::make_shared<Sphere>(
         5,
-        Coordinate(500, y, 10));
+        Coordinate(depth, 5, 0));
 
     world.add_object(sphere);
     world.add_object(sphere2);
 
-    for (size_t i = 0; i < 50; i++)
+    for (size_t i = 0; i < 210; i++)
     {
         t.clear();
-        sphere->set_origin(Coordinate(500, 30, ++z));
-        sphere2->set_origin(Coordinate(500, ++y, 10));
-        world.render_orthographic(t);
+        sphere->set_origin(Coordinate(5000, 0, ++z));
+        sphere2->set_origin(Coordinate(depth, 5, 0));
+        depth -= 25;
+        world.render_perspective(t);
         std::cout << t.render_to_str().str();
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(200));
+        std::this_thread::sleep_for(std::chrono::milliseconds(20));
     }
 
     return 0; // make sure your main returns int

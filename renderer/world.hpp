@@ -15,10 +15,17 @@ namespace renderer
         World(
             size_t view_port_width_,
             size_t view_port_height_,
-            size_t super_sampling_ = 1.0) : view_port_width(view_port_width_),
-                                            view_port_height(view_port_height_),
-                                            super_sampling(super_sampling_)
+            size_t super_sampling_ = 1.0,
+            double focal_point_ = 100) : view_port_width(view_port_width_),
+                                         view_port_height(view_port_height_),
+                                         super_sampling(super_sampling_),
+                                         focal_point(focal_point_)
         {
+        }
+
+        inline void add_object(std::shared_ptr<Object> object)
+        {
+            objects.push_back(object);
         }
 
         void render(Display &display);
@@ -41,30 +48,64 @@ namespace renderer
                     {
                         for (size_t d = 0; d < super_sampling; d++)
                         {
-                            for (auto &obj : objects)
-                            {
-                                auto inter_ = obj->line_intersection(
-                                    lin_alg::Coordinate(
-                                        0,
-                                        (double) i + ((double)c / super_sampling),
-                                        (double) j + ((double)d / super_sampling)),
-                                    dir);
+                            auto x = i + ((double)c / super_sampling);
+                            auto y = j + ((double)d / super_sampling);
 
-                                if (inter_.a)
-                                {
-                                    display(i, j) += 255 / (super_sampling * super_sampling);
-                                    break;
-                                }
-                            }
+                            update_pixel_(x, y, dir, display, i, j);
                         }
                     }
                 }
             }
         }
 
-        void add_object(std::shared_ptr<Object> object)
+        void render_perspective(Display &display)
         {
-            objects.push_back(object);
+            auto width = display.width();
+            auto height = display.height();
+
+            auto min_width = std::min(width, view_port_width);
+            auto min_height = std::min(height, view_port_height);
+
+            auto width_half = min_width / 2;
+            auto height_half = min_height / 2;
+
+            for (size_t i = 0; i < min_height; i++)
+            {
+                for (size_t j = 0; j < min_width; j++)
+                {
+                    for (size_t c = 0; c < super_sampling; c++)
+                    {
+                        for (size_t d = 0; d < super_sampling; d++)
+                        {
+                            auto x = i + ((double)c / super_sampling) - height_half;
+                            auto y = j + ((double)d / super_sampling) - width_half;
+                            lin_alg::Coordinate dir(focal_point, x, y);
+
+                            update_pixel_(x, y, dir, display, i, j);
+                        }
+                    }
+                }
+            }
+        }
+
+        void update_pixel_(
+            double x, double y,
+            lin_alg::Coordinate &dir,
+            renderer::Display &display,
+            size_t i, size_t j)
+        {
+            for (auto &obj : objects)
+            {
+                auto inter_ = obj->line_intersection(
+                    lin_alg::Coordinate(0, x, y),
+                    dir);
+
+                if (inter_.a)
+                {
+                    display(i, j) += 255 / (super_sampling * super_sampling);
+                    break;
+                }
+            }
         }
 
     private:
@@ -73,6 +114,7 @@ namespace renderer
         size_t view_port_height;
 
         size_t super_sampling;
+        double focal_point;
 
         lin_alg::Coordinate origin = lin_alg::Coordinate(0.0, 0.0, 0.0);
 
