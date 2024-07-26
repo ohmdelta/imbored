@@ -32,19 +32,19 @@ namespace renderer
         {
         }
 
-        void set_origin(const lin_alg::Coordinate &origin_)
+        void set_origin(const lin_alg::Coordinate &origin_) override
         {
             origin = origin_;
         }
 
-        lin_alg::Vector normal(const lin_alg::Coordinate &c)
+        lin_alg::Vector normal(const lin_alg::Coordinate &c) override
         {
             return (origin - c) * -1;
         }
 
         lin_alg::Coordinate line_intersection(
             lin_alg::Coordinate p0,
-            lin_alg::Coordinate d);
+            lin_alg::Coordinate d) override;
 
     private:
         double radius;

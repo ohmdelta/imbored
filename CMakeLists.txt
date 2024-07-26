@@ -9,6 +9,7 @@ find_package( OpenCV REQUIRED )
 include_directories( ${OpenCV_INCLUDE_DIRS} )
 
 add_subdirectory(lin_alg)
+add_subdirectory(polynomial)
 add_subdirectory(renderer)
 add_subdirectory(test)
 
