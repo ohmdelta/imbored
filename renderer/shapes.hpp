@@ -12,9 +12,9 @@ namespace renderer
             const lin_alg::Coordinate &c) = 0;
     };
 
-    struct Object
+    struct Shape
     {
-        Object() = default;
+        Shape() = default;
 
         virtual void set_origin(const lin_alg::Coordinate &) = 0;
         virtual lin_alg::Vector normal(const lin_alg::Coordinate &c) = 0;
@@ -24,7 +24,7 @@ namespace renderer
             lin_alg::Coordinate line_gradient) = 0;
     };
 
-    struct Sphere : public Object
+    struct Sphere : public Shape
     {
         Sphere(
             double radius_ = 0.0,
@@ -51,7 +51,7 @@ namespace renderer
         lin_alg::Coordinate origin;
     };
 
-    class Plane : public Object
+    class Plane : public Shape
     {
         lin_alg::Coordinate origin;
         lin_alg::Vector normal_;

@@ -23,7 +23,7 @@ namespace renderer
         {
         }
 
-        inline void add_object(std::shared_ptr<Object> object)
+        inline void add_object(std::shared_ptr<Shape> object)
         {
             objects.push_back(object);
         }
@@ -118,7 +118,7 @@ namespace renderer
 
         lin_alg::Coordinate origin = lin_alg::Coordinate(0.0, 0.0, 0.0);
 
-        std::vector<std::shared_ptr<Object>> objects;
+        std::vector<std::shared_ptr<Shape>> objects;
     };
 
 };
