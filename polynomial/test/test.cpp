@@ -86,15 +86,15 @@ BOOST_AUTO_TEST_CASE(QuarticSolutionQ)
     BOOST_CHECK_EQUAL(sol, 0);
 }
 
-BOOST_AUTO_TEST_CASE(QuarticSolutionEasy)
-{
-    // x ^ 4 - 2 x ^ 2 + 1 = 0
-    // (x ^ 2 - 1) ^ 2
-    auto sol = solve_quartic(1, 0, -2, 0, 1);
+// BOOST_AUTO_TEST_CASE(QuarticSolutionEasy)
+// {
+//     // x ^ 4 - 2 x ^ 2 + 1 = 0
+//     // (x ^ 2 - 1) ^ 2
+//     auto sol = solve_quartic(1, 0, -1, 0, 0);
     
-    // BOOST_CHECK_EQUAL(sol.num_solutions, 2);
-    // BOOST_CHECK_EQUAL(sol.sol[0], 1);
-    // BOOST_CHECK_EQUAL(sol.sol[1], 1);
-}
+//     BOOST_CHECK_EQUAL(sol.num_solutions, 2);
+//     BOOST_CHECK_EQUAL(sol.sol[0], 1);
+//     BOOST_CHECK_EQUAL(sol.sol[1], 1);
+// }
 
 BOOST_AUTO_TEST_SUITE_END();

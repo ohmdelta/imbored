@@ -8,7 +8,7 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
-include_directories(${CMAKE_SOURCE_DIR}/include)
+include_directories(include)
 
 file(GLOB_RECURSE SOURCES "src/*.cpp")
 
@@ -19,12 +19,13 @@ message(PROJECT_SOURCE_DIR=
 add_library(
   polynomial
   SHARED
-${SOURCES})
+  ${SOURCES}
+)
 
 target_include_directories(
   polynomial
   PUBLIC
-  ${CMAKE_CURRENT_SOURCE_DIR}
+  # ${CMAKE_CURRENT_SOURCE_DIR}
   include
 )
 
