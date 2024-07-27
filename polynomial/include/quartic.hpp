@@ -32,7 +32,7 @@ namespace polynomial
         uint8_t num_solutions = 0;
         double sol[4] = {};
 
-        inline void add_sol(double v)
+        void add_sol(double v)
         {
             if (num_solutions < 4)
             {
@@ -40,7 +40,7 @@ namespace polynomial
             }
         }
 
-        inline double min()
+        double min()
         {
             return *std::min_element(sol, sol + num_solutions);
         }
