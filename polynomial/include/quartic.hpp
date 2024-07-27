@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <cmath>
 #include <algorithm>
+#include <iostream>
 
 namespace polynomial
 {
@@ -17,14 +18,14 @@ namespace polynomial
         return 64 * cube(a) * e - 16 * sq(a) * sq(c) + 16 * a * sq(b) * c - 16 * sq(a) * b * d - 3 * supercube(b);
     }
 
-    inline double P(double a, double c, double b)
-    {
-        return 8 * a * c - 3 * sq(b);
-    }
-
     inline double sol_1_b(double b, double a, double S)
     {
         return -b / (4 * a) - S;
+    }
+
+    inline double sol_2_b(double b, double a, double S)
+    {
+        return -b / (4 * a) + S;
     }
 
     struct QuarticSolution
@@ -46,6 +47,10 @@ namespace polynomial
         }
     };
 
+    double P(double a, double c, double b);
+
+    double Q(double a, double b, double c, double d);
+
     QuarticSolution solve_quartic(
         double a,
         double b,
@@ -56,38 +61,108 @@ namespace polynomial
 
         QuarticSolution solution;
 
-        double p = (8 * a * c - 3 * sq(b)) / (8 * sq(a));
-        double q = (cube(b) - 4 * a * b * c + 8 * sq(a) * d) / (8 * cube(a));
+        double p_ = P(a, b, c);
+        double q_ = Q(a, b, c, d);
 
-        double delta0 = sq(2) - 3 * b * d + 12 * a * e;
+        double delta0 = sq(c) - 3 * b * d + 12 * a * e;
         double delta1 = 2 * cube(c) - 9 * b * c * d + 27 * sq(b) * e + 27 * a * sq(d) - 72 * a * c * e;
 
         double u = sq(delta1) - 4 * cube(delta0);
 
         double det = -u;
 
-        if (det > 0)
+        if (u > 0)
         {
-            double Q = std::cbrt((delta1 + std::sqrt(det)) / 2);
-            double S = std::sqrt(-2 * p / 3 + (Q + delta0 / Q) / (3 * a));
+            // std::cout << "DET > 0 " << u << std::endl;
+            double Q_ = std::cbrt((delta1 + std::sqrt(u)) / 2);
 
-            double det1 = q / S - 2 * p - 4 * sq(S);
-            double det2 = -q / S - 2 * p - 4 * sq(S);
+            double S_ = std::sqrt(-2 * p_ / 3 + (Q_ + delta0 / Q_) / (3 * a));
+
+            // std::cout << "Q_ " << Q_ << " S_ " << S_ << " p_ " << p_ << std::endl;
+
+            double det1 = q_ / S_ - 2 * p_ - 4 * sq(S_);
+            double det2 = -q_ / S_ - 2 * p_ - 4 * sq(S_);
+
+            // if (abs(det1) < 1e-9)
+            // {
+            //     det1 = 0;
+            // }
+
+            // if (abs(det2) < 1e-9)
+            // {
+            //     det2 = 0;
+            // }
+
+            // std::cout << "DET 1 " << det1 << std::endl;
+            // std::cout << "DET 2 " << det2 << std::endl;
 
             if (det1 == 0)
             {
-                solution.add_sol(polynomial::sol_1_b(b, a, S));
+                solution.add_sol(polynomial::sol_1_b(b, a, S_));
             }
             else if (det1 > 0)
             {
-                solution.add_sol(polynomial::sol_1_b(b, a, S) - std::sqrt(det1));
-                solution.add_sol(polynomial::sol_1_b(b, a, S) + std::sqrt(det1));
+                solution.add_sol(polynomial::sol_1_b(b, a, S_) - std::sqrt(det1));
+                solution.add_sol(polynomial::sol_1_b(b, a, S_) + std::sqrt(det1));
+            }
+
+            if (det2 == 0)
+            {
+                solution.add_sol(polynomial::sol_2_b(b, a, S_));
+            }
+            else if (det2 > 0)
+            {
+                solution.add_sol(polynomial::sol_2_b(b, a, S_) - std::sqrt(det2));
+                solution.add_sol(polynomial::sol_2_b(b, a, S_) + std::sqrt(det2));
             }
         }
+        else if (u < 0)
+        {
+            // std::cout << "DET < 0 " << det << " " << delta0 << std::endl;
+            double phi = std::acos(delta1 / (2 * sqrt(cube(delta0))));
+            double S2_ = (-2 * p_ / 3) + 2 / (3 * a) * sqrt(delta0) * std::cos(phi / 3);
+            double S_ = std::sqrt(S2_) / 2;
+            // std::cout << "S_ " << S_ << " S2_ " << S2_ << std::endl;
 
+            double det1 = q_ / S_ - 2 * p_ - 4 * sq(S_);
+            double det2 = -q_ / S_ - 2 * p_ - 4 * sq(S_);
+
+            std::cout << "1" << det1 << std::endl;
+            if (det1 == 0)
+            {
+
+                solution.add_sol(polynomial::sol_1_b(b, a, S_));
+            }
+            else if (det1 > 0)
+            {
+                solution.add_sol(polynomial::sol_1_b(b, a, S_) - std::sqrt(det1));
+                solution.add_sol(polynomial::sol_1_b(b, a, S_) + std::sqrt(det1));
+            }
+
+            std::cout << "2" << det2 << std::endl;
+
+            if (det2 == 0)
+            {
+                solution.add_sol(polynomial::sol_2_b(b, a, S_));
+            }
+            else if (det2 > 0)
+            {
+                solution.add_sol(polynomial::sol_2_b(b, a, S_) - std::sqrt(det2));
+                solution.add_sol(polynomial::sol_2_b(b, a, S_) + std::sqrt(det2));
+            }
+        }
         return solution;
-    };
+    }
 
+    double Q(double a, double b, double c, double d)
+    {
+        return (cube(b) - 4 * a * b * c + 8 * sq(a) * d) / (8 * cube(a));
+    }
+
+    double P(double a, double b, double c)
+    {
+        return (8 * a * c - 3 * sq(b)) / (8 * sq(a));
+    };
 };
 
 #endif

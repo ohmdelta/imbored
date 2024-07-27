@@ -68,10 +68,33 @@ BOOST_AUTO_TEST_CASE(QuarticSolutionStructMinimum)
         BOOST_CHECK_EQUAL(q2.num_solutions, 4);
         for (int i = 0; i < 4; i++)
         {
-            BOOST_CHECK_EQUAL(q2.sol[i],-i);
+            BOOST_CHECK_EQUAL(q2.sol[i], -i);
         }
         BOOST_CHECK_EQUAL(q2.min(), -3);
     }
+}
+
+BOOST_AUTO_TEST_CASE(QuarticSolutionP)
+{
+    auto sol = P(1, 0, 0);
+    BOOST_CHECK_EQUAL(sol, 0);
+}
+
+BOOST_AUTO_TEST_CASE(QuarticSolutionQ)
+{
+    auto sol = Q(1, 0, 0, 0);
+    BOOST_CHECK_EQUAL(sol, 0);
+}
+
+BOOST_AUTO_TEST_CASE(QuarticSolutionEasy)
+{
+    // x ^ 4 - 2 x ^ 2 + 1 = 0
+    // (x ^ 2 - 1) ^ 2
+    auto sol = solve_quartic(1, 0, -2, 0, 1);
+    
+    // BOOST_CHECK_EQUAL(sol.num_solutions, 2);
+    // BOOST_CHECK_EQUAL(sol.sol[0], 1);
+    // BOOST_CHECK_EQUAL(sol.sol[1], 1);
 }
 
 BOOST_AUTO_TEST_SUITE_END();
