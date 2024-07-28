@@ -3,5 +3,6 @@
 
 #include "quadratic.hpp"
 #include "quartic.hpp"
+#include "cubic.hpp"
 
 #endif
