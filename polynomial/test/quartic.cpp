@@ -86,15 +86,44 @@ BOOST_AUTO_TEST_CASE(QuarticSolutionQ)
     BOOST_CHECK_EQUAL(sol, 0);
 }
 
-// BOOST_AUTO_TEST_CASE(QuarticSolutionEasy)
-// {
-//     // x ^ 4 - 2 x ^ 2 + 1 = 0
-//     // (x ^ 2 - 1) ^ 2
-//     auto sol = solve_quartic(1, 0, -1, 0, 0);
-    
-//     BOOST_CHECK_EQUAL(sol.num_solutions, 2);
-//     BOOST_CHECK_EQUAL(sol.sol[0], 1);
-//     BOOST_CHECK_EQUAL(sol.sol[1], 1);
-// }
+BOOST_AUTO_TEST_CASE(QuarticDepressedSolutionEasy)
+{
+    // x ^ 4 - 2 x ^ 2 + 1 = 0
+    // (x ^ 2 - 1) ^ 2
+    {
+        auto sol = solve_depressed_quartic(-2, 0, 1);
+
+        BOOST_CHECK_EQUAL(sol.num_solutions, 2);
+        BOOST_CHECK_EQUAL(sol.sol[0], -1);
+        BOOST_CHECK_EQUAL(sol.sol[1], 1);
+    }
+
+    // x ^ 4 = 0
+    {
+        auto sol = solve_depressed_quartic(0, 0, 0);
+
+        BOOST_CHECK_EQUAL(sol.sol[0], 0);
+    }
+}
+
+BOOST_AUTO_TEST_CASE(QuarticDepressedSolveMany)
+{
+    // x ^ 4 + p x ^ 2 + q x + r = 0
+    for (size_t p = 0; p < 100; p++)
+    {
+        for (size_t q = 0; q < 100; q++)
+        {
+            for (size_t r = 0; r < 100; r++)
+            {
+                auto sol = solve_depressed_quartic(p, q, r);
+
+                for (auto &s : sol)
+                {
+                    BOOST_CHECK_CLOSE(supercube(s) + p * sq(s) + q * s + r + 1, 1, 0.0001);
+                }
+            }
+        }
+    }
+}
 
 BOOST_AUTO_TEST_SUITE_END();

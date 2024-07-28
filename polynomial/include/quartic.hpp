@@ -27,6 +27,9 @@ namespace polynomial
 
     struct QuarticSolution
     {
+        typedef double *iterator;
+        typedef const double *const_iterator;
+
         uint8_t num_solutions = 0;
         double sol[4] = {};
 
@@ -42,6 +45,11 @@ namespace polynomial
         {
             return *std::min_element(sol, sol + num_solutions);
         }
+
+        iterator begin() { return sol; }
+        const_iterator begin() const { return sol; }
+        iterator end() { return sol + num_solutions; }
+        const_iterator end() const { return sol + num_solutions; }
     };
 
     double P(double a, double c, double b);

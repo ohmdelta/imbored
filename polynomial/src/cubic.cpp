@@ -35,12 +35,17 @@ namespace polynomial
 
                 for (size_t i = 0; i < 3; i++)
                 {
-                    solution.add_sol(2 * std::sqrt(-p / 3) * std::cos(u - 2 * M_PI / 3 * i));
+                    solution.add_sol(2 * std::sqrt(-p / 3) * std::cos(u - M_2_PI_3() * i));
                 }
             }
         }
 
         return solution;
+    }
+
+    constexpr double M_2_PI_3()
+    {
+        return 2 * M_PI / 3;
     }
 
     CubicSolution solve_cubic(double a, double b, double c, double d)

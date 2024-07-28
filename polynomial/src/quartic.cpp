@@ -1,4 +1,6 @@
 #include "quartic.hpp"
+#include "cubic.hpp"
+#include "quadratic.hpp"
 
 namespace polynomial
 {
@@ -12,6 +14,73 @@ namespace polynomial
         return (cube(b) - 4 * a * b * c + 8 * sq(a) * d) / (8 * cube(a));
     }
 
+    QuarticSolution solve_depressed_quartic(
+        double p,
+        double q,
+        double r)
+    {
+        if (q == 0)
+        {
+            QuadraticSolution quadraticSolution = solve_quadratic(1, p, r);
+            QuarticSolution solution;
+
+            for (const auto &i : quadraticSolution)
+            {
+                if (i >= 0)
+                {
+                    double v = std::sqrt(i);
+                    solution.add_sol(-v);
+                    solution.add_sol(v);
+                }
+            }
+
+            return solution;
+        }
+
+        CubicSolution cubicSol = solve_cubic(8, 8 * p, (2 * sq(p) - 8 * r), -sq(q));
+        if (cubicSol.num_solutions == 0)
+        {
+            return QuarticSolution();
+        }
+        else
+        {
+            QuarticSolution solution;
+
+            // double m = std::find_first_of(std::begin(cubicSol.sol), std::end(cubicSol), );
+            for (auto &m : cubicSol)
+            {
+                if (m <= 0)
+                    continue;
+
+                // Solve y**2 +- sqrt(2m) y + p/2 + m -+ q/(2sqrt(2m))
+                double sqrt_m = std::sqrt(m);
+                double det_pos = -(2 * p + 2 * m + M_SQRT2 * q / sqrt_m);
+                double det_neg = -(2 * p + 2 * m - M_SQRT2 * q / sqrt_m);
+
+                if (det_pos < 0 && det_neg < 0)
+                    continue;
+
+                double sqrt_2m = sqrt_m * M_SQRT2;
+
+                if (det_pos > 0)
+                {
+                    solution.add_sol((sqrt_2m + std::sqrt(det_pos)) / 2);
+                    solution.add_sol((sqrt_2m - std::sqrt(det_pos)) / 2);
+                }
+
+                if (det_neg > 0)
+                {
+                    solution.add_sol((-sqrt_2m + std::sqrt(det_neg)) / 2);
+                    solution.add_sol((-sqrt_2m - std::sqrt(det_neg)) / 2);
+                }
+
+                break;
+            }
+
+            return solution;
+        }
+    }
+
     QuarticSolution solve_quartic(
         double a,
         double b,
@@ -19,7 +88,6 @@ namespace polynomial
         double d,
         double e)
     {
-
         QuarticSolution solution;
 
         double p_ = P(a, b, c);
