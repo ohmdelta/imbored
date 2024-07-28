@@ -100,6 +100,22 @@ BOOST_AUTO_TEST_CASE(SolveDepressedCubicEasy)
     }
 }
 
+BOOST_AUTO_TEST_CASE(SolveCubicEasy)
+{
+    // (x - 1)(x^2  + 2x + 1) = 0
+    // x^3  + x^2 - x - 1 = 0
+    {
+        auto sol = solve_cubic(1, 1, -1, -1);
+        BOOST_CHECK_EQUAL(sol.num_solutions, 3);
+
+        for (auto i : sol.sol)
+        {
+            double v = cube(i) + sq(i) - i - 1;
+            BOOST_CHECK_CLOSE(v + 1, 1, 0.000001);
+        }
+    }
+}
+
 BOOST_AUTO_TEST_SUITE_END();
 
 #endif
