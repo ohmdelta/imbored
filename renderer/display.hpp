@@ -53,8 +53,9 @@ namespace renderer
         size_t height_;
 
         size_t char_per_pixel_;
-
-        unsigned char val_to_char(unsigned char i);
+        
+        unsigned char val_to_char_3_bit(unsigned char i);
+        unsigned char val_to_char_4_bit(unsigned char i);
 
         std::vector<unsigned char> matrix;
     };

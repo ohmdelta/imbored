@@ -6,14 +6,12 @@
 
 namespace renderer
 {
-    unsigned char TerminalDisplay::val_to_char(unsigned char i)
+    unsigned char TerminalDisplay::val_to_char_3_bit(unsigned char i)
     {
         switch (i >> 5)
         {
         case 0:
             return ' ';
-        case 1:
-            return '.';
         case 2:
             return '-';
         case 3:
@@ -25,6 +23,48 @@ namespace renderer
         case 6:
             return '8';
         case 7:
+            return '@';
+        default:
+            return ' ';
+        }
+    }
+
+
+    unsigned char TerminalDisplay::val_to_char_4_bit(unsigned char i)
+    {
+        switch (i >> 4)
+        {
+        case 0:
+            return ' ';
+        case 1:
+            return '.';
+        case 2:
+            return ',';
+        case 3:
+            return '^';
+        case 4:
+            return '~';
+        case 5:
+            return ':';
+        case 6:
+            return '=';
+        case 7:
+            return '!';
+        case 8:
+            return '/';
+        case 9:
+            return '*';
+        case 10:
+            return '&';
+        case 11:
+            return '#';
+        case 12:
+            return '%';
+        case 13:
+            return '8';
+        case 14:
+            return '$';
+        case 15:
             return '@';
         default:
             return ' ';
@@ -47,8 +87,8 @@ namespace renderer
             {
                 for (size_t i = 0; i < char_per_pixel_; i++)
                 {
-                    ss << val_to_char(matrix[c + r * width_]);
-                }            
+                    ss << val_to_char_3_bit(matrix[c + r * width_]);
+                }
             }
             ss << std::endl;
         }
