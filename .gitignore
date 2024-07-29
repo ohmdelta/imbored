@@ -510,3 +510,5 @@ test/test_unit_tests
 *.mp4
 *.webm
 render_balls
+
+*.ipynb
