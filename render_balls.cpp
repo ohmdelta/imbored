@@ -5,7 +5,7 @@
 #include <unistd.h>
 #include <thread>
 
-#include "renderer/renderer.hpp"
+#include "renderer.hpp"
 #include "lin_alg/lin_alg.hpp"
 
 using namespace lin_alg;

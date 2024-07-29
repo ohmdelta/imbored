@@ -12,10 +12,6 @@ include_directories(include)
 
 file(GLOB_RECURSE SOURCES "src/*.cpp")
 
-message(PROJECT_SOURCE_DIR=
-  ${PROJECT_SOURCE_DIR}
-  ${all_SRCS})
-
 add_library(
   polynomial
   SHARED

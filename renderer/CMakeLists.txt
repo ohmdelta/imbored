@@ -5,20 +5,24 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
+include_directories(include)
+
+file(GLOB_RECURSE SOURCES "src/*.cpp")
+
 add_library(
     renderer
     SHARED
-    renderer.hpp
-    world.hpp
-    shapes.hpp
-    shapes.cpp
-    display.hpp
-    display.cpp
+    ${SOURCES}
 )
+
 
 target_include_directories(
     renderer
     PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
+    include
 )
-target_link_libraries(renderer lin_alg)
+
+set_target_properties(renderer PROPERTIES VERSION 1.0.0 SOVERSION 1)
+
+target_link_libraries(renderer lin_alg polynomial)

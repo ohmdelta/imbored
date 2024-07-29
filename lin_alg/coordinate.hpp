@@ -94,7 +94,7 @@ namespace lin_alg
             normalise();
         }
 
-        void normalise()
+        void normalise() override
         {
             if (a == 1)
                 return;
@@ -110,13 +110,13 @@ namespace lin_alg
             a = 1;
         }
 
-        double norm_sq()
+        double norm_sq() override
         {
             normalise();
             return x * x + y * y + z * z;
         }
 
-        double norm()
+        double norm() override
         {
             return sqrt(norm_sq());
         }
@@ -132,7 +132,7 @@ namespace lin_alg
         }
 
 
-        bool valid()
+        bool valid() override
         {
             return a != 0;
         }
