@@ -126,4 +126,26 @@ BOOST_AUTO_TEST_CASE(QuarticDepressedSolveMany)
     }
 }
 
+BOOST_AUTO_TEST_CASE(QuarticSolveMany)
+{
+    // x ^ 4 + b x ^ 3 + c x ^ 2 + d x + e = 0
+    for (size_t b = 0; b < 100; b++)
+    {
+        for (size_t c = 0; c < 100; c++)
+        {
+            for (size_t d = 0; d < 100; d++)
+            {
+                for (size_t e = 0; e < 5; e++)
+                {
+                    auto sol = solve_quartic(1, b, c, d, e);
+                    for (auto &s : sol)
+                    {
+                        BOOST_CHECK_SMALL(supercube(s) + b * cube(s) + c * sq(s) + d * s + e, 0.001);
+                    }
+                }
+            }
+        }
+    }
+}
+
 BOOST_AUTO_TEST_SUITE_END();
