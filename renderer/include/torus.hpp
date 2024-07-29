@@ -12,9 +12,16 @@ namespace renderer
     inline double cube(double v) { return v * v * v; }
     inline double supercube(double v) { return sq(v) * sq(v); }
 
-    class Torus : public Shape
+    struct Torus : public Shape
     {
-        void set_origin(const lin_alg::Coordinate &origin_)
+        Torus(
+            double ring_radius_,
+            double torus_radius_,
+            lin_alg::Coordinate origin_ = lin_alg::Coordinate(0, 0, 0)) : ring_radius(ring_radius_),
+                                                                          torus_radius(torus_radius_),
+                                                                          origin(origin_) {}
+
+        void set_origin(const lin_alg::Coordinate &origin_) override
         {
             origin = origin_;
         }
@@ -25,10 +32,19 @@ namespace renderer
             return (origin - c) * -1;
         }
 
+        void set_rotation(lin_alg::TransformationMatrix t)
+        {
+            rotation = t;
+        }
+
         lin_alg::Coordinate line_intersection(
             lin_alg::Coordinate p0,
             lin_alg::Coordinate d)
         {
+            p0 -= origin;
+            d = rotation * d;
+            p0 = rotation * p0;
+
             double R = torus_radius;
             double r = ring_radius;
 
@@ -98,6 +114,8 @@ namespace renderer
         double torus_radius;
 
         lin_alg::Coordinate origin;
+
+        lin_alg::TransformationMatrix rotation = lin_alg::Identity();
     };
 };
 

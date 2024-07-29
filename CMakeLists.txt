@@ -23,5 +23,9 @@ add_executable(render_balls render_balls.cpp)
 target_link_libraries(render_balls lin_alg)
 target_link_libraries(render_balls renderer)
 
+add_executable(render_donut render_donut.cpp)
+target_link_libraries(render_donut lin_alg)
+target_link_libraries(render_donut renderer)
+
 enable_testing()
 

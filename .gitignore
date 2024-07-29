@@ -512,3 +512,5 @@ test/test_unit_tests
 render_balls
 
 *.ipynb
+.vscode/
+render_donut

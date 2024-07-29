@@ -4,5 +4,6 @@
 #include "display.hpp"
 #include "shapes.hpp"
 #include "world.hpp"
+#include "torus.hpp"
 
 #endif
