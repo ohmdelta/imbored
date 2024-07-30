@@ -13,6 +13,7 @@ add_library(
   src/display.cpp
   src/plane.cpp
   src/shapes.cpp
+  src/torus.cpp
 )
 
 
