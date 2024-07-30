@@ -7,20 +7,20 @@ endif()
 
 include_directories(include)
 
-file(GLOB_RECURSE SOURCES "src/*.cpp")
-
 add_library(
-    renderer
-    SHARED
-    ${SOURCES}
+  renderer
+  SHARED
+  src/display.cpp
+  src/plane.cpp
+  src/shapes.cpp
 )
 
 
 target_include_directories(
-    renderer
-    PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    include
+  renderer
+  PUBLIC
+  ${CMAKE_CURRENT_SOURCE_DIR}
+  include
 )
 
 set_target_properties(renderer PROPERTIES VERSION 1.0.0 SOVERSION 1)

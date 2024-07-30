@@ -52,20 +52,6 @@ namespace renderer
         lin_alg::Coordinate origin;
     };
 
-    class Plane : public Shape
-    {
-        lin_alg::Coordinate origin;
-        lin_alg::Vector normal_;
-
-        lin_alg::Vector normal(const lin_alg::Coordinate &)
-        {
-            return normal_;
-        }
-
-        lin_alg::Coordinate line_intersection(
-            const lin_alg::Coordinate &line_origin,
-            const lin_alg::Coordinate &line_gradient);
-    };
 };
 
 #endif

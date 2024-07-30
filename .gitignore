@@ -514,3 +514,4 @@ render_balls
 *.ipynb
 .vscode/
 render_donut
+*.pdf

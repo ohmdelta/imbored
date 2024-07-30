@@ -5,5 +5,6 @@
 #include "shapes.hpp"
 #include "world.hpp"
 #include "torus.hpp"
+#include "plane.hpp"
 
 #endif

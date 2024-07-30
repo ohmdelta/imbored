@@ -18,9 +18,9 @@ namespace lin_alg
         {
         }
 
-        double x;
-        double y;
-        double z;
+        double x = 0;
+        double y = 0;
+        double z = 0;
         double a;
 
         virtual bool valid() { return true; };
@@ -87,6 +87,54 @@ namespace lin_alg
             double a_ = 1.0) : Vector(x_, y_, z_, a_)
         {
             normalise();
+        }
+
+        friend Coordinate operator+(Coordinate lhs, Coordinate rhs)
+        {
+            lhs.normalise();
+            rhs.normalise();
+            
+            lhs.x += rhs.x;
+            lhs.y += rhs.y;
+            lhs.z += rhs.z;
+
+            return lhs;
+        }
+
+        // friend Coordinate operator+(Coordinate lhs, const Coordinate& rhs)
+        // {
+        //     lhs.normalise();
+        //     Coordinate c = rhs;
+        //     c.normalise();
+
+        //     lhs.x += c.x;
+        //     lhs.y += c.y;
+        //     lhs.z += c.z;
+
+        //     return lhs;
+        // }
+
+        friend Coordinate operator-(Coordinate lhs, Coordinate& rhs)
+        {
+            lhs.normalise();
+            rhs.normalise();
+
+            lhs.x -= rhs.x;
+            lhs.y -= rhs.y;
+            lhs.z -= rhs.z;
+
+            return lhs;
+        }
+
+        friend Coordinate operator*(Coordinate lhs, double rhs)
+        {
+            lhs.normalise();
+            
+            lhs.x *= rhs;
+            lhs.y *= rhs;
+            lhs.z *= rhs;
+
+            return lhs;
         }
 
         Coordinate(Vector const &v) : Vector(v)

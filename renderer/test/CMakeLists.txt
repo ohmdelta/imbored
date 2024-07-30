@@ -30,4 +30,5 @@ function(add_boost_test SOURCE_FILE_NAME DEPENDENCY_LIB)
 endfunction()
 
 enable_testing()
-add_boost_test(main.cpp "")
+add_boost_test(main.cpp renderer)
+add_boost_test(plane.cpp renderer)

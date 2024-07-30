@@ -29,7 +29,15 @@ namespace renderer
         lin_alg::Vector normal(const lin_alg::Coordinate &c)
         {
             // TODO: FIX THIS
-            return (origin - c) * -1;
+            double norm = sqrt(sq(c.x) + sq(c.y));
+            double x = c.x * torus_radius / norm;
+            double y = c.y * torus_radius / norm;
+            lin_alg::Coordinate torus_point(x, y, 0);
+            // double theta = std::acos(c[1] / c[0]);
+            // double phi = std::acos(c[2] / c[1]);
+
+            // c[0] + c[1];
+            return c - (origin - c) * -1;
         }
 
         void set_rotation(lin_alg::TransformationMatrix t)

@@ -24,7 +24,8 @@ namespace renderer
 
         double mu = (-b - sqrt(v)) / (2 * a);
 
-        result += p0 + d * mu;
+        lin_alg::Coordinate d_ = (d * mu);
+        result += (p0 + d_);
         return result;
     };
 };
