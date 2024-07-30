@@ -25,6 +25,11 @@ namespace renderer
         virtual Intersection line_intersection(
             lin_alg::Coordinate line_origin,
             lin_alg::Coordinate line_gradient) = 0;
+
+        // virtual Intersection ray_intersection(
+        //     lin_alg::Coordinate line_origin,
+        //     lin_alg::Coordinate line_gradient) {}
+
     };
 
 };

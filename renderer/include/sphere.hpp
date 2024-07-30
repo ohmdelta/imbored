@@ -29,6 +29,10 @@ namespace renderer
             lin_alg::Coordinate p0,
             lin_alg::Coordinate d) override;
 
+        // Intersection ray_intersection(
+        //     lin_alg::Coordinate p0,
+        //     lin_alg::Coordinate d) override;
+
     private:
         double radius;
         lin_alg::Coordinate origin;

@@ -1,13 +1,12 @@
-#ifdef STAND_ALONE
 #define BOOST_TEST_MODULE Tests
-#endif
 
 #include <boost/test/unit_test.hpp>
+
 #include "lin_alg.hpp"
 
-BOOST_AUTO_TEST_SUITE(lin_alg_suite)
+BOOST_AUTO_TEST_SUITE(Vector)
 
-using namespace lin_alg;
+using lin_alg::Vector;
 
 BOOST_AUTO_TEST_CASE(dotproduct)
 {

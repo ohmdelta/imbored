@@ -1,6 +1,4 @@
-#ifdef STAND_ALONE
 #define BOOST_TEST_MODULE Tests
-#endif
 
 #include <boost/test/unit_test.hpp>
 #include "renderer.hpp"

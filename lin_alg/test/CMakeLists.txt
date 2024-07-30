@@ -30,4 +30,5 @@ function(add_boost_test SOURCE_FILE_NAME DEPENDENCY_LIB)
 endfunction()
 
 enable_testing()
+add_boost_test(vector.cpp lin_alg)
 add_boost_test(transformation.cpp lin_alg)
