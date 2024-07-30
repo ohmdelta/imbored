@@ -1,8 +1,9 @@
 #ifndef SHAPES_HPP
 #define SHAPES_HPP
 
-#include <lin_alg.hpp>
 #include <cmath>
+
+#include "lin_alg.hpp"
 
 namespace renderer
 {

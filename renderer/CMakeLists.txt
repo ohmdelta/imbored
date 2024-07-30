@@ -26,3 +26,6 @@ target_include_directories(
 set_target_properties(renderer PROPERTIES VERSION 1.0.0 SOVERSION 1)
 
 target_link_libraries(renderer lin_alg polynomial)
+
+enable_testing()
+add_subdirectory(test)

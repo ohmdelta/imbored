@@ -6,7 +6,7 @@
 #include <thread>
 
 #include "renderer.hpp"
-#include "lin_alg/lin_alg.hpp"
+#include "lin_alg.hpp"
 
 using namespace lin_alg;
 using namespace renderer;
