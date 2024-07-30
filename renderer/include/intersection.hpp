@@ -9,8 +9,9 @@
 
 namespace renderer
 {
-    struct intersection
+    struct Intersection
     {
+        bool valid;
         size_t id;
         double ray_length;
         lin_alg::Coordinate coordinate;

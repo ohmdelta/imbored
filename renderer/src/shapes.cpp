@@ -1,4 +1,4 @@
-#include "shapes.hpp"
+#include "sphere.hpp"
 #include <iostream>
 
 namespace renderer
