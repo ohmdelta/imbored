@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5.0)
-project(renderer_test)
+project(lin_alg_test)
 
 find_package(Boost COMPONENTS system filesystem unit_test_framework REQUIRED)
 
@@ -23,11 +23,11 @@ function(add_boost_test SOURCE_FILE_NAME DEPENDENCY_LIB)
     foreach(HIT ${FOUND_TESTS})
         string(REGEX REPLACE ".*\\( *([A-Za-z_0-9]+) *\\).*" "\\1" TEST_NAME ${HIT})
         
-        add_test(NAME "${TEST_EXECUTABLE_NAME}.${TEST_NAME}" 
+        add_test(NAME "${PROJECT_NAME}.${TEST_EXECUTABLE_NAME}.${TEST_NAME}" 
                  COMMAND ${TEST_EXECUTABLE_NAME}
                  --run_test=*/${TEST_NAME} --catch_system_error=yes)
     endforeach()
 endfunction()
 
 enable_testing()
-add_boost_test(main.cpp "")
+add_boost_test(transformation.cpp lin_alg)

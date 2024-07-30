@@ -21,3 +21,6 @@ target_include_directories(
     include
 )
 set_target_properties(lin_alg PROPERTIES VERSION 1.0.0 SOVERSION 1)
+
+enable_testing()
+add_subdirectory(test)

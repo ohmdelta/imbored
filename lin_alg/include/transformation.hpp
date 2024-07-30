@@ -24,6 +24,10 @@ namespace lin_alg
         friend TransformationMatrix operator*(TransformationMatrix t, double p);
         friend TransformationMatrix operator/(TransformationMatrix t, double p);
 
+        friend TransformationMatrix operator+(TransformationMatrix a, TransformationMatrix b);
+
+        friend TransformationMatrix operator*(TransformationMatrix a, TransformationMatrix b);
+
         friend Vector operator*(const TransformationMatrix &t, const Vector &p);
 
         TransformationMatrix &operator*=(double p);
@@ -31,8 +35,6 @@ namespace lin_alg
         TransformationMatrix &operator-=(const TransformationMatrix &matrix);
 
         TransformationMatrix &operator*=(const TransformationMatrix &t);
-
-        TransformationMatrix operator+(const TransformationMatrix &matrix);
 
         void transpose();
 
@@ -79,6 +81,22 @@ namespace lin_alg
             for (size_t i = 0; i < 4; i++)
             {
                 index(i, i) = 1;
+            }
+        }
+    };
+
+    class Ones : public TransformationMatrix
+    {
+    public:
+        Ones()
+        {
+            for (size_t i = 0; i < 4; i++)
+            {
+                for (size_t j = 0; j < 4; j++)
+                {
+                    /* code */
+                    index(i, j) = 1;
+                }
             }
         }
     };
