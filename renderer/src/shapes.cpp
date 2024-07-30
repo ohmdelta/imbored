@@ -3,7 +3,7 @@
 
 namespace renderer
 {
-    lin_alg::Coordinate Sphere::line_intersection(
+    Intersection Sphere::line_intersection(
         lin_alg::Coordinate p0,
         lin_alg::Coordinate d)
     {
@@ -19,13 +19,14 @@ namespace renderer
         if (v < 0)
         {
             result.a = 0;
-            return result;
+            // return result;
+            return Intersection(false, result);
         }
 
         double mu = (-b - sqrt(v)) / (2 * a);
 
         lin_alg::Coordinate d_ = (d * mu);
         result += (p0 + d_);
-        return result;
+        return Intersection(true, result, mu);
     };
 };

@@ -100,7 +100,7 @@ namespace renderer
                     lin_alg::Coordinate(0, x, y),
                     dir);
 
-                if (inter_.a)
+                if (inter_.valid)
                 {
                     display(i, j) += 255 / (super_sampling * super_sampling);
                     break;

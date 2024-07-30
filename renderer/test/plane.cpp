@@ -14,10 +14,10 @@ BOOST_AUTO_TEST_CASE(PlaneIntersection)
     auto intersection = plane.line_intersection(lin_alg::Coordinate(0, 0, 1), lin_alg::Coordinate(0, 0, -1));
     for (size_t i = 0; i < 3; i++)
     {
-        BOOST_CHECK_EQUAL(intersection[i], 0);
+        BOOST_CHECK_EQUAL(intersection.coordinate[i], 0);
     }
-    
-    BOOST_CHECK_EQUAL(intersection.a, 1);
+
+    BOOST_CHECK_EQUAL(intersection.coordinate.a, 1);
 }
 
 BOOST_AUTO_TEST_SUITE_END();

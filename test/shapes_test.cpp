@@ -14,7 +14,7 @@ BOOST_AUTO_TEST_CASE(sphere_intersection)
     renderer::Sphere sphere(1.0, lin_alg::Coordinate(2, 0, 0));
     auto intersection = sphere.line_intersection(
         lin_alg::Coordinate(0, 0, 0),
-        lin_alg::Coordinate(1, 0, 0));
+        lin_alg::Coordinate(1, 0, 0)).coordinate;
     
     BOOST_CHECK_CLOSE(intersection.x, 1.0, 0.001);
     BOOST_CHECK_CLOSE(intersection.y, 0.0, 0.001);
@@ -23,7 +23,7 @@ BOOST_AUTO_TEST_CASE(sphere_intersection)
 
     auto intersection2 = sphere.line_intersection(
         lin_alg::Coordinate(0, 0, 1),
-        lin_alg::Coordinate(1, 0, 0));
+        lin_alg::Coordinate(1, 0, 0)).coordinate;
 
     BOOST_CHECK_CLOSE(intersection2.x, 2.0, 0.001);
     BOOST_CHECK_CLOSE(intersection2.y, 0.0, 0.001);
@@ -32,7 +32,7 @@ BOOST_AUTO_TEST_CASE(sphere_intersection)
 
     auto intersection3 = sphere.line_intersection(
         lin_alg::Coordinate(0, 0, 2),
-        lin_alg::Coordinate(1, 0, 0));
+        lin_alg::Coordinate(1, 0, 0)).coordinate;
     
     BOOST_CHECK_CLOSE(intersection3.x, 0.0, 0.001);
     BOOST_CHECK_CLOSE(intersection3.y, 0.0, 0.001);

@@ -12,9 +12,20 @@ namespace renderer
     struct Intersection
     {
         bool valid;
-        size_t id;
-        double ray_length;
         lin_alg::Coordinate coordinate;
+        double ray_length;
+        size_t id = -1;
+
+        Intersection(
+            bool valid_,
+            const lin_alg::Coordinate &coordinate_,
+            double ray_length_ = 0.0,
+            size_t id_ = -1) : valid(valid_),
+                               coordinate(coordinate_),
+                               ray_length(ray_length_),
+                               id(id_)
+        {
+        }
     };
 };
 

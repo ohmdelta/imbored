@@ -25,7 +25,7 @@ namespace renderer
             return (origin - c) * -1;
         }
 
-        lin_alg::Coordinate line_intersection(
+        Intersection line_intersection(
             lin_alg::Coordinate p0,
             lin_alg::Coordinate d) override;
 

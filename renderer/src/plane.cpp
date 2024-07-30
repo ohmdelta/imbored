@@ -11,7 +11,7 @@ namespace renderer
         origin = origin_;
     }
 
-    lin_alg::Coordinate Plane::line_intersection(
+    Intersection Plane::line_intersection(
         lin_alg::Coordinate p0,
         lin_alg::Coordinate l)
     {
@@ -20,7 +20,7 @@ namespace renderer
         {
             auto c = lin_alg::Coordinate(0, 0, 0);
             c.a = 0;
-            return c;
+            return Intersection(false, c);
         }
 
         double d = (origin - p0).dot(normal_) / v;
@@ -28,11 +28,13 @@ namespace renderer
         {
             auto c = lin_alg::Coordinate(0, 0, 0);
             c.a = 0;
-            return c;
+
+            return Intersection(false, c);
         }
 
         lin_alg::Coordinate l_ = (l * d);
-        return p0 + l_;
+        
+        return Intersection(true, p0 + l_, d);
     }
 
     lin_alg::Vector Plane::normal(const lin_alg::Coordinate &)

@@ -17,7 +17,7 @@ namespace renderer
 
         lin_alg::Vector normal(const lin_alg::Coordinate &c) override;
 
-        lin_alg::Coordinate line_intersection(
+        Intersection line_intersection(
             lin_alg::Coordinate l0,
             lin_alg::Coordinate l) override;
 

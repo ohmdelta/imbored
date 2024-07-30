@@ -22,7 +22,7 @@ namespace renderer{
             rotation = t;
         }
 
-        lin_alg::Coordinate Torus::line_intersection(
+        Intersection Torus::line_intersection(
             lin_alg::Coordinate p0,
             lin_alg::Coordinate d)
         {
@@ -73,13 +73,13 @@ namespace renderer{
             if (intersections_mu.num_solutions == 0)
             {
                 result.a = 0;
-                return result;
+                return Intersection(false, result);
             }
             else
             {
                 auto min_mu = intersections_mu.min();
                 result += p0 + d * min_mu;
-                return result;
+                return Intersection(true, result, min_mu);
             }
         }
 

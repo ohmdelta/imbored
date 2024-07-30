@@ -24,10 +24,10 @@ namespace renderer
         void set_origin(const lin_alg::Coordinate &origin_) override;
 
         lin_alg::Vector normal(const lin_alg::Coordinate &c) override;
-        
+
         void set_rotation(lin_alg::TransformationMatrix t);
-        
-        lin_alg::Coordinate line_intersection(
+
+        Intersection line_intersection(
             lin_alg::Coordinate p0,
             lin_alg::Coordinate d) override;
 
