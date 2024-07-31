@@ -11,6 +11,7 @@ add_library(
   renderer
   SHARED
   src/display.cpp
+  src/intersection.cpp
   src/plane.cpp
   src/sphere.cpp
   src/torus.cpp

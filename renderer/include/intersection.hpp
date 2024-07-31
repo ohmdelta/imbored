@@ -4,7 +4,6 @@
 #include <cmath>
 #include <memory>
 
-#include "shapes.hpp"
 #include "ray.hpp"
 #include "lin_alg.hpp"
 
@@ -29,16 +28,8 @@ namespace renderer
         {
         }
 
-        Ray reflected_ray(Ray ray)
-        {
-            lin_alg::Coordinate &v = ray.line_gradient;
-
-            ray.line_origin = coordinate;
-            v = v - normal * (2 * (v.dot(normal)));
-
-            return ray;
-        }
-
+        Ray reflected_ray(Ray ray);
+        
         friend bool operator<(const Intersection &l, const Intersection &r);
     };
 };

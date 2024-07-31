@@ -4,7 +4,7 @@
 #include <cmath>
 #include <memory>
 
-#include "shapes.hpp"
+#include "lin_alg.hpp"
 
 namespace renderer
 {
@@ -12,7 +12,13 @@ namespace renderer
     {
         lin_alg::Coordinate line_origin;
         lin_alg::Coordinate line_gradient;
-        double ray_length;
+        double ray_length = 1;
+
+        Ray(lin_alg::Coordinate line_origin_,
+            lin_alg::Coordinate line_gradient_,
+            double ray_length_ = 1) : line_origin(line_origin_),
+                                      line_gradient(line_gradient_),
+                                      ray_length(ray_length_) {};
     };
 };
 

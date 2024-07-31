@@ -25,7 +25,7 @@ namespace renderer
         double mu = (-b - sqrt(v)) / (2 * a);
         if (mu < 0)
         {
-            double mu = (-b + sqrt(v)) / (2 * a);
+            mu = (-b + sqrt(v)) / (2 * a);
         }
 
         if (mu < 0)
