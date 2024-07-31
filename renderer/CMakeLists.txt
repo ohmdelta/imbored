@@ -12,7 +12,7 @@ add_library(
   SHARED
   src/display.cpp
   src/plane.cpp
-  src/shapes.cpp
+  src/sphere.cpp
   src/torus.cpp
 )
 

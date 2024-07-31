@@ -27,6 +27,8 @@ namespace renderer
 
         lin_alg::Coordinate d_ = (d * mu);
         result += (p0 + d_);
-        return Intersection(true, result, mu);
+        Intersection intersection(true, result, mu);
+        intersection.normal = normal(result);
+        return intersection;
     };
 };

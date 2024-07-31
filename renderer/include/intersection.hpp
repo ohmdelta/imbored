@@ -32,7 +32,7 @@ namespace renderer
         Ray reflected_ray(Ray ray)
         {
             lin_alg::Coordinate &v = ray.line_gradient;
-            // auto v = normal;
+
             ray.line_origin = coordinate;
             v = v - normal * (2 * (v.dot(normal)));
 

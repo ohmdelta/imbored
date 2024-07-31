@@ -1,6 +1,4 @@
-#ifdef STAND_ALONE
 #define BOOST_TEST_MODULE Tests
-#endif
 
 #include <boost/test/unit_test.hpp>
 #include "polynomial.hpp"
@@ -146,6 +144,15 @@ BOOST_AUTO_TEST_CASE(QuarticSolveMany)
             }
         }
     }
+}
+
+BOOST_AUTO_TEST_CASE(QuarticSolutionMingeZero)
+{
+    QuarticSolution solution;
+    solution.add_sol(2);
+    solution.add_sol(1);
+    solution.add_sol(-2);
+    BOOST_CHECK_EQUAL(solution.min_ge_zero(), 1);
 }
 
 BOOST_AUTO_TEST_SUITE_END();

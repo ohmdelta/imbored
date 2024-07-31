@@ -1,6 +1,4 @@
-#ifdef STAND_ALONE
 #define BOOST_TEST_MODULE Tests
-#endif
 
 #ifndef QUADRATIC_TEST_CPP
 #define QUADRATIC_TEST_CPP

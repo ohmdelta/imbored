@@ -34,7 +34,9 @@ namespace renderer
 
         lin_alg::Coordinate l_ = (l * d);
         
-        return Intersection(true, p0 + l_, d);
+        Intersection intersection(true, p0 + l_, d);
+        intersection.normal = normal_;
+        return intersection;
     }
 
     lin_alg::Vector Plane::normal(const lin_alg::Coordinate &)

@@ -79,7 +79,9 @@ namespace renderer{
             {
                 auto min_mu = intersections_mu.min();
                 result += p0 + d * min_mu;
-                return Intersection(true, result, min_mu);
+                Intersection intersection(true, result, min_mu);
+                // intersection.
+                return intersection;
             }
         }
 

@@ -46,6 +46,25 @@ namespace polynomial
             return *std::min_element(sol, sol + num_solutions);
         }
 
+        double min_ge_zero()
+        {
+            double k = INFINITY;
+            for (size_t i = 0; i < num_solutions; i++)
+            {
+                if (sol[i] > 0)
+                {
+                    k = std::min(k, sol[i]);
+                }
+            }
+
+            if (k == INFINITY)
+            {
+                return -1;
+            }
+            return k;
+            // return *std::min_element((sol | std::view::filter(ge_zero)));
+        }
+
         iterator begin() { return sol; }
         const_iterator begin() const { return sol; }
         iterator end() { return sol + num_solutions; }
