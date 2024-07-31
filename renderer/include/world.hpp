@@ -51,7 +51,9 @@ namespace renderer
                             auto x = i + ((double)c / super_sampling);
                             auto y = j + ((double)d / super_sampling);
 
-                            update_pixel_(x, y, dir, display, i, j);
+                            update_pixel_(dir, display,
+                                          i, j,
+                                          lin_alg::Coordinate(0, x, y));
                         }
                     }
                 }
@@ -81,7 +83,7 @@ namespace renderer
                             auto y = j + ((double)d / super_sampling) - width_half;
                             lin_alg::Coordinate dir(focal_point, x, y);
 
-                            update_pixel_(x, y, dir, display, i, j);
+                            update_pixel_(dir, display, i, j, lin_alg::Coordinate(0, 0, 0));
                         }
                     }
                 }
@@ -89,15 +91,15 @@ namespace renderer
         }
 
         void update_pixel_(
-            double x, double y,
             lin_alg::Coordinate &dir,
             renderer::Display &display,
-            size_t i, size_t j)
+            size_t i, size_t j,
+            lin_alg::Coordinate origin)
         {
             for (auto &obj : objects)
             {
                 auto inter_ = obj->line_intersection(
-                    lin_alg::Coordinate(0, x, y),
+                    origin,
                     dir);
 
                 if (inter_.valid)

@@ -19,11 +19,20 @@ namespace renderer
         if (v < 0)
         {
             result.a = 0;
-            // return result;
             return Intersection(false, result);
         }
 
         double mu = (-b - sqrt(v)) / (2 * a);
+        if (mu < 0)
+        {
+            double mu = (-b + sqrt(v)) / (2 * a);
+        }
+
+        if (mu < 0)
+        {
+            result.a = 0;
+            return Intersection(false, result);
+        }
 
         lin_alg::Coordinate d_ = (d * mu);
         result += (p0 + d_);

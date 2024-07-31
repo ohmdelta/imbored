@@ -38,7 +38,7 @@ int main()
     world.add_object(sphere);
     world.add_object(sphere2);
 
-    for (size_t i = 0; i < 210; i++)
+    for (size_t i = 0; i < 250; i++)
     {
         t.clear();
         sphere->set_origin(Coordinate(5000, 0, ++z));
