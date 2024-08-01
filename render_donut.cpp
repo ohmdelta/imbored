@@ -40,7 +40,7 @@ int main()
     std::cout << "columns " << cols << std::endl;
 
     World world(cols, rows, 3, 500);
-    TerminalDisplay t(cols, rows, 2);
+    std::shared_ptr<TerminalDisplay> t = std::make_shared<TerminalDisplay>(cols, rows, 2);
 
     // auto z = 50;
     auto sphere = std::make_shared<Torus>(
@@ -84,16 +84,16 @@ int main()
 
     for (size_t i = 0; i < 210; i++)
     {
-        t.clear();
+        t->clear();
         world.render_perspective(t);
-        std::cout << t.render_to_str().str();
+        std::cout << t->render_to_str().str();
         // current = transformation * current;
         transformation = set_transformation_angle_z(transformation, angle);
         sphere->set_rotation(transformation);
         sphere2->set_rotation(transformation * transformation2);
         // std::cout << transformation << std::endl;
         angle += M_PI_2 / 32;
-        std::this_thread::sleep_for(std::chrono::milliseconds(30));
+        std::this_thread::sleep_for(std::chrono::milliseconds(40));
     }
 
     return 0; // make sure your main returns int

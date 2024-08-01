@@ -2,6 +2,7 @@
 #include <sys/ioctl.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <memory>
 #include <chrono>
 #include <thread>
 
@@ -67,7 +68,7 @@ int main()
     std::cout << "lines " << rows << std::endl;
     std::cout << "columns " << cols << std::endl;
 
-    renderer::TerminalDisplay t(cols, rows);
+    std::shared_ptr<TerminalDisplay> t = std::make_shared<TerminalDisplay>(cols, rows);
 
     cv::VideoCapture cap("./videoplayback.mp4");
     if (!cap.isOpened()) // check if we succeeded
@@ -87,13 +88,13 @@ int main()
         {
             for (size_t j = 0; j < cols; j++)
             {
-                t(i, j) = temp.at<unsigned char>(i, j);
+                t->operator()(i, j) = temp.at<unsigned char>(i, j);
             }
         }
-        std::cout << t.render_to_str().str();
+        std::cout << t->render_to_str().str();
         std::this_thread::sleep_for(std::chrono::milliseconds(42));
 
-        t.clear();
+        t->clear();
     }
 
     return 0; // make sure your main returns int

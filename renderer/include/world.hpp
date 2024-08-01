@@ -2,6 +2,11 @@
 #define WORLD_HPP
 
 #include <vector>
+#include <atomic>
+#include <functional>
+#include <memory>
+#include <thread>
+#include <cstdlib>
 
 #include "shapes.hpp"
 #include "display.hpp"
@@ -30,10 +35,10 @@ namespace renderer
 
         void render(Display &display);
 
-        void render_orthographic(Display &display)
+        void render_orthographic(std::shared_ptr<Display> display)
         {
-            auto width = display.width();
-            auto height = display.height();
+            auto width = display->width();
+            auto height = display->height();
 
             auto min_width = std::min(width, view_port_width);
             auto min_height = std::min(height, view_port_height);
@@ -60,41 +65,44 @@ namespace renderer
             }
         }
 
-        void render_perspective(Display &display)
+
+        void render_perspective(std::shared_ptr<Display> display)
         {
-            auto width = display.width();
-            auto height = display.height();
+            size_t width = display->width();
+            size_t height = display->height();
 
-            auto min_width = std::min(width, view_port_width);
-            auto min_height = std::min(height, view_port_height);
+            size_t min_width = std::min(width, view_port_width);
+            size_t min_height = std::min(height, view_port_height);
+            size_t max_pixels = min_width * min_height;
 
-            auto width_half = min_width / 2;
-            auto height_half = min_height / 2;
+            pixel_index = 0;
 
-            for (size_t i = 0; i < min_height; i++)
+            std::vector<std::thread> thread_pool;
+            thread_pool.reserve(num_threads);
+
+            for (size_t i = 0; i < num_threads; i++)
             {
-                for (size_t j = 0; j < min_width; j++)
-                {
-                    for (size_t c = 0; c < super_sampling; c++)
-                    {
-                        for (size_t d = 0; d < super_sampling; d++)
-                        {
-                            auto x = i + ((double)c / super_sampling) - height_half;
-                            auto y = j + ((double)d / super_sampling) - width_half;
-                            lin_alg::Coordinate dir(focal_point, x, y);
+                thread_pool.push_back(
+                    std::thread(
+                        &World::update_display,
+                        this,
+                        std::ref(display),
+                        min_width,
+                        min_height,
+                        max_pixels));
+            }
 
-                            update_pixel_(dir, display, i, j, lin_alg::Coordinate(0, 0, 0));
-                        }
-                    }
-                }
+            for (auto &thread : thread_pool)
+            {
+                thread.join();
             }
         }
 
         void update_pixel_(
             lin_alg::Coordinate &dir,
-            renderer::Display &display,
+            std::shared_ptr<renderer::Display> display,
             size_t i, size_t j,
-            lin_alg::Coordinate origin)
+            const lin_alg::Coordinate &origin)
         {
             for (auto &obj : objects)
             {
@@ -104,8 +112,49 @@ namespace renderer
 
                 if (inter_.valid)
                 {
-                    display(i, j) += 255 / (super_sampling * super_sampling);
+                    display->operator()(i, j) += 255 / (super_sampling * super_sampling);
                     break;
+                }
+            }
+        }
+
+    private:
+        void update_display(
+            std::shared_ptr<Display> display,
+            const int min_width,
+            const int min_height,
+            const int max_pixels)
+        {
+            auto width_half = min_width / 2;
+            auto height_half = min_height / 2;
+
+            for (int count = 0; (count = pixel_index++) < max_pixels;)
+            {
+                auto v = std::div(count, min_width);
+                size_t i = v.quot;
+                size_t j = v.rem;
+
+                for (size_t c = 0; c < super_sampling; c++)
+                {
+                    for (size_t d = 0; d < super_sampling; d++)
+                    {
+                        double x = i + ((double)c / super_sampling) - height_half;
+                        double y = j + ((double)d / super_sampling) - width_half;
+                        lin_alg::Coordinate dir(focal_point, x, y);
+
+                        for (const auto &obj : objects)
+                        {
+                            auto inter_ = obj->line_intersection(
+                                origin,
+                                dir);
+
+                            if (inter_.valid)
+                            {
+                                display->operator()(i, j) += 255 / (super_sampling * super_sampling);
+                                break;
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -121,6 +170,9 @@ namespace renderer
         lin_alg::Coordinate origin = lin_alg::Coordinate(0.0, 0.0, 0.0);
 
         std::vector<std::shared_ptr<Shape>> objects;
+        std::atomic_int64_t pixel_index = 0;
+
+        size_t num_threads = 32;
     };
 
 };
