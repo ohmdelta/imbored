@@ -10,12 +10,13 @@ include_directories(include)
 add_library(
   renderer
   SHARED
+  src/checkerboard.cpp
   src/display.cpp
   src/intersection.cpp
   src/plane.cpp
   src/sphere.cpp
   src/torus.cpp
-  src/checkerboard.cpp
+  src/world.cpp
 )
 
 
