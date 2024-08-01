@@ -7,5 +7,6 @@
 #include "torus.hpp"
 #include "plane.hpp"
 #include "sphere.hpp"
+#include "checkerboard.hpp"
 
 #endif

@@ -70,7 +70,11 @@ int main()
 
     auto angle = 0.0;
 
-    auto plane = std::make_shared<Plane>(lin_alg::Coordinate(0, 100, 0), lin_alg::Coordinate(0, 1, 0));
+    auto plane = std::make_shared<CheckerBoard>(
+        lin_alg::Coordinate(0, 100, 0),
+        lin_alg::Coordinate(0, 1, 0),
+        lin_alg::Coordinate(0.01, 0, 0));
+
     world.add_object(plane);
 
     world.add_object(sphere);

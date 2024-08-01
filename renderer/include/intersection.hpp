@@ -19,7 +19,7 @@ namespace renderer
 
         Intersection(
             bool valid_,
-            const lin_alg::Coordinate &coordinate_,
+            const lin_alg::Coordinate &coordinate_ = lin_alg::Coordinate(0, 0, 0),
             double ray_length_ = 0.0,
             size_t id_ = -1) : valid(valid_),
                                coordinate(coordinate_),
@@ -29,7 +29,7 @@ namespace renderer
         }
 
         Ray reflected_ray(Ray ray);
-        
+
         friend bool operator<(const Intersection &l, const Intersection &r);
     };
 };

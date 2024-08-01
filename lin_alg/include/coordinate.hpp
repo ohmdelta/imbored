@@ -93,7 +93,7 @@ namespace lin_alg
         {
             lhs.normalise();
             rhs.normalise();
-            
+
             lhs.x += rhs.x;
             lhs.y += rhs.y;
             lhs.z += rhs.z;
@@ -101,20 +101,7 @@ namespace lin_alg
             return lhs;
         }
 
-        // friend Coordinate operator+(Coordinate lhs, const Coordinate& rhs)
-        // {
-        //     lhs.normalise();
-        //     Coordinate c = rhs;
-        //     c.normalise();
-
-        //     lhs.x += c.x;
-        //     lhs.y += c.y;
-        //     lhs.z += c.z;
-
-        //     return lhs;
-        // }
-
-        friend Coordinate operator-(Coordinate lhs, Coordinate& rhs)
+        friend Coordinate operator-(Coordinate lhs, Coordinate &rhs)
         {
             lhs.normalise();
             rhs.normalise();
@@ -129,7 +116,7 @@ namespace lin_alg
         friend Coordinate operator*(Coordinate lhs, double rhs)
         {
             lhs.normalise();
-            
+
             lhs.x *= rhs;
             lhs.y *= rhs;
             lhs.z *= rhs;
@@ -179,7 +166,6 @@ namespace lin_alg
             return Str;
         }
 
-
         bool valid() override
         {
             return a != 0;
@@ -193,6 +179,7 @@ namespace lin_alg
             return x * coordinate.x + y * coordinate.y + coordinate.z * z;
         }
 
+        Coordinate cross(Coordinate &coordinate);
     };
 
 }

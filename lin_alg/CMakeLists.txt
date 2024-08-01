@@ -11,6 +11,7 @@ add_library(
     lin_alg
     SHARED
     src/coordinate.cpp
+    src/vector.cpp
     src/transformation.cpp
 )
 

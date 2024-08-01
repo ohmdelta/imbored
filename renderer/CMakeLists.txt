@@ -15,6 +15,7 @@ add_library(
   src/plane.cpp
   src/sphere.cpp
   src/torus.cpp
+  src/checkerboard.cpp
 )
 
 

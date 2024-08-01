@@ -30,7 +30,7 @@ int main()
         Coordinate(5000, 0, z));
 
     // auto y = -50;
-    auto depth = 5000;
+    auto depth = 1500;
     auto sphere2 = std::make_shared<Sphere>(
         5,
         Coordinate(depth, 5, 0));
@@ -38,7 +38,7 @@ int main()
     world.add_object(sphere);
     world.add_object(sphere2);
 
-    for (size_t i = 0; i < 250; i++)
+    for (size_t i = 0; i < 100; i++)
     {
         t.clear();
         sphere->set_origin(Coordinate(5000, 0, ++z));

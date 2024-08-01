@@ -3,5 +3,6 @@
 
 #include "coordinate.hpp"
 #include "transformation.hpp"
+#include "direction.hpp"
 
 #endif

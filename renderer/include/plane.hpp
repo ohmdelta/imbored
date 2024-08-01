@@ -17,11 +17,11 @@ namespace renderer
 
         lin_alg::Vector normal(const lin_alg::Coordinate &c) override;
 
-        Intersection line_intersection(
+        virtual Intersection line_intersection(
             lin_alg::Coordinate l0,
             lin_alg::Coordinate l) override;
 
-    private:
+    protected:
         lin_alg::Coordinate origin;
         lin_alg::Coordinate normal_;
     };
