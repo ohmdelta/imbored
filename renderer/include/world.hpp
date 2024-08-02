@@ -8,9 +8,11 @@
 #include <thread>
 #include <cstdlib>
 
+#include "lin_alg.hpp"
+
 #include "shapes.hpp"
 #include "display.hpp"
-#include "lin_alg.hpp"
+#include "light_source.hpp"
 
 namespace renderer
 {
@@ -33,11 +35,24 @@ namespace renderer
             objects.push_back(object);
         }
 
+        inline void add_light_source(std::shared_ptr<LightSource> light_source)
+        {
+            light_sources.push_back(light_source);
+        }
+
         void render_orthographic(std::shared_ptr<Display> display);
 
         void render_perspective(std::shared_ptr<Display> display);
 
+        void ray_trace_perspective(std::shared_ptr<Display> display);
+
     private:
+        bool intersecting(lin_alg::Coordinate dir,
+                          const lin_alg::Coordinate &origin);
+
+        Intersection min_intersection(lin_alg::Coordinate dir,
+                                      const lin_alg::Coordinate &origin);
+
         void update_pixel_(
             lin_alg::Coordinate &dir,
             std::shared_ptr<renderer::Display> display,
@@ -61,6 +76,8 @@ namespace renderer
         lin_alg::Coordinate origin = lin_alg::Coordinate(0.0, 0.0, 0.0);
 
         std::vector<std::shared_ptr<Shape>> objects;
+        std::vector<std::shared_ptr<LightSource>> light_sources;
+
         std::atomic_int64_t pixel_index = 0;
 
         size_t num_threads = 32;

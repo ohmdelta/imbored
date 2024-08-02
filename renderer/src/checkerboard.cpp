@@ -8,7 +8,7 @@ namespace renderer
         lin_alg::Coordinate l)
     {
         Intersection intersection = Plane::line_intersection(p0, l);
-        // std::cout << "intersection" << std::endl;
+
         if(!intersection.valid) {
             return intersection;
         }

@@ -7,7 +7,6 @@ namespace renderer
         lin_alg::Coordinate p0,
         lin_alg::Coordinate d)
     {
-        lin_alg::Coordinate result(0, 0, 0);
         lin_alg::Coordinate delta_p = p0 - origin;
 
         double a = d.norm_sq();
@@ -17,8 +16,7 @@ namespace renderer
         double v = b * b - 4 * a * c;
         if (v < 0)
         {
-            result.a = 0;
-            return Intersection(false, result);
+            return Intersection(false);
         }
 
         double mu = (-b - sqrt(v)) / (2 * a);
@@ -27,13 +25,13 @@ namespace renderer
             mu = (-b + sqrt(v)) / (2 * a);
             if (mu <= 0)
             {
-                result.a = 0;
-                return Intersection(false, result);
+                return Intersection(false);
             }
         }
 
         lin_alg::Coordinate d_ = (d * mu);
-        result += (p0 + d_);
+        lin_alg::Coordinate result = (p0 + d_);
+
         Intersection intersection(true, result, mu);
         intersection.normal = normal(result);
         return intersection;

@@ -13,7 +13,7 @@ namespace renderer
         return ray;
     }
 
-    inline bool operator<(const Intersection &l, const Intersection &r)
+    bool operator<(const Intersection &l, const Intersection &r)
     {
         if (!l.valid)
         {

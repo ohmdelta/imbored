@@ -8,7 +8,7 @@
 
 namespace renderer
 {
-    struct light_source
+    struct LightSource
     {
         size_t id;
         double intensity;
