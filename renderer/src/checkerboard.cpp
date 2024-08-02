@@ -15,8 +15,6 @@ namespace renderer
 
         lin_alg::Coordinate direction = intersection.coordinate - origin;
         direction.a = 1.0;
-
-        // std::cout << direction << std::endl;
         
         int x = std::ceil(direction.dot(grid_orientation_x));
         int y = std::ceil(direction.dot(grid_orientation_y));

@@ -16,7 +16,7 @@ add_subdirectory(test)
 add_executable(Main main.cpp)
 target_link_libraries(Main lin_alg)
 target_link_libraries(Main renderer)
-target_link_libraries(Main ${OpenCV_LIBS} )
+target_link_libraries(Main ${OpenCV_LIBS})
 
 
 add_executable(render_balls render_balls.cpp)

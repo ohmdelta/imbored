@@ -13,7 +13,7 @@ namespace polynomial
         }
 
         double v = sq(q) / 4 + cube(p) / 27;
-        // std::cout << "V" << v << std::endl;
+
         if (v == 0)
         {
             solution.add_sol(3 * q / p);
@@ -54,7 +54,6 @@ namespace polynomial
         double q = (2 * cube(b) - 9 * a * b * c + 27 * sq(a) * d) / (27 * cube(a));
         double offset = b / (3 * a);
 
-        // std::cout << p << ", " << q << ", " << offset << std::endl;
         auto sol = solve_depressed_cubic(p, q);
         for (size_t i = 0; i < sol.num_solutions; i++)
         {

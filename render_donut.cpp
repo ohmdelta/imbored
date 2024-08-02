@@ -87,11 +87,11 @@ int main()
         t->clear();
         world.render_perspective(t);
         std::cout << t->render_to_str().str();
-        // current = transformation * current;
+
         transformation = set_transformation_angle_z(transformation, angle);
         sphere->set_rotation(transformation);
         sphere2->set_rotation(transformation * transformation2);
-        // std::cout << transformation << std::endl;
+
         angle += M_PI_2 / 32;
         std::this_thread::sleep_for(std::chrono::milliseconds(40));
     }

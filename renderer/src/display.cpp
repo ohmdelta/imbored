@@ -29,7 +29,6 @@ namespace renderer
         }
     }
 
-
     unsigned char TerminalDisplay::val_to_char_4_bit(unsigned char i)
     {
         switch (i >> 4)
@@ -90,7 +89,7 @@ namespace renderer
                     ss << val_to_char_3_bit(matrix[c + r * width_]);
                 }
             }
-            ss << std::endl;
+            ss << '\n';
         }
         return ss;
     }
