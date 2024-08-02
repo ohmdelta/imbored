@@ -14,7 +14,7 @@ namespace renderer
     {
         Intersection(
             bool valid_,
-            const lin_alg::Coordinate &coordinate_ = lin_alg::Coordinate(0, 0, 0),
+            const lin_alg::Coordinate &coordinate_ = lin_alg::Origin(),
             double ray_length_ = 0.0,
             size_t id_ = -1) : valid(valid_),
                                coordinate(coordinate_),
@@ -27,7 +27,7 @@ namespace renderer
         lin_alg::Coordinate coordinate;
         double ray_length;
         size_t id = -1;
-        lin_alg::Coordinate normal = lin_alg::Coordinate(0, 0, 0);
+        lin_alg::Coordinate normal = lin_alg::Origin();
 
         double max_length = 1000;
 

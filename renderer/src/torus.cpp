@@ -30,6 +30,9 @@ namespace renderer
         lin_alg::Coordinate p0,
         lin_alg::Coordinate d)
     {
+        lin_alg::Coordinate p0_ = p0;
+        lin_alg::Coordinate dir_ = d;
+
         p0 -= origin;
         d = rotation * d;
         p0 = rotation * p0;
@@ -84,7 +87,7 @@ namespace renderer
                 return Intersection(false);
             }
 
-            lin_alg::Coordinate result = p0 + d * min_mu;
+            lin_alg::Coordinate result = p0_ + dir_ * min_mu;
             Intersection intersection(true, result, min_mu);
 
             auto x = result.x;

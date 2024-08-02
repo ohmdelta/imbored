@@ -9,7 +9,7 @@ using namespace renderer;
 
 BOOST_AUTO_TEST_CASE(IntersectionReflection)
 {
-    Intersection intersection(1, lin_alg::Coordinate(0, 0, 0), 1);
+    Intersection intersection(1, lin_alg::Origin(), 1);
     intersection.normal = lin_alg::Coordinate(0, 0, 1);
     
     Ray ray(lin_alg::Coordinate(1, 0, 1), lin_alg::Coordinate(-1, 0, -1));

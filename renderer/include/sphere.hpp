@@ -11,13 +11,18 @@ namespace renderer
     {
         Sphere(
             double radius_ = 0.0,
-            const lin_alg::Coordinate &origin_ = lin_alg::Coordinate(0, 0, 0)) : radius(radius_), origin(origin_)
+            const lin_alg::Coordinate &origin_ = lin_alg::Origin()) : radius(radius_), origin(origin_)
         {
         }
 
         void set_origin(const lin_alg::Coordinate &origin_) override
         {
             origin = origin_;
+        }
+
+        lin_alg::Coordinate get_origin() override
+        {
+            return origin;
         }
 
         lin_alg::Vector normal(const lin_alg::Coordinate &c) override

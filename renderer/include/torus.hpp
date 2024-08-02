@@ -17,10 +17,15 @@ namespace renderer
         Torus(
             double ring_radius_,
             double torus_radius_,
-            lin_alg::Coordinate origin_ = lin_alg::Coordinate(0, 0, 0)) : ring_radius(ring_radius_),
+            lin_alg::Coordinate origin_ = lin_alg::Origin()) : ring_radius(ring_radius_),
                                                                           torus_radius(torus_radius_),
                                                                           origin(origin_) {}
 
+        lin_alg::Coordinate get_origin() override
+        {
+            return origin;
+        }
+        
         void set_origin(const lin_alg::Coordinate &origin_) override;
 
         lin_alg::Vector normal(const lin_alg::Coordinate &c) override;

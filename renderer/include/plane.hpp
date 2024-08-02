@@ -21,6 +21,11 @@ namespace renderer
             lin_alg::Coordinate l0,
             lin_alg::Coordinate l) override;
 
+        lin_alg::Coordinate get_origin() override
+        {
+            return origin;
+        }
+
     protected:
         lin_alg::Coordinate origin;
         lin_alg::Coordinate normal_;

@@ -187,6 +187,10 @@ namespace lin_alg
         Coordinate cross(Coordinate &coordinate);
     };
 
+    struct Origin : public Coordinate
+    {
+        Origin() : Coordinate(0, 0, 0) {}
+    };
 }
 
 #endif

@@ -13,6 +13,13 @@ namespace renderer
         size_t id;
         double intensity;
         std::shared_ptr<Shape> shape;
+
+        LightSource(
+            size_t id_,
+            double intensity_,
+            std::shared_ptr<Shape> shape_) : id(id_),
+                                             intensity(intensity_),
+                                             shape(shape_) {}
     };
 };
 

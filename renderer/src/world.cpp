@@ -98,6 +98,17 @@ namespace renderer
             display->operator()(i, j) += 255 / (super_sampling * super_sampling);
     }
 
+    void World::update_pixel_(
+        lin_alg::Coordinate &dir,
+        std::shared_ptr<renderer::Display> display,
+        size_t i, size_t j,
+        const lin_alg::Coordinate &origin,
+        double value)
+    {
+        if (intersecting(dir, origin))
+            display->operator()(i, j) += std::floor(value * 255 / (super_sampling * super_sampling));
+    }
+
     void World::thread_display_update_task(
         std::shared_ptr<Display> display,
         const int min_width,
@@ -132,11 +143,14 @@ namespace renderer
     bool World::intersecting(lin_alg::Coordinate dir,
                              const lin_alg::Coordinate &origin)
     {
-        return std::any_of(std::begin(objects), std::end(objects), [dir, origin](std::shared_ptr<renderer::Shape> obj)
-                           { return obj->line_intersection(
-                                           origin,
-                                           dir)
-                                 .valid; });
+        return std::any_of(
+            std::begin(objects),
+            std::end(objects),
+            [dir, origin](std::shared_ptr<renderer::Shape> obj)
+            { auto intersection = obj->line_intersection(
+                            origin,
+                            dir);
+                return intersection.valid && intersection.ray_length > EPSILON; });
     }
 
     Intersection World::min_intersection(
@@ -166,6 +180,11 @@ namespace renderer
         return *std::min_element(std::begin(intersections), std::end(intersections));
     };
 
+    void World::set_ambient(double a)
+    {
+        ambient = a;
+    }
+
     void World::ray_trace_perspective(std::shared_ptr<Display> display)
     {
         size_t width = display->width();
@@ -180,7 +199,39 @@ namespace renderer
         std::vector<std::thread> thread_pool;
         thread_pool.reserve(num_threads);
 
-        auto thread_display_task = [this, min_width, min_height, max_pixels, display]()
+        auto shadow_contribution = [this](const Intersection &intersection)
+        {
+            auto coord = intersection.coordinate;
+            int shadows = 0;
+
+            auto intersecting_ = [this](lin_alg::Coordinate dir,
+                                    const lin_alg::Coordinate &origin)
+            {
+                return std::any_of(
+                    std::begin(objects),
+                    std::end(objects),
+                    [dir, origin](std::shared_ptr<renderer::Shape> obj)
+                    { auto intersection = obj->line_intersection(
+                            origin,
+                            dir);
+                return intersection.valid && intersection.ray_length > EPSILON && intersection.ray_length < 1.0; });
+            };
+
+            for (auto &i : light_sources)
+            {
+                auto light_origin = i.shape->get_origin();
+                shadows += intersecting_(light_origin - coord, coord);
+            }
+
+            return shadows;
+        };
+
+        auto thread_display_task = [this,
+                                    shadow_contribution,
+                                    min_width,
+                                    min_height,
+                                    max_pixels,
+                                    display]()
         {
             int width_half = min_width / 2;
             int height_half = min_height / 2;
@@ -200,6 +251,20 @@ namespace renderer
                         lin_alg::Coordinate dir(focal_point, x, y);
 
                         // TODO: add ray tracing implementation here
+                        Intersection min_inter = min_intersection(dir, lin_alg::Origin());
+                        if (min_inter.valid)
+                        {
+                            auto num_shadow_intersections = shadow_contribution(min_inter);
+                            double value = std::max(1.0 - num_shadow_intersections * shadow, 0.0);
+
+                            display->operator()(i, j) += std::floor(value * 255 / (super_sampling * super_sampling));
+
+                            // if (value > 0)
+                            // update_pixel_(dir, display,
+                            // i, j,
+                            // lin_alg::Coordinate(0, x, y),
+                            // value);
+                        }
                     }
                 }
             }

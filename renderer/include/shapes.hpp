@@ -21,16 +21,16 @@ namespace renderer
     {
         Shape() = default;
 
+        // Origin
         virtual void set_origin(const lin_alg::Coordinate &) = 0;
+        virtual lin_alg::Coordinate get_origin() = 0;
+
+        // Get Shape Normal at Surface
         virtual lin_alg::Vector normal(const lin_alg::Coordinate &c) = 0;
 
         virtual Intersection line_intersection(
             lin_alg::Coordinate line_origin,
             lin_alg::Coordinate line_gradient) = 0;
-
-        // virtual Intersection ray_intersection(
-        //     lin_alg::Coordinate line_origin,
-        //     lin_alg::Coordinate line_gradient) {}
 
     };
 

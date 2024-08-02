@@ -35,7 +35,7 @@ namespace renderer
             objects.push_back(object);
         }
 
-        inline void add_light_source(std::shared_ptr<LightSource> light_source)
+        inline void add_light_source(LightSource light_source)
         {
             light_sources.push_back(light_source);
         }
@@ -45,6 +45,8 @@ namespace renderer
         void render_perspective(std::shared_ptr<Display> display);
 
         void ray_trace_perspective(std::shared_ptr<Display> display);
+
+        void set_ambient(double ambient);
 
     private:
         bool intersecting(lin_alg::Coordinate dir,
@@ -58,6 +60,13 @@ namespace renderer
             std::shared_ptr<renderer::Display> display,
             size_t i, size_t j,
             const lin_alg::Coordinate &origin);
+
+        void update_pixel_(
+            lin_alg::Coordinate &dir,
+            std::shared_ptr<renderer::Display> display,
+            size_t i, size_t j,
+            const lin_alg::Coordinate &origin,
+            double value);
 
         void thread_display_update_task(
             std::shared_ptr<Display> display,
@@ -76,11 +85,14 @@ namespace renderer
         lin_alg::Coordinate origin = lin_alg::Coordinate(0.0, 0.0, 0.0);
 
         std::vector<std::shared_ptr<Shape>> objects;
-        std::vector<std::shared_ptr<LightSource>> light_sources;
+        std::vector<LightSource> light_sources;
 
         std::atomic_int64_t pixel_index = 0;
 
         size_t num_threads = 32;
+
+        double ambient = 1.0;
+        double shadow = 0.5;
     };
 
 };

@@ -43,6 +43,12 @@ int main()
     std::shared_ptr<TerminalDisplay> t = std::make_shared<TerminalDisplay>(cols, rows, 2);
 
     // auto z = 50;
+    auto light_source_1 = LightSource(
+        0, 1.0,
+        std::make_shared<Sphere>(
+            40,
+            Coordinate(0, -200, 0)));
+
     auto sphere = std::make_shared<Torus>(
         40,
         80);
@@ -75,6 +81,8 @@ int main()
         lin_alg::Coordinate(0, 1, 0),
         lin_alg::Coordinate(0.01, 0, 0));
 
+    world.add_light_source(light_source_1);
+
     world.add_object(plane);
 
     world.add_object(sphere);
@@ -85,7 +93,8 @@ int main()
     for (size_t i = 0; i < 210; i++)
     {
         t->clear();
-        world.render_perspective(t);
+        world.ray_trace_perspective(t);
+        // world.render_perspective(t);
         std::cout << t->render_to_str().str();
 
         transformation = set_transformation_angle_z(transformation, angle);
