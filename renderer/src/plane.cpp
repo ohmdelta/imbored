@@ -22,7 +22,7 @@ namespace renderer
         }
 
         double d = (origin - p0).dot(normal_) / v;
-        if (d < 0)
+        if (d < EPSILON)
         {
             return Intersection(false);
         }

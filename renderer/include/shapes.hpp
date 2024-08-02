@@ -9,6 +9,8 @@
 
 namespace renderer
 {
+    const double EPSILON = 1e-7;
+
     struct ObjectProjection
     {
         virtual lin_alg::Coordinate point_projection(

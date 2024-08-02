@@ -51,7 +51,7 @@ namespace polynomial
             double k = INFINITY;
             for (size_t i = 0; i < num_solutions; i++)
             {
-                if (sol[i] > 0)
+                if (sol[i] > EPSILON)
                 {
                     k = std::min(k, sol[i]);
                 }

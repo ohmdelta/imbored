@@ -4,5 +4,6 @@
 #include "coordinate.hpp"
 #include "transformation.hpp"
 #include "direction.hpp"
+#include "rotation.hpp"
 
 #endif

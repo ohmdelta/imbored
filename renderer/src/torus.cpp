@@ -21,6 +21,9 @@ namespace renderer
     void Torus::set_rotation(lin_alg::TransformationMatrix t)
     {
         rotation = t;
+
+        rotation_transpose = t;
+        rotation_transpose.transpose();
     }
 
     Intersection Torus::line_intersection(
@@ -75,12 +78,23 @@ namespace renderer
         }
         else
         {
-            auto min_mu = intersections_mu.min();
+            auto min_mu = intersections_mu.min_ge_zero();
+            if (min_mu < 0) 
+            {
+                return Intersection(false);
+            }
+
             lin_alg::Coordinate result = p0 + d * min_mu;
             Intersection intersection(true, result, min_mu);
 
-            // TODO: set normal here
+            auto x = result.x;
+            auto y = result.y;
+            auto norm = std::sqrt(sq(x) + sq(y));
+
             // intersection.
+            intersection.normal = rotation_transpose * (result - lin_alg::Coordinate(x / norm, y / norm, 0));
+
+            // intersection.normal.dir_normalise();
             return intersection;
         }
     }

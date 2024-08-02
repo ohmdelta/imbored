@@ -129,6 +129,11 @@ namespace lin_alg
             normalise();
         }
 
+        void dir_normalise()
+        {
+            operator/=(norm());
+        }
+
         void normalise() override
         {
             if (a == 1)

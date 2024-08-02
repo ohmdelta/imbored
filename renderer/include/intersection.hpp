@@ -9,6 +9,7 @@
 
 namespace renderer
 {
+
     struct Intersection
     {
         Intersection(

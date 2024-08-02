@@ -62,27 +62,5 @@ namespace polynomial
 
         return sol;
 
-        /*
-        CubicSolution solution;
-
-        double delta0 = sq(b) - 3 * a * c;
-        double delta1 = 2 * cube(b) - 9 * a * b * c + 27 * sq(a) * d;
-
-        double C1 = std::cbrt((delta1 + std::sqrt(sq(delta1) - 4 * cube(delta0))) / 2);
-        double C2 = std::cbrt((delta1 - std::sqrt(sq(delta1) - 4 * cube(delta0))) / 2);
-
-        if (C1 && C2)
-        {
-            double x = -b / (3 * a);
-            solution.add_sol(x);
-        }
-        else
-        {
-            double C = C1 == 0 ? C2 : C1;
-            double x = -(b + C + delta0 / C);
-            solution.add_sol(x);
-        }
-        return solution;
-        */
     }
 }

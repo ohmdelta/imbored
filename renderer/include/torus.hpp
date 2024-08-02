@@ -38,6 +38,7 @@ namespace renderer
         lin_alg::Coordinate origin;
 
         lin_alg::TransformationMatrix rotation = lin_alg::Identity();
+        lin_alg::TransformationMatrix rotation_transpose = lin_alg::Identity();
     };
 };
 
