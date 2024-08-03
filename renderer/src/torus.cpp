@@ -82,22 +82,25 @@ namespace renderer
         else
         {
             auto min_mu = intersections_mu.min_ge_zero();
-            if (min_mu < 0) 
+            if (min_mu < 0)
             {
                 return Intersection(false);
             }
 
-            lin_alg::Coordinate result = p0_ + dir_ * min_mu;
-            Intersection intersection(true, result, min_mu);
+            // lin_alg::Coordinate result = p0_ + dir_ * min_mu;
+            Intersection intersection(true, p0_ + dir_ * min_mu, min_mu);
+
+            lin_alg::Coordinate result = p0 + d * min_mu;
 
             auto x = result.x;
             auto y = result.y;
-            auto norm = std::sqrt(sq(x) + sq(y));
+            auto norm = torus_radius / std::sqrt(sq(x) + sq(y));
+            // std::cout << x << ", " << y << ", " << norm<< std::endl;
+            // std::cout << result << std::endl;
 
-            // intersection.
-            intersection.normal = rotation_transpose * (result - lin_alg::Coordinate(x / norm, y / norm, 0));
+            intersection.normal = rotation_transpose * (result - lin_alg::Coordinate(x * norm, y * norm, 0));
 
-            // intersection.normal.dir_normalise();
+            intersection.normal.dir_normalise();
             return intersection;
         }
     }

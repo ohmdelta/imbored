@@ -7,27 +7,37 @@
 #include "lin_alg.hpp"
 #include "ray.hpp"
 
-namespace renderer {
+#include "shapes.hpp"
 
-struct Intersection {
-  Intersection(bool valid_,
-               const lin_alg::Coordinate &coordinate_ = lin_alg::Origin(),
-               double ray_length_ = 0.0, size_t id_ = -1)
-      : valid(valid_), coordinate(coordinate_), ray_length(ray_length_),
-        id(id_) {}
+namespace renderer
+{
+    struct Shape;
 
-  bool valid;
-  lin_alg::Coordinate coordinate;
-  double ray_length;
-  size_t id = -1;
-  lin_alg::Coordinate normal = lin_alg::Origin();
+    struct Intersection
+    {
+        Intersection(
+            bool valid_,
+            const lin_alg::Coordinate &coordinate_ = lin_alg::Origin(),
+            double ray_length_ = 0.0,
+            size_t id_ = -1) : valid(valid_),
+                               coordinate(coordinate_),
+                               ray_length(ray_length_),
+                               id(id_) {}
 
-  double max_length = 1000;
+        bool valid;
+        lin_alg::Coordinate coordinate;
+        double ray_length;
+        size_t id = -1;
+        lin_alg::Coordinate normal = lin_alg::Origin();
 
-  Ray reflected_ray(Ray ray);
+        double max_length = 1000;
 
-  friend bool operator<(const Intersection &l, const Intersection &r);
-};
+        Ray reflected_ray(Ray ray);
+        lin_alg::Coordinate reflected_ray(lin_alg::Coordinate ray);
+
+        friend bool operator<(const Intersection &l, const Intersection &r);
+    };
+
 }; // namespace renderer
 
 #endif

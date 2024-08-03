@@ -32,6 +32,7 @@ namespace renderer
 
         inline void add_object(std::shared_ptr<Shape> object)
         {
+            object->id = objects.size();
             objects.push_back(object);
         }
 
@@ -91,8 +92,12 @@ namespace renderer
 
         size_t num_threads = 32;
 
-        double ambient = 1.0;
-        double shadow = 0.5;
+        double ambient = 0.5;
+        double shadow = 100.0;
+        double distance_heuristic = 100;
+
+        double specular_reflection_coefficient;
+        double specular_reflection_exponent = 1;
     };
 
 };

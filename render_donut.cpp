@@ -47,7 +47,7 @@ int main()
         0, 1.0,
         std::make_shared<Sphere>(
             40,
-            Coordinate(0, -200, 0)));
+            Coordinate(800, -400, 0)));
 
     auto sphere = std::make_shared<Torus>(
         40,
@@ -78,7 +78,7 @@ int main()
 
     auto plane = std::make_shared<CheckerBoard>(
         lin_alg::Coordinate(0, 100, 0),
-        lin_alg::Coordinate(0, 1, 0),
+        lin_alg::Coordinate(0, -1, 0),
         lin_alg::Coordinate(0.01, 0, 0));
 
     world.add_light_source(light_source_1);
@@ -87,8 +87,8 @@ int main()
 
     world.add_object(sphere);
     world.add_object(sphere2);
-    sphere->set_origin(Coordinate(2500, -160, 0));
-    sphere2->set_origin(Coordinate(2500, -160, 240));
+    sphere->set_origin(Coordinate(1200, -80, 0));
+    sphere2->set_origin(Coordinate(1200, -90, 240));
 
     for (size_t i = 0; i < 210; i++)
     {
@@ -102,7 +102,7 @@ int main()
         sphere2->set_rotation(transformation * transformation2);
 
         angle += M_PI_2 / 32;
-        std::this_thread::sleep_for(std::chrono::milliseconds(40));
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
 
     return 0; // make sure your main returns int

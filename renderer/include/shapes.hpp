@@ -9,6 +9,7 @@
 
 namespace renderer
 {
+    struct Intersection;
     const double EPSILON = 1e-7;
 
     struct ObjectProjection
@@ -19,6 +20,13 @@ namespace renderer
 
     struct Shape
     {
+        size_t id = -1;
+
+        double k_diffuse = 0.5;
+        double k_specular = 0.5;
+        double specular_exponent = 0.4;
+        double phi_specular = 50000 / (4 * M_PI);
+
         Shape() = default;
 
         // Origin
@@ -31,7 +39,6 @@ namespace renderer
         virtual Intersection line_intersection(
             lin_alg::Coordinate line_origin,
             lin_alg::Coordinate line_gradient) = 0;
-
     };
 
 };

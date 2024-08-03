@@ -1,6 +1,8 @@
 #include "world.hpp"
 
 #include <algorithm>
+#include <iostream>
+#include <cmath>
 
 namespace renderer
 {
@@ -168,6 +170,7 @@ namespace renderer
 
             if (inter_.valid)
             {
+                inter_.id = obj->id;
                 intersections.push_back(std::move(inter_));
             }
         }
@@ -202,28 +205,34 @@ namespace renderer
         auto shadow_contribution = [this](const Intersection &intersection)
         {
             auto coord = intersection.coordinate;
-            int shadows = 0;
 
             auto intersecting_ = [this](lin_alg::Coordinate dir,
-                                    const lin_alg::Coordinate &origin)
+                                        const lin_alg::Coordinate &origin)
             {
                 return std::any_of(
                     std::begin(objects),
                     std::end(objects),
                     [dir, origin](std::shared_ptr<renderer::Shape> obj)
-                    { auto intersection = obj->line_intersection(
+                    {
+                        auto intersection = obj->line_intersection(
                             origin,
                             dir);
-                return intersection.valid && intersection.ray_length > EPSILON && intersection.ray_length < 1.0; });
+                        return intersection.valid && intersection.ray_length > EPSILON && intersection.ray_length < 1.0;
+                    });
             };
 
-            for (auto &i : light_sources)
+            std::vector<lin_alg::Coordinate> intersecting;
+            intersecting.reserve(light_sources.size());
+
+            for (size_t i = 0; i < light_sources.size(); i++)
             {
-                auto light_origin = i.shape->get_origin();
-                shadows += intersecting_(light_origin - coord, coord);
+                auto light_origin = light_sources[i].shape->get_origin();
+                auto direction = light_origin - coord;
+                if (!intersecting_(direction, coord))
+                    intersecting.push_back(std::move(direction));
             }
 
-            return shadows;
+            return intersecting;
         };
 
         auto thread_display_task = [this,
@@ -250,21 +259,33 @@ namespace renderer
                         double y = j + ((double)d / super_sampling) - width_half;
                         lin_alg::Coordinate dir(focal_point, x, y);
 
+                        double L = ambient;
+
                         // TODO: add ray tracing implementation here
                         Intersection min_inter = min_intersection(dir, lin_alg::Origin());
                         if (min_inter.valid)
                         {
-                            auto num_shadow_intersections = shadow_contribution(min_inter);
-                            double value = std::max(1.0 - num_shadow_intersections * shadow, 0.0);
+                            auto non_intersecting_indices = shadow_contribution(min_inter);
+                            if(non_intersecting_indices.empty())
+                            {
+                                continue;
+                            }
+                            for (auto &&dir_ : non_intersecting_indices)
+                            {
+                                min_inter.normal.dir_normalise();
+                                double distance = dir_.norm_sq();
 
-                            display->operator()(i, j) += std::floor(value * 255 / (super_sampling * super_sampling));
+                                dir_.dir_normalise();
+                                auto r = min_inter.reflected_ray(dir_);
 
-                            // if (value > 0)
-                            // update_pixel_(dir, display,
-                            // i, j,
-                            // lin_alg::Coordinate(0, x, y),
-                            // value);
+                                auto object = objects[min_inter.id];
+                                L += (std::max(min_inter.normal.dot(dir_), 0.) * object->k_diffuse + object->k_specular * std::pow(std::max(dir.dot(r), 0.), object->specular_exponent)) * (object->phi_specular / distance);
+                            }
+                            display->operator()(i, j) += std::floor(std::clamp(L, 0., 1.) * 255 / (super_sampling * super_sampling));
+
+                            // double value = std::max(1.0 - num_shadow_intersections * shadow, 0.0);
                         }
+                        
                     }
                 }
             }
