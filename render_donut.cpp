@@ -49,11 +49,11 @@ int main()
             40,
             Coordinate(800, -400, 0)));
 
-    auto sphere = std::make_shared<Torus>(
+    auto donut_1 = std::make_shared<Torus>(
         40,
         80);
 
-    auto sphere2 = std::make_shared<Torus>(
+    auto donut_2 = std::make_shared<Torus>(
         40,
         80);
 
@@ -81,14 +81,23 @@ int main()
         lin_alg::Coordinate(0, -1, 0),
         lin_alg::Coordinate(0.01, 0, 0));
 
+    double y = -160;
+    bool dir_down = true;
+
+    auto sphere = std::make_shared<Sphere>(
+        40,
+        Coordinate(1200, -160, -240));
+
     world.add_light_source(light_source_1);
 
     world.add_object(plane);
 
+    world.add_object(donut_1);
+    world.add_object(donut_2);
     world.add_object(sphere);
-    world.add_object(sphere2);
-    sphere->set_origin(Coordinate(1200, -80, 0));
-    sphere2->set_origin(Coordinate(1200, -90, 240));
+
+    donut_1->set_origin(Coordinate(1200, -80, 0));
+    donut_2->set_origin(Coordinate(1200, -90, 240));
 
     for (size_t i = 0; i < 210; i++)
     {
@@ -98,11 +107,27 @@ int main()
         std::cout << t->render_to_str().str();
 
         transformation = set_transformation_angle_z(transformation, angle);
-        sphere->set_rotation(transformation);
-        sphere2->set_rotation(transformation * transformation2);
+        donut_1->set_rotation(transformation);
+        donut_2->set_rotation(transformation * transformation2);
+        // auto sphere = std::make_shared<Sphere>(
+        sphere->set_origin(Coordinate(1200, y, -240));
+
+        if (dir_down)
+        {
+            y += 5;
+        }
+        else
+        {
+            y -= 5;
+        }
+
+        if (y > 0 || y < -160)
+        {
+            dir_down ^= 1;
+        }
 
         angle += M_PI_2 / 32;
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        std::this_thread::sleep_for(std::chrono::milliseconds(30));
     }
 
     return 0; // make sure your main returns int

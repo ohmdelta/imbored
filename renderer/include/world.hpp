@@ -90,7 +90,7 @@ namespace renderer
 
         std::atomic_int64_t pixel_index = 0;
 
-        size_t num_threads = 32;
+        size_t num_threads = 20;
 
         double ambient = 0.5;
         double shadow = 100.0;

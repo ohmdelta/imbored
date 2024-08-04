@@ -4,7 +4,7 @@
 namespace polynomial
 {
 
-    const double EPSILON = 1e-7;
+    const double EPSILON = 1e-12;
 
     inline double sq(double x) { return x * x; }
     inline double cube(double x) { return x * x * x; }

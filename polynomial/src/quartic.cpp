@@ -19,7 +19,7 @@ namespace polynomial
         double q,
         double r)
     {
-        if (q == 0)
+        if (std::abs(q) < EPSILON)
         {
             QuadraticSolution quadraticSolution = solve_quadratic(1, p, r);
             QuarticSolution solution;
@@ -95,13 +95,13 @@ namespace polynomial
         double e_ = e / a;
         double offset = b_ / 4;
 
-        double p = (8 * c_ - 3 * sq(b_)) / 8;
+        double p = c_ - 3 * sq(b_) / 8;
         double q = (cube(b_) - 4 * b_ * c_ + 8 * d_) / 8;
         double r = (-3 * supercube(b_) + 256 * e_ - 64 * b_ * d_ + 16 * sq(b_) * c_) / 256;
 
         auto solution = solve_depressed_quartic(p, q, r);
 
-        for (auto &i : solution)
+        for (auto &&i : solution)
         {
             i -= offset;
         }

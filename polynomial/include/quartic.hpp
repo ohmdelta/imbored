@@ -62,7 +62,6 @@ namespace polynomial
                 return -1;
             }
             return k;
-            // return *std::min_element((sol | std::view::filter(ge_zero)));
         }
 
         iterator begin() { return sol; }

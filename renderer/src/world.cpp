@@ -202,9 +202,9 @@ namespace renderer
         std::vector<std::thread> thread_pool;
         thread_pool.reserve(num_threads);
 
-        auto shadow_contribution = [this](const Intersection &intersection)
+        auto valid_light_directions = [this](const Intersection &intersection)
         {
-            auto coord = intersection.coordinate;
+            auto coord = intersection.coordinate + intersection.normal;
 
             auto intersecting_ = [this](lin_alg::Coordinate dir,
                                         const lin_alg::Coordinate &origin)
@@ -236,7 +236,7 @@ namespace renderer
         };
 
         auto thread_display_task = [this,
-                                    shadow_contribution,
+                                    valid_light_directions,
                                     min_width,
                                     min_height,
                                     max_pixels,
@@ -258,19 +258,21 @@ namespace renderer
                         double x = i + ((double)c / super_sampling) - height_half;
                         double y = j + ((double)d / super_sampling) - width_half;
                         lin_alg::Coordinate dir(focal_point, x, y);
-
+                        // dir.dir_normalise();
                         double L = ambient;
 
                         // TODO: add ray tracing implementation here
                         Intersection min_inter = min_intersection(dir, lin_alg::Origin());
                         if (min_inter.valid)
                         {
-                            auto non_intersecting_indices = shadow_contribution(min_inter);
-                            if(non_intersecting_indices.empty())
+                            auto light_source_dir = valid_light_directions(min_inter);
+
+                            if (light_source_dir.empty())
                             {
+                                // display->operator()(i, j) += std::floor(ambient * 255 / (super_sampling * super_sampling));
                                 continue;
                             }
-                            for (auto &&dir_ : non_intersecting_indices)
+                            for (auto &&dir_ : light_source_dir)
                             {
                                 min_inter.normal.dir_normalise();
                                 double distance = dir_.norm_sq();
@@ -285,7 +287,6 @@ namespace renderer
 
                             // double value = std::max(1.0 - num_shadow_intersections * shadow, 0.0);
                         }
-                        
                     }
                 }
             }

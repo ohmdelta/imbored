@@ -146,13 +146,23 @@ BOOST_AUTO_TEST_CASE(QuarticSolveMany)
     }
 }
 
-BOOST_AUTO_TEST_CASE(QuarticSolutionMingeZero)
+BOOST_AUTO_TEST_CASE(QuarticSolutionMinGEZero)
 {
     QuarticSolution solution;
     solution.add_sol(2);
     solution.add_sol(1);
     solution.add_sol(-2);
     BOOST_CHECK_EQUAL(solution.min_ge_zero(), 1);
+}
+
+BOOST_AUTO_TEST_CASE(QuarticSolveMinGEZero)
+{
+    // x^4 - 5x^2 + 4
+    // (x^2 - 1)(x^2 - 4)
+    QuarticSolution sol = solve_quartic(1, 0, -5, 0, 4);
+
+    BOOST_CHECK_EQUAL(sol.min_ge_zero(), 1);
+    BOOST_CHECK_EQUAL(sol.min(), -2);
 }
 
 BOOST_AUTO_TEST_SUITE_END();
