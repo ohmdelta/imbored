@@ -17,9 +17,9 @@ namespace renderer
         case 3:
             return ':';
         case 4:
-            return '=';
+            return 'i';
         case 5:
-            return '7';
+            return 'X';
         case 6:
             return '8';
         case 7:
