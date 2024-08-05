@@ -12,11 +12,7 @@ namespace renderer
         CheckerBoard(const lin_alg::Coordinate &origin_,
                      const lin_alg::Coordinate &normal__,
                      const lin_alg::Coordinate &grid_orientation_
-                     ) : Plane(origin_, normal__),
-                         grid_orientation_x(grid_orientation_)
-        {
-            grid_orientation_y = Plane::normal_.cross(grid_orientation_x);
-        }
+                     );
 
         Intersection line_intersection(
             lin_alg::Coordinate l0,
