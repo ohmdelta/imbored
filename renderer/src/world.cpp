@@ -261,7 +261,6 @@ namespace renderer
                         // dir.dir_normalise();
                         double L = ambient;
 
-                        // TODO: add ray tracing implementation here
                         Intersection min_inter = min_intersection(dir, lin_alg::Origin());
                         if (min_inter.valid)
                         {
@@ -274,6 +273,7 @@ namespace renderer
                             }
                             for (auto &&dir_ : light_source_dir)
                             {
+                                // TODO FIX Constants & Make multiple ray passes
                                 min_inter.normal.dir_normalise();
                                 double distance = dir_.norm_sq();
 

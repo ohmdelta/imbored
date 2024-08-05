@@ -141,7 +141,7 @@ namespace lin_alg
 
             if (a == 0)
             {
-                throw std::runtime_error("Math error: Attempted to divide by Zero\n");
+                throw std::runtime_error("Math error: Normalisation Attempted to divide by Zero\n");
             }
 
             x /= a;

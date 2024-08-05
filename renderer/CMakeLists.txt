@@ -21,6 +21,7 @@ add_library(
   src/plane.cpp
   src/sphere.cpp
   src/torus.cpp
+  src/triangle.cpp
   src/world.cpp
 )
 

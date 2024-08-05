@@ -99,7 +99,6 @@ namespace renderer
             // std::cout << result << std::endl;
 
             intersection.normal = rotation_transpose * (result - lin_alg::Coordinate(x * norm, y * norm, 0));
-
             intersection.normal.dir_normalise();
             return intersection;
         }

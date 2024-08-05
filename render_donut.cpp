@@ -74,8 +74,20 @@ int main()
 
     transformation2 = transformation3 * transformation2;
 
+    TransformationMatrix transformation4 = Identity();
+    angle_ = M_PI_4;
+    transformation4(0, 0) = std::cos(angle_);
+    transformation4(0, 1) = -std::sin(angle_);
+    transformation4(1, 0) = std::sin(angle_);
+    transformation4(1, 1) = std::cos(angle_);
+
     auto angle = 0.0;
 
+    auto triangle = std::make_shared<Triangle>(
+        lin_alg::Coordinate(0, 100, 0), lin_alg::Coordinate(0, 0, -100));
+    triangle->set_origin(Coordinate(1200, -160, -240));
+    triangle->rotate(transformation4);
+    
     auto plane = std::make_shared<CheckerBoard>(
         lin_alg::Coordinate(0, 100, 0),
         lin_alg::Coordinate(0, -1, 0),
@@ -95,6 +107,7 @@ int main()
     world.add_object(donut_1);
     world.add_object(donut_2);
     world.add_object(sphere);
+    world.add_object(triangle);
 
     donut_1->set_origin(Coordinate(1200, -80, 0));
     donut_2->set_origin(Coordinate(1200, -90, 240));

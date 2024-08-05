@@ -8,5 +8,6 @@
 #include "plane.hpp"
 #include "sphere.hpp"
 #include "checkerboard.hpp"
+#include "triangle.hpp"
 
 #endif

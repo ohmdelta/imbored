@@ -212,7 +212,7 @@ namespace lin_alg
     {
         if (b == 0)
         {
-            throw std::runtime_error("Math error: Attempted to divide by Zero\n");
+            throw std::runtime_error("Math error: Div Eq Attempted to divide by Zero\n");
         }
 
         for (size_t i = 0; i < 3; i++)
