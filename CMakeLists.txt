@@ -6,6 +6,8 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 endif()
 
 find_package( OpenCV REQUIRED )
+find_package(Curses REQUIRED)
+
 include_directories( ${OpenCV_INCLUDE_DIRS} )
 
 add_subdirectory(lin_alg)
@@ -26,6 +28,7 @@ target_link_libraries(render_balls renderer)
 add_executable(render_donut render_donut.cpp)
 target_link_libraries(render_donut lin_alg)
 target_link_libraries(render_donut renderer)
+target_link_libraries(render_donut ncurses)
 
 enable_testing()
 

@@ -9,6 +9,24 @@
 
 namespace renderer
 {
+    struct StringBuffer
+    {
+        StringBuffer(size_t width, size_t height) : width(width), height(height), size(height * width)
+        {
+            s = new char[size];
+        }
+
+        size_t width, height, size;
+
+
+        ~StringBuffer()
+        {
+            delete[] s;
+        }
+
+        char *s;
+    };
+
     struct Display
     {
         virtual size_t width() = 0;
@@ -33,6 +51,7 @@ namespace renderer
         void resize(size_t width_, size_t height_);
 
         std::stringstream render_to_str();
+        StringBuffer render_to_c_str();
 
         unsigned char &operator()(size_t r, size_t c);
 

@@ -5,6 +5,8 @@
 #include <unistd.h>
 #include <thread>
 
+#include <ncurses.h>
+
 #include "renderer.hpp"
 #include "lin_alg.hpp"
 
@@ -36,9 +38,12 @@ int main()
 
     size_t rows = w.ws_row - 1;
     size_t cols = w.ws_col - 1;
-    std::cout << "lines " << rows << std::endl;
-    std::cout << "columns " << cols << std::endl;
-
+    initscr();
+    start_color();
+    for(size_t i=1; i <= 8; i++)
+        init_pair(i, i, COLOR_BLACK);
+    printf("lines %ld\n", rows);
+    printf("columns %ld\n", cols);
     World world(cols, rows, 3, 500);
     std::shared_ptr<TerminalDisplay> t = std::make_shared<TerminalDisplay>(cols, rows, 2);
 
@@ -111,14 +116,21 @@ int main()
 
     donut_1->set_origin(Coordinate(1200, -80, 0));
     donut_2->set_origin(Coordinate(1200, -90, 240));
-
-    for (size_t i = 0; i < 210; i++)
+    
+    for (int i = 0; ; (i = (i + 1) % 8))
     {
         t->clear();
         world.ray_trace_perspective(t);
         // world.render_perspective(t);
-        std::cout << t->render_to_str().str();
-
+        clear();
+        int c = i + 1;
+        attron(COLOR_PAIR(c));
+        
+        auto v = t->render_to_c_str();
+        for(int i=0; i<v.size; i++)
+            addch(v.s[i]);
+        // printw("%s", v.s);
+        refresh();
         transformation = set_transformation_angle_z(transformation, angle);
         donut_1->set_rotation(transformation);
         donut_2->set_rotation(transformation * transformation2);
@@ -140,8 +152,10 @@ int main()
         }
 
         angle += M_PI_2 / 32;
+        attroff(COLOR_PAIR(c));
         std::this_thread::sleep_for(std::chrono::milliseconds(30));
     }
 
+    endwin();
     return 0; // make sure your main returns int
 }

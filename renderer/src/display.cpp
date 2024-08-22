@@ -94,6 +94,27 @@ namespace renderer
         return ss;
     }
 
+    StringBuffer TerminalDisplay::render_to_c_str()
+    {
+        auto w_ = width_ * char_per_pixel_;
+        StringBuffer sb(w_ + 1, height_);
+        for (size_t r = 0; r < height_; r++)
+        {
+            for (size_t c = 0; c < width_; c++)
+            {
+                for (size_t i = 0; i < char_per_pixel_; i++)
+                {
+                    sb.s[c * char_per_pixel_ + i + r * (w_ + 1)] = val_to_char_3_bit(matrix[c + r * width_]);
+                }
+            }
+            sb.s[(w_ + 1) * (r + 1) - 1] = '\n';
+            // std::cout << "ok " << r << std::endl;
+        }
+        sb.s[height_ * (w_ + 1) - 1] = '\0';
+        // std::cout << "ok" << std::endl;
+        return sb;
+    }
+
     unsigned char &TerminalDisplay::operator()(size_t r, size_t c)
     {
         return matrix[c + r * width_];
