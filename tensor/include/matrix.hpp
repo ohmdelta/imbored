@@ -19,20 +19,19 @@ namespace tensor
     {
     public:
         size_t rows_, columns_;
+        size_t len_ = rows_ * columns_;
         T *matrix_;
 
     public:
         Matrix(size_t rows, size_t columns) : rows_(rows), columns_(columns)
         {
-            matrix_ = new T[rows_ * columns_]{0};
+            matrix_ = new T[len_]{0};
         }
 
         Matrix(const Matrix<T> &m) : rows_(m.rows_), columns_(m.columns_)
         {
-            size_t size = rows_ * columns_;
-            this->matrix_ = new T[size];
-
-            memcpy(matrix_, m.matrix_, size * sizeof(T));
+            this->matrix_ = new T[len_];
+            memcpy(matrix_, m.matrix_, len_ * sizeof(T));
         }
 
         ~Matrix()
@@ -89,23 +88,64 @@ namespace tensor
         template <Arithmetic S>
         auto operator+(const Matrix<S> &v) -> Matrix<decltype(operator()(0, 0) + v(0, 0))>
         {
-            if (columns_ == v.columns_ && rows_ == v.rows_)
+            if (len_ == v.len_ && columns_ == v.columns_)
             {
-                Matrix<decltype(operator()(0, 0) * v(0, 0))>
+                Matrix<decltype(operator()(0, 0) + v(0, 0))>
                     m(rows_, columns_);
 
-                for (size_t i = 0; i < rows_; i++)
+                for (size_t i = 0; i < len_; i++)
                 {
-                    for (size_t j = 0; j < v.columns_; j++)
-                    {
-                        m(i, j) = operator()(i, j) + v(i, j);
-                    }
+                    m.matrix_[i] = matrix_[i] + v.matrix_[i];
                 }
                 return m;
             }
             else
             {
                 throw std::invalid_argument("Cannot multiply matrices - dimension mismatch");
+            }
+        }
+
+        template <Arithmetic S>
+        auto operator*(S c) -> Matrix<decltype(operator()(0, 0) * c)>
+        {
+            Matrix<decltype(operator()(0, 0) * c)>
+                m(rows_, columns_);
+
+            for (size_t i = 0; i < len_; i++)
+            {
+                m.matrix_[i] = matrix_[i] * c;
+            }
+            return m;
+        }
+
+        template <Arithmetic S>
+        auto operator+(S c) -> Matrix<decltype(operator()(0, 0) + c)>
+        {
+            Matrix<decltype(operator()(0, 0) + c)>
+                m(rows_, columns_);
+
+            for (size_t i = 0; i < len_; i++)
+            {
+                m.matrix_[i] = matrix_[i] + c;
+            }
+            return m;
+        }
+
+        template <Arithmetic S>
+        void operator+=(S c) 
+        {
+            for (size_t i = 0; i < len_; i++)
+            {
+                matrix_[i] += c;
+            }
+        }
+
+        template <Arithmetic S>
+        void operator*=(S c) 
+        {
+            for (size_t i = 0; i < len_; i++)
+            {
+                matrix_[i] *= c;
             }
         }
     };
