@@ -36,7 +36,7 @@ BOOST_AUTO_TEST_CASE(MatrixMultiplication)
 
     std::cout << A << std::endl;
     std::cout << B << std::endl;
-    
+
     // std::cout << (A * B) << std::endl;
     auto C = A * B;
     // std::cout << C;
@@ -46,10 +46,12 @@ BOOST_AUTO_TEST_CASE(MatrixMultiplication)
         {
             if (i == 0)
             {
-                if (j == 0) {
+                if (j == 0)
+                {
                     BOOST_CHECK_EQUAL(C(0, 0), 2.0);
                     continue;
-                } else if (j == 2)
+                }
+                else if (j == 2)
                 {
                     BOOST_CHECK_EQUAL(C(0, 2), 4.0);
                     continue;
@@ -57,12 +59,36 @@ BOOST_AUTO_TEST_CASE(MatrixMultiplication)
             }
             BOOST_CHECK_EQUAL(C(i, j), 0.0);
         }
-        
     }
-    
-
-
-    
 }
+
+BOOST_AUTO_TEST_CASE(MatrixAddition)
+{
+    Matrix<int> A(3, 3);
+    Matrix<float> B(3, 3);
+    B(0, 0) = 1.0;
+    B(0, 2) = 2.0;
+
+    BOOST_CHECK_EQUAL(B(0, 0), 1.0);
+    for (size_t i = 0; i < 3; i++)
+    {
+        A(i, i) = 2;
+    }
+
+    // std::cout << (A * B) << std::endl;
+    auto C = A + B;
+
+    BOOST_CHECK_EQUAL(C(0, 0), 4.0);
+    BOOST_CHECK_EQUAL(C(0, 1), 0.0);
+    BOOST_CHECK_EQUAL(C(0, 2), 2.0);
+ 
+    BOOST_CHECK_EQUAL(C(1, 0), 0.0);
+    BOOST_CHECK_EQUAL(C(1, 1), 2.0);
+    BOOST_CHECK_EQUAL(C(1, 2), 0.0);
+
+    BOOST_CHECK_EQUAL(C(2, 0), 0.0);
+    BOOST_CHECK_EQUAL(C(2, 1), 0.0);
+    BOOST_CHECK_EQUAL(C(2, 2), 2.0);
+};
 
 BOOST_AUTO_TEST_SUITE_END();

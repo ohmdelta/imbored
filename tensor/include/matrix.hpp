@@ -27,14 +27,13 @@ namespace tensor
             matrix_ = new T[rows_ * columns_]{0};
         }
 
-        Matrix(const Matrix<T>& m) : rows_(m.rows_), columns_(m.columns_)
+        Matrix(const Matrix<T> &m) : rows_(m.rows_), columns_(m.columns_)
         {
             size_t size = rows_ * columns_;
-            this->matrix_ = new T[size]{0};
+            this->matrix_ = new T[size];
 
             memcpy(matrix_, m.matrix_, size * sizeof(T));
         }
-
 
         ~Matrix()
         {
@@ -62,7 +61,7 @@ namespace tensor
         }
 
         template <Arithmetic S>
-        auto operator*(Matrix<S> &v) -> Matrix<decltype( operator()(0, 0) * v(0, 0))>
+        auto operator*(const Matrix<S> &v) -> Matrix<decltype(operator()(0, 0) * v(0, 0))>
         {
             if (columns_ == v.rows_)
             {
@@ -87,6 +86,28 @@ namespace tensor
             }
         }
 
+        template <Arithmetic S>
+        auto operator+(const Matrix<S> &v) -> Matrix<decltype(operator()(0, 0) + v(0, 0))>
+        {
+            if (columns_ == v.columns_ && rows_ == v.rows_)
+            {
+                Matrix<decltype(operator()(0, 0) * v(0, 0))>
+                    m(rows_, columns_);
+
+                for (size_t i = 0; i < rows_; i++)
+                {
+                    for (size_t j = 0; j < v.columns_; j++)
+                    {
+                        m(i, j) = operator()(i, j) + v(i, j);
+                    }
+                }
+                return m;
+            }
+            else
+            {
+                throw std::invalid_argument("Cannot multiply matrices - dimension mismatch");
+            }
+        }
     };
 
     template <typename T>
