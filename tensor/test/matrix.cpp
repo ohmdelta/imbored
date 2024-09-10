@@ -87,7 +87,7 @@ BOOST_AUTO_TEST_CASE(MatrixAddition)
     // std::cout << (A * B) << std::endl;
     auto C = A + B;
 
-    BOOST_CHECK_EQUAL(C(0, 0), 4.0);
+    BOOST_CHECK_EQUAL(C(0, 0), 3.0);
     BOOST_CHECK_EQUAL(C(0, 1), 0.0);
     BOOST_CHECK_EQUAL(C(0, 2), 2.0);
 
@@ -123,40 +123,44 @@ BOOST_AUTO_TEST_CASE(MatrixTranspose)
         A(i, i) = 2;
     }
 
-    A(2, 0) = 1;
+    A(1, 0) = 1;
 
     std::cout << A << std::endl;
 
     BOOST_CHECK_EQUAL(A(0, 0), 2.0);
     BOOST_CHECK_EQUAL(A(0, 1), 0.0);
-    BOOST_CHECK_EQUAL(A(0, 2), 1.0);
+    BOOST_CHECK_EQUAL(A(0, 2), 0.0);
 
-    BOOST_CHECK_EQUAL(A(1, 0), 0.0);
-    BOOST_CHECK_EQUAL(A(1, 1), 1.0);
+    BOOST_CHECK_EQUAL(A(1, 0), 1.0);
+    BOOST_CHECK_EQUAL(A(1, 1), 2.0);
     BOOST_CHECK_EQUAL(A(1, 2), 0.0);
 
     A.transpose_inplace();
+
+    std::cout << A << std::endl;
 
     BOOST_CHECK_EQUAL(A.columns_, 2);
     BOOST_CHECK_EQUAL(A.rows_, 3);
 
     BOOST_CHECK_EQUAL(A(0, 0), 2.0);
     BOOST_CHECK_EQUAL(A(1, 0), 0.0);
-    BOOST_CHECK_EQUAL(A(2, 0), 1.0);
+    BOOST_CHECK_EQUAL(A(2, 0), 0.0);
 
-    BOOST_CHECK_EQUAL(A(0, 1), 0.0);
-    BOOST_CHECK_EQUAL(A(1, 1), 1.0);
+    BOOST_CHECK_EQUAL(A(0, 1), 1.0);
+    BOOST_CHECK_EQUAL(A(1, 1), 2.0);
     BOOST_CHECK_EQUAL(A(2, 1), 0.0);
 
     auto B = A.transpose();
 
+    BOOST_CHECK(!B.transposed_);
     BOOST_CHECK_EQUAL(B(0, 0), 2.0);
     BOOST_CHECK_EQUAL(B(0, 1), 0.0);
-    BOOST_CHECK_EQUAL(B(0, 2), 1.0);
+    BOOST_CHECK_EQUAL(B(0, 2), 0.0);
 
-    BOOST_CHECK_EQUAL(B(1, 0), 0.0);
-    BOOST_CHECK_EQUAL(B(1, 1), 1.0);
+    BOOST_CHECK_EQUAL(B(1, 0), 1.0);
+    BOOST_CHECK_EQUAL(B(1, 1), 2.0);
     BOOST_CHECK_EQUAL(B(1, 2), 0.0);
+
 };
 
 BOOST_AUTO_TEST_CASE(MatrixTransposeMultiplication)
@@ -173,12 +177,15 @@ BOOST_AUTO_TEST_CASE(MatrixTransposeMultiplication)
     std::cout << A << std::endl;
 
     A.transpose_inplace();
+    // std::cout << A.transposed_ << std::endl;
+    // std::cout << A.rows_ << " , " << A.columns_ << std::endl;
+    // std::cout << A << std::endl;
     BOOST_CHECK_EQUAL(A(0, 0), 2.0);
     BOOST_CHECK_EQUAL(A(0, 1), 0.0);
     BOOST_CHECK_EQUAL(A(0, 2), 1.0);
 
     BOOST_CHECK_EQUAL(A(1, 0), 0.0);
-    BOOST_CHECK_EQUAL(A(1, 1), 1.0);
+    BOOST_CHECK_EQUAL(A(1, 1), 2.0);
     BOOST_CHECK_EQUAL(A(1, 2), 0.0);
 
     Matrix<int> B(3, 1);
@@ -186,11 +193,33 @@ BOOST_AUTO_TEST_CASE(MatrixTransposeMultiplication)
     B(2, 0) = 1;
 
     auto C = A * B;
+    std::cout << C << std::endl;
     BOOST_CHECK_EQUAL(C(0, 0), 3);
-    BOOST_CHECK_EQUAL(C(0, 1), 0);
     BOOST_CHECK_EQUAL(C(1, 0), 0);
-    BOOST_CHECK_EQUAL(C(1, 1), 0);
+}
 
+BOOST_AUTO_TEST_CASE(SlicedMatrixMultiplication)
+{
+    Matrix<int> A(3, 3);
+
+    for (size_t i = 0; i < 2; i++)
+    {
+        A(i, i) = 2;
+    }
+
+    A(2, 2) = 1;
+
+    std::cout << A << std::endl;
+    SlicedMatrix<int> SA(std::make_shared<Matrix<int>>(A), 2, 2);
+
+    std::cout << SA << std::endl;
+    auto B = SA * SA;
+    BOOST_CHECK_EQUAL(B.rows_, 2);
+    BOOST_CHECK_EQUAL(B.columns_, 2);
+    BOOST_CHECK_EQUAL(B(0, 0), 4);
+    BOOST_CHECK_EQUAL(B(1, 1), 4);
+    BOOST_CHECK_EQUAL(B(0, 1), 0);
+    BOOST_CHECK_EQUAL(B(1, 0), 0);
 }
 
 BOOST_AUTO_TEST_SUITE_END();
