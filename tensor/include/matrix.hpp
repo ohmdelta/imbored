@@ -20,6 +20,7 @@ namespace tensor
     public:
         size_t rows_, columns_;
         size_t len_ = rows_ * columns_;
+        bool transposed_ = false;
         T *matrix_;
 
     public:
@@ -41,6 +42,9 @@ namespace tensor
 
         T &operator()(size_t r, size_t c)
         {
+            if (transposed_)
+                std::swap(r, c);
+
             if (r < rows_ && c < columns_)
                 return matrix_[r * rows_ + c];
             else
@@ -51,6 +55,9 @@ namespace tensor
 
         const T &operator()(size_t r, size_t c) const
         {
+            if (transposed_)
+                std::swap(r, c);
+
             if (r < rows_ && c < columns_)
                 return matrix_[r * rows_ + c];
             else
@@ -59,6 +66,7 @@ namespace tensor
             }
         }
 
+        // START: MATRIX - MATRIX Operations
         template <Arithmetic S>
         auto operator*(const Matrix<S> &v) -> Matrix<decltype(operator()(0, 0) * v(0, 0))>
         {
@@ -104,6 +112,7 @@ namespace tensor
                 throw std::invalid_argument("Cannot multiply matrices - dimension mismatch");
             }
         }
+        // END: MATRIX - MATRIX Operations
 
         template <Arithmetic S>
         auto operator*(S c) -> Matrix<decltype(operator()(0, 0) * c)>
@@ -132,7 +141,7 @@ namespace tensor
         }
 
         template <Arithmetic S>
-        void operator+=(S c) 
+        void operator+=(S c)
         {
             for (size_t i = 0; i < len_; i++)
             {
@@ -141,12 +150,26 @@ namespace tensor
         }
 
         template <Arithmetic S>
-        void operator*=(S c) 
+        void operator*=(S c)
         {
             for (size_t i = 0; i < len_; i++)
             {
                 matrix_[i] *= c;
             }
+        }
+
+        void transpose_inplace()
+        {
+            transposed_ ^= true;
+            std::swap(rows_, columns_);
+        }
+
+        Matrix<T> transpose() const
+        {
+            Matrix<T> transpose = *this;
+            transpose.transpose_inplace();
+
+            return transpose;
         }
     };
 

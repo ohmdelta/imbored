@@ -69,7 +69,6 @@ BOOST_AUTO_TEST_CASE(MatrixMultiplication)
                 BOOST_CHECK_EQUAL(A(i, j), 0.0);
         }
     }
-    
 }
 
 BOOST_AUTO_TEST_CASE(MatrixAddition)
@@ -91,7 +90,7 @@ BOOST_AUTO_TEST_CASE(MatrixAddition)
     BOOST_CHECK_EQUAL(C(0, 0), 4.0);
     BOOST_CHECK_EQUAL(C(0, 1), 0.0);
     BOOST_CHECK_EQUAL(C(0, 2), 2.0);
- 
+
     BOOST_CHECK_EQUAL(C(1, 0), 0.0);
     BOOST_CHECK_EQUAL(C(1, 1), 2.0);
     BOOST_CHECK_EQUAL(C(1, 2), 0.0);
@@ -105,7 +104,7 @@ BOOST_AUTO_TEST_CASE(MatrixAddition)
     BOOST_CHECK_EQUAL(A(0, 0), 5.0);
     BOOST_CHECK_EQUAL(A(0, 1), 3.0);
     BOOST_CHECK_EQUAL(A(0, 2), 3.0);
- 
+
     BOOST_CHECK_EQUAL(A(1, 0), 3.0);
     BOOST_CHECK_EQUAL(A(1, 1), 5.0);
     BOOST_CHECK_EQUAL(A(1, 2), 3.0);
@@ -113,7 +112,51 @@ BOOST_AUTO_TEST_CASE(MatrixAddition)
     BOOST_CHECK_EQUAL(A(2, 0), 3.0);
     BOOST_CHECK_EQUAL(A(2, 1), 3.0);
     BOOST_CHECK_EQUAL(A(2, 2), 5.0);
+};
 
+BOOST_AUTO_TEST_CASE(MatrixTranspose)
+{
+    Matrix<int> A(2, 3);
+
+    for (size_t i = 0; i < 2; i++)
+    {
+        A(i, i) = 2;
+    }
+
+    A(2, 0) = 1;
+
+    std::cout << A << std::endl;
+
+    BOOST_CHECK_EQUAL(A(0, 0), 2.0);
+    BOOST_CHECK_EQUAL(A(0, 1), 0.0);
+    BOOST_CHECK_EQUAL(A(0, 2), 1.0);
+
+    BOOST_CHECK_EQUAL(A(1, 0), 0.0);
+    BOOST_CHECK_EQUAL(A(1, 1), 1.0);
+    BOOST_CHECK_EQUAL(A(1, 2), 0.0);
+
+    A.transpose_inplace();
+
+    BOOST_CHECK_EQUAL(A.columns_, 2);
+    BOOST_CHECK_EQUAL(A.rows_, 3);
+
+    BOOST_CHECK_EQUAL(A(0, 0), 2.0);
+    BOOST_CHECK_EQUAL(A(1, 0), 0.0);
+    BOOST_CHECK_EQUAL(A(2, 0), 1.0);
+
+    BOOST_CHECK_EQUAL(A(0, 1), 0.0);
+    BOOST_CHECK_EQUAL(A(1, 1), 1.0);
+    BOOST_CHECK_EQUAL(A(2, 1), 0.0);
+
+    auto B = A.transpose();
+
+    BOOST_CHECK_EQUAL(B(0, 0), 2.0);
+    BOOST_CHECK_EQUAL(B(0, 1), 0.0);
+    BOOST_CHECK_EQUAL(B(0, 2), 1.0);
+
+    BOOST_CHECK_EQUAL(B(1, 0), 0.0);
+    BOOST_CHECK_EQUAL(B(1, 1), 1.0);
+    BOOST_CHECK_EQUAL(B(1, 2), 0.0);
 };
 
 BOOST_AUTO_TEST_SUITE_END();
