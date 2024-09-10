@@ -159,4 +159,38 @@ BOOST_AUTO_TEST_CASE(MatrixTranspose)
     BOOST_CHECK_EQUAL(B(1, 2), 0.0);
 };
 
+BOOST_AUTO_TEST_CASE(MatrixTransposeMultiplication)
+{
+    Matrix<int> A(3, 2);
+
+    for (size_t i = 0; i < 2; i++)
+    {
+        A(i, i) = 2;
+    }
+
+    A(2, 0) = 1;
+
+    std::cout << A << std::endl;
+
+    A.transpose_inplace();
+    BOOST_CHECK_EQUAL(A(0, 0), 2.0);
+    BOOST_CHECK_EQUAL(A(0, 1), 0.0);
+    BOOST_CHECK_EQUAL(A(0, 2), 1.0);
+
+    BOOST_CHECK_EQUAL(A(1, 0), 0.0);
+    BOOST_CHECK_EQUAL(A(1, 1), 1.0);
+    BOOST_CHECK_EQUAL(A(1, 2), 0.0);
+
+    Matrix<int> B(3, 1);
+    B(0, 0) = 1;
+    B(2, 0) = 1;
+
+    auto C = A * B;
+    BOOST_CHECK_EQUAL(C(0, 0), 3);
+    BOOST_CHECK_EQUAL(C(0, 1), 0);
+    BOOST_CHECK_EQUAL(C(1, 0), 0);
+    BOOST_CHECK_EQUAL(C(1, 1), 0);
+
+}
+
 BOOST_AUTO_TEST_SUITE_END();
