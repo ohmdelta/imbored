@@ -160,7 +160,6 @@ BOOST_AUTO_TEST_CASE(MatrixTranspose)
     BOOST_CHECK_EQUAL(B(1, 0), 1.0);
     BOOST_CHECK_EQUAL(B(1, 1), 2.0);
     BOOST_CHECK_EQUAL(B(1, 2), 0.0);
-
 };
 
 BOOST_AUTO_TEST_CASE(MatrixTransposeMultiplication)
@@ -266,6 +265,16 @@ BOOST_AUTO_TEST_CASE(SlicedToMatrix)
     BOOST_CHECK_EQUAL(M(0, 1), 1);
     BOOST_CHECK_EQUAL(M(1, 0), 3);
     BOOST_CHECK_EQUAL(M(1, 1), 2);
+
+    SlicedMatrix<int> SA_2(std::make_shared<Matrix<int>>(A), 1, 3, 1, 3);
+    Matrix<int> M_2 = SA_2.toMatrix();
+    std::cout << M_2 << std::endl;
+
+    BOOST_CHECK_EQUAL(M_2(0, 0), 2);
+    BOOST_CHECK_EQUAL(M_2(0, 1), 6);
+    BOOST_CHECK_EQUAL(M_2(1, 0), 0);
+    BOOST_CHECK_EQUAL(M_2(1, 1), 0);
+
 }
 
 BOOST_AUTO_TEST_CASE(MatrixMatrixInsert)
@@ -306,15 +315,42 @@ BOOST_AUTO_TEST_CASE(MatrixInsert)
     {
         for (size_t j = 0; j < 3; j++)
         {
-            if(i == 2 && j == 2)
+            if (i == 2 && j == 2)
             {
                 BOOST_CHECK_EQUAL(A(i, j), 2);
             }
             else
                 BOOST_CHECK_EQUAL(A(i, j), 1);
         }
-        
+    }
+}
+
+BOOST_AUTO_TEST_CASE(StrassenMultiplicationSmall)
+{
+    Matrix<int> A(4, 4, 1);
+    Matrix<int> B(4, 4, 0);
+    for (size_t i = 0; i < 4; i++)
+    {
+        B(i, i) = 2;
+    }
+
+    auto a = SlicedMatrix(std::make_shared<Matrix<int>>(A));
+    auto b = SlicedMatrix(std::make_shared<Matrix<int>>(B));
+    std::cout << a << std::endl << b << std::endl;
+    auto C = a.strassen_multiplication(b);
+    std::cout << C << std::endl;
+
+    BOOST_CHECK_EQUAL(C.rows_, 4);
+    BOOST_CHECK_EQUAL(C.columns_, 4);
+
+    for (size_t i = 0; i < 4; i++)
+    {
+        for (size_t j = 0; j < 4; j++)
+        {
+            BOOST_CHECK_EQUAL(C(i, j), 2);
+        }
     }
 
 }
+
 BOOST_AUTO_TEST_SUITE_END();

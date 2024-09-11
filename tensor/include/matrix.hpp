@@ -185,14 +185,13 @@ namespace tensor
         }
         // END: MATRIX - MATRIX Operations
 
-        void insert_matrix(Matrix<T> const & m, size_t r, size_t c)
+        void insert_matrix(Matrix<T> const &m, size_t r, size_t c)
         {
             if (r < rows_ && c < columns_)
             {
                 auto s_ = sizeof(T);
-                auto r_ = std::min(r, rows_ - r);
-                auto c_ = std::min(c, columns_ - c);
-                std::cout << r_ << " " << c_ << std::endl;
+                auto r_ = std::min(m.rows_, rows_ - r);
+                auto c_ = std::min(m.columns_, columns_ - c);
                 for (size_t i = 0; i < r_; i++)
                 {
                     memcpy(pointer(r + i, c), m.pointer(i, 0), c_ * s_);
@@ -307,6 +306,11 @@ namespace tensor
 
     public:
         SlicedMatrix(
+            std::shared_ptr<Matrix<T>> mat) : matrix(mat),
+                                              row_end(mat->rows_), column_end(mat->columns_)
+        {
+        }
+        SlicedMatrix(
             std::shared_ptr<Matrix<T>> mat,
             size_t row_end_,
             size_t column_end_) : matrix(mat),
@@ -382,7 +386,7 @@ namespace tensor
                     return m;
                 }
 
-                size_t k = columns_;
+                size_t k = columns_ >> 1;
 
                 SlicedMatrix<MT> A11(matrix, k, k);
                 SlicedMatrix<MT> A12(matrix, 0, k, k, columns_);
@@ -404,14 +408,23 @@ namespace tensor
                 Matrix<MT> b21 = B21.toMatrix();
                 Matrix<MT> b22 = B22.toMatrix();
 
-                auto I = (a11 + a22) * (b11 + b22);
-                auto II = (a21 + a22) * b11;
-                auto III = a11 * (b12 - b22);
-                auto IV = a22 * (-b11 + b21);
-                auto V = (a11 + a12) * b22;
-                auto VI = (-a11 + a21) * (b11 + b12);
-                auto VII = (a12 - a22) * (b21 + b22);
+                Matrix<MT> I = (a11 + a22) * (b11 + b22);
+                Matrix<MT> II = (a21 + a22) * b11;
+                Matrix<MT> III = a11 * (b12 - b22);
+                Matrix<MT> IV = a22 * (b21 - b11);
+                Matrix<MT> V = (a11 + a12) * b22;
+                Matrix<MT> VI = (a21 - a11) * (b11 + b12);
+                Matrix<MT> VII = (a12 - a22) * (b21 + b22);
 
+                auto c1 = I + IV - V + VII;
+                auto c2 = III + V;
+                auto c3 = II + IV;
+                auto c4 = I - II + III + VI;
+
+                m.insert_matrix(c1, 0, 0);
+                m.insert_matrix(c2, 0, k);
+                m.insert_matrix(c3, k, 0);
+                m.insert_matrix(c4, k, k);
                 return m;
             }
             else
@@ -430,7 +443,7 @@ namespace tensor
             for (size_t i = 0; i < rows_; i++)
             {
                 // r + row_start, c + column_start;
-                memcpy(m.matrix_ + columns_ * i, matrix->pointer(i, column_start), len);
+                memcpy(m.matrix_ + columns_ * i, matrix->pointer(row_start + i, column_start), len);
             }
 
             return m;
