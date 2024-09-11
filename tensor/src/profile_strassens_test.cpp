@@ -6,8 +6,8 @@ using namespace tensor;
 
 int main()
 {
-    Matrix<int> A(1024, 1024, 0);
-    Matrix<int> B(1024, 1024, 0);
+    Matrix<long> A(1024, 1024, 0);
+    Matrix<long> B(1024, 1024, 0);
     for (size_t i = 0; i < A.len_; i++)
     {
         A.matrix_[i] = i + 1;

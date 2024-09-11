@@ -11,6 +11,16 @@
 #include <bit>
 #include <cstring>
 
+// #define SIMD_ENABLED true
+#if SIMD_ENABLED
+#include <experimental/simd>
+namespace stdx = std::experimental;
+using floatv = stdx::native_simd<int>;
+using doublev = stdx::rebind_simd_t<double, floatv>;
+using intv = stdx::rebind_simd_t<int, floatv>;
+using longv = stdx::rebind_simd_t<long, floatv>;
+#endif
+
 namespace tensor
 {
 
@@ -40,8 +50,11 @@ namespace tensor
     public:
         Matrix(size_t rows, size_t columns, T init = 0) : rows_(rows), columns_(columns)
         {
-            matrix_ = new T[len_];
-            std::fill_n(matrix_, len_, init);
+            matrix_ = (T*) calloc(len_, sizeof(T));
+            if (init)
+            {
+                memset(matrix_, init, len_ * sizeof(T));
+            }
         }
 
         Matrix(const Matrix<T> &m) : rows_(m.rows_), columns_(m.columns_), transposed_(m.transposed_)
@@ -50,9 +63,17 @@ namespace tensor
             memcpy(matrix_, m.matrix_, len_ * sizeof(T));
         }
 
+        Matrix(Matrix<T> &&m) noexcept : rows_(std::move(m.rows_)),
+                                         columns_(std::move(m.columns_)),
+                                         transposed_(std::move(m.transposed_)),
+                                         matrix_{m.matrix_}
+        {
+            m.matrix_ = nullptr;
+        }
+
         ~Matrix()
         {
-            delete[] matrix_;
+            free (matrix_);
             matrix_ = nullptr;
         }
 
@@ -113,6 +134,87 @@ namespace tensor
         }
 
         // START: MATRIX - MATRIX Operations
+        template <Arithmetic S>
+        auto elementwise_addition(const Matrix<S> &v) -> Matrix<decltype(operator()(0, 0) * v(0, 0))>
+        {
+            using MT = decltype(operator()(0, 0) * v(0, 0));
+            if (columns_ == v.columns_ && rows_ == v.rows_)
+            {
+                Matrix<MT> m(rows_, v.columns_);
+#if SIMD_ENABLED
+                // using V_LEN = std::integral< constexpr (256 / sizeof(MT))>::value;
+                constexpr size_t V_LEN = 256 / sizeof(MT);
+                stdx::fixed_size_simd<MT, (256 / sizeof(MT))> a;
+                stdx::fixed_size_simd<MT, (256 / sizeof(MT))> b;
+                stdx::fixed_size_simd<MT, (256 / sizeof(MT))> c;
+                for (size_t i = 0; i < len_ / V_LEN ; i++)
+                {
+                    /* code */
+                    a.copy_from(matrix_, stdx::element_aligned);
+                    b.copy_from(v.matrix_, stdx::element_aligned);
+                    c = (a + b);
+                    // alignas(stdx::memory_alignment_v<stdx::native_simd<MT>>)
+                    //     std::array<MT, (256 / sizeof(MT))>
+                    //         mem = {};
+                    // c.copy_to(&mem[0], stdx::element_aligned);
+
+                    // for (int e : mem)
+                    //     std::cout << e << ' ';
+                    // std::cout << '\n';
+
+                    c.copy_to(m.matrix_ + i * V_LEN, stdx::vector_aligned);
+                }
+                
+#else
+                // memcpy(m.matrix_, matrix_[i], len_ *  
+                for (size_t i = 0; i < len_; i++)
+                {
+                    m.matrix_[i] = matrix_[i] + v.matrix_[i];
+                }
+#endif
+                return m;
+            }
+            else
+            {
+                throw std::invalid_argument("Cannot multiply matrices - dimension mismatch");
+            }
+        }
+
+        auto elementwise_addition(const Matrix<T> &v) -> Matrix<decltype(operator()(0, 0) * v(0, 0))>
+        {
+            if (columns_ == v.columns_ && rows_ == v.rows_)
+            {
+                Matrix<T> m(rows_, v.columns_);
+                memcpy(m.matrix_, matrix_, len_ * sizeof(T));
+#if SIMD_ENABLED
+                // using V_LEN = std::integral< constexpr (256 / sizeof(MT))>::value;
+                constexpr size_t V_LEN = 256 / sizeof(MT);
+                stdx::fixed_size_simd<MT, (256 / sizeof(MT))> a;
+                stdx::fixed_size_simd<MT, (256 / sizeof(MT))> b;
+                stdx::fixed_size_simd<MT, (256 / sizeof(MT))> c;
+                for (size_t i = 0; i < len_ / V_LEN ; i++)
+                {
+                    /* code */
+                    a.copy_from(matrix_, stdx::element_aligned);
+                    b.copy_from(v.matrix_, stdx::element_aligned);
+                    c = (a + b);
+                    c.copy_to(m.matrix_ + i * V_LEN, stdx::vector_aligned);
+                }
+                
+#else
+                for (size_t i = 0; i < len_; i++)
+                {
+                    m.matrix_[i] += v.matrix_[i];
+                }
+#endif
+                return m;
+            }
+            else
+            {
+                throw std::invalid_argument("Cannot multiply matrices - dimension mismatch");
+            }
+        }
+
         template <Arithmetic S>
         auto operator*(const Matrix<S> &v) -> Matrix<decltype(operator()(0, 0) * v(0, 0))>
         {
@@ -221,9 +323,23 @@ namespace tensor
         }
 
         template <Arithmetic S>
-        auto operator-(const Matrix<S> &c) -> Matrix<decltype(operator()(0, 0) + c(0, 0))>
+        auto operator-(const Matrix<S> &v) -> Matrix<decltype(operator()(0, 0) + v(0, 0))>
         {
-            return operator+(-c);
+            if (len_ == v.len_ && columns_ == v.columns_)
+            {
+                Matrix<decltype(operator()(0, 0) + v(0, 0))>
+                    m(rows_, columns_);
+
+                for (size_t i = 0; i < len_; i++)
+                {
+                    m.matrix_[i] = matrix_[i] - v.matrix_[i];
+                }
+                return m;
+            }
+            else
+            {
+                throw std::invalid_argument("Cannot multiply matrices - dimension mismatch");
+            }
         }
 
         template <Arithmetic S>
@@ -357,9 +473,9 @@ namespace tensor
                     auto I = (a11 + a22) * (b11 + b22);
                     auto II = (a21 + a22) * b11;
                     auto III = a11 * (b12 - b22);
-                    auto IV = a22 * (-b11 + b21);
+                    auto IV = a22 * (b21 - b11);
                     auto V = (a11 + a12) * b22;
-                    auto VI = (-a11 + a21) * (b11 + b12);
+                    auto VI = (a21 - a11) * (b11 + b12);
                     auto VII = (a12 - a22) * (b21 + b22);
 
                     m(0, 0) = I + IV - V + VII;

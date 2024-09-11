@@ -325,6 +325,32 @@ BOOST_AUTO_TEST_CASE(MatrixInsert)
     }
 }
 
+BOOST_AUTO_TEST_CASE(StrassenMultiplicationSimpleSmall)
+{
+    Matrix<int> A(2, 2, 1);
+    Matrix<int> B(2, 2, 0);
+    for (size_t i = 0; i < 2; i++)
+    {
+        B(i, i) = 2;
+    }
+
+    std::cout << A * B << std::endl;
+    auto C = A.strassen_multiplication(B);
+    std::cout << C << std::endl;
+
+    BOOST_CHECK_EQUAL(C.rows_, 2);
+    BOOST_CHECK_EQUAL(C.columns_, 2);
+
+    for (size_t i = 0; i < 2; i++)
+    {
+        for (size_t j = 0; j < 2; j++)
+        {
+            BOOST_CHECK_EQUAL(C(i, j), 2);
+        }
+    }
+
+}
+
 BOOST_AUTO_TEST_CASE(StrassenMultiplicationSmall)
 {
     Matrix<int> A(4, 4, 1);
@@ -337,6 +363,7 @@ BOOST_AUTO_TEST_CASE(StrassenMultiplicationSmall)
     auto a = SlicedMatrix(std::make_shared<Matrix<int>>(A));
     auto b = SlicedMatrix(std::make_shared<Matrix<int>>(B));
     std::cout << a << std::endl << b << std::endl;
+    // std::cout << A * B << std::endl;
     auto C = a.strassen_multiplication(b);
     std::cout << C << std::endl;
 
