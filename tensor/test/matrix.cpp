@@ -274,12 +274,11 @@ BOOST_AUTO_TEST_CASE(SlicedToMatrix)
     BOOST_CHECK_EQUAL(M_2(0, 1), 6);
     BOOST_CHECK_EQUAL(M_2(1, 0), 0);
     BOOST_CHECK_EQUAL(M_2(1, 1), 0);
-
 }
 
 BOOST_AUTO_TEST_CASE(MatrixMatrixInsert)
 {
-    Matrix<int> A(2, 2, 1);
+    Matrix<int> A(2, 2, (int)1);
 
     std::cout << A << std::endl;
     SlicedMatrix<int> SA(std::make_shared<Matrix<int>>(A), 2, 2);
@@ -348,7 +347,6 @@ BOOST_AUTO_TEST_CASE(StrassenMultiplicationSimpleSmall)
             BOOST_CHECK_EQUAL(C(i, j), 2);
         }
     }
-
 }
 
 BOOST_AUTO_TEST_CASE(StrassenMultiplicationSmall)
@@ -362,7 +360,8 @@ BOOST_AUTO_TEST_CASE(StrassenMultiplicationSmall)
 
     auto a = SlicedMatrix(std::make_shared<Matrix<int>>(A));
     auto b = SlicedMatrix(std::make_shared<Matrix<int>>(B));
-    std::cout << a << std::endl << b << std::endl;
+    std::cout << a << std::endl
+              << b << std::endl;
     // std::cout << A * B << std::endl;
     auto C = a.strassen_multiplication(b);
     std::cout << C << std::endl;
@@ -377,7 +376,6 @@ BOOST_AUTO_TEST_CASE(StrassenMultiplicationSmall)
             BOOST_CHECK_EQUAL(C(i, j), 2);
         }
     }
-
 }
 
 BOOST_AUTO_TEST_CASE(StrassenMultiplicationMedium)
@@ -394,7 +392,6 @@ BOOST_AUTO_TEST_CASE(StrassenMultiplicationMedium)
     BOOST_CHECK_EQUAL(C.rows_, 32);
     BOOST_CHECK_EQUAL(C.columns_, 32);
 
-
     auto D = A * B;
     BOOST_CHECK_EQUAL(D.rows_, 32);
     BOOST_CHECK_EQUAL(D.columns_, 32);
@@ -402,7 +399,6 @@ BOOST_AUTO_TEST_CASE(StrassenMultiplicationMedium)
     {
         BOOST_CHECK_EQUAL(C.matrix_[i], D.matrix_[i]);
     }
-
 }
 
 BOOST_AUTO_TEST_CASE(StrassenMultiplicationLarge)
@@ -419,7 +415,6 @@ BOOST_AUTO_TEST_CASE(StrassenMultiplicationLarge)
     BOOST_CHECK_EQUAL(C.rows_, 512);
     BOOST_CHECK_EQUAL(C.columns_, 512);
 
-
     auto D = A * B;
     BOOST_CHECK_EQUAL(D.rows_, 512);
     BOOST_CHECK_EQUAL(D.columns_, 512);
@@ -427,7 +422,6 @@ BOOST_AUTO_TEST_CASE(StrassenMultiplicationLarge)
     {
         BOOST_CHECK_EQUAL(C.matrix_[i], D.matrix_[i]);
     }
-
 }
 
 BOOST_AUTO_TEST_SUITE_END();

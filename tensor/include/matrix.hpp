@@ -50,16 +50,21 @@ namespace tensor
     public:
         Matrix(size_t rows, size_t columns, T init = 0) : rows_(rows), columns_(columns)
         {
-            matrix_ = (T*) calloc(len_, sizeof(T));
+            matrix_ = (T *)calloc(len_, sizeof(T));
             if (init)
             {
-                memset(matrix_, init, len_ * sizeof(T));
+                std::fill(matrix_, matrix_ + len_, init);
             }
+        }
+
+        Matrix(T *matrix, size_t rows, size_t columns) : rows_(rows), columns_(columns), matrix_(matrix)
+        {
+            matrix = nullptr;
         }
 
         Matrix(const Matrix<T> &m) : rows_(m.rows_), columns_(m.columns_), transposed_(m.transposed_)
         {
-            this->matrix_ = new T[len_];
+            this->matrix_ = (T *)malloc(len_ * sizeof(T));
             memcpy(matrix_, m.matrix_, len_ * sizeof(T));
         }
 
@@ -73,7 +78,7 @@ namespace tensor
 
         ~Matrix()
         {
-            free (matrix_);
+            free(matrix_);
             matrix_ = nullptr;
         }
 
@@ -105,7 +110,7 @@ namespace tensor
             }
         }
 
-        const T *pointer(size_t r, size_t c) const
+        inline const T *pointer(size_t r, size_t c) const
         {
             if (r < rows_ && c < columns_)
             {
@@ -119,7 +124,7 @@ namespace tensor
             }
         }
 
-        const T &operator()(size_t r, size_t c) const override
+        inline const T &operator()(size_t r, size_t c) const override
         {
             if (r < rows_ && c < columns_)
             {
@@ -147,7 +152,7 @@ namespace tensor
                 stdx::fixed_size_simd<MT, (256 / sizeof(MT))> a;
                 stdx::fixed_size_simd<MT, (256 / sizeof(MT))> b;
                 stdx::fixed_size_simd<MT, (256 / sizeof(MT))> c;
-                for (size_t i = 0; i < len_ / V_LEN ; i++)
+                for (size_t i = 0; i < len_ / V_LEN; i++)
                 {
                     /* code */
                     a.copy_from(matrix_, stdx::element_aligned);
@@ -164,9 +169,8 @@ namespace tensor
 
                     c.copy_to(m.matrix_ + i * V_LEN, stdx::vector_aligned);
                 }
-                
+
 #else
-                // memcpy(m.matrix_, matrix_[i], len_ *  
                 for (size_t i = 0; i < len_; i++)
                 {
                     m.matrix_[i] = matrix_[i] + v.matrix_[i];
@@ -192,7 +196,7 @@ namespace tensor
                 stdx::fixed_size_simd<MT, (256 / sizeof(MT))> a;
                 stdx::fixed_size_simd<MT, (256 / sizeof(MT))> b;
                 stdx::fixed_size_simd<MT, (256 / sizeof(MT))> c;
-                for (size_t i = 0; i < len_ / V_LEN ; i++)
+                for (size_t i = 0; i < len_ / V_LEN; i++)
                 {
                     /* code */
                     a.copy_from(matrix_, stdx::element_aligned);
@@ -200,7 +204,7 @@ namespace tensor
                     c = (a + b);
                     c.copy_to(m.matrix_ + i * V_LEN, stdx::vector_aligned);
                 }
-                
+
 #else
                 for (size_t i = 0; i < len_; i++)
                 {
@@ -223,17 +227,47 @@ namespace tensor
                 Matrix<decltype(operator()(0, 0) * v(0, 0))>
                     m(rows_, v.columns_);
 
+#pragma omp parallel for
                 for (size_t i = 0; i < rows_; i++)
                 {
-                    for (size_t j = 0; j < v.columns_; j++)
+                    for (size_t k = 0; k < columns_; k++)
                     {
-                        for (size_t k = 0; k < columns_; k++)
+                        for (size_t j = 0; j < v.columns_; j++)
                         {
                             m(i, j) += operator()(i, k) * v(k, j);
                         }
                     }
                 }
                 return m;
+            }
+            else
+            {
+                throw std::invalid_argument("Cannot multiply matrices - dimension mismatch");
+            }
+        }
+
+        Matrix<T> operator*(const Matrix<T> &v)
+        {
+            if (columns_ == v.rows_)
+            {
+                T *m = (T *)calloc(len_, sizeof(T));
+
+#pragma omp parallel for
+                for (size_t i = 0; i < rows_; i++)
+                {
+                    for (size_t k = 0; k < columns_; k++)
+                    {
+                        size_t n = i + k * rows_;
+#pragma omp simd
+                        for (size_t j = 0; j < v.columns_; j++)
+                        {
+                            m[i * columns_ + j] += matrix_[n] * v(k, j);
+                        }
+                    }
+                }
+                Matrix<T> m_(m, rows_, v.columns_);
+                m = nullptr;
+                return m_;
             }
             else
             {
@@ -373,6 +407,24 @@ namespace tensor
 
             return transpose;
         }
+
+        // void _true_transpose() const
+        // {
+        //     std::swap(rows_, columns_);
+        //     T* v = (T*) calloc(len_, sizeof(T));
+
+        //     for (size_t i = 0; i < rows_; i++)
+        //     {
+        //         for (size_t j = 0; j < columns_; j++)
+        //         {
+        //             v[i + j] = operator()(i, j);
+        //         }
+
+        //     }
+        //     free(matrix_);
+
+        //     matrix_ = v;
+        // }
     };
 
     template <typename T>
