@@ -222,4 +222,51 @@ BOOST_AUTO_TEST_CASE(SlicedMatrixMultiplication)
     BOOST_CHECK_EQUAL(B(1, 0), 0);
 }
 
+BOOST_AUTO_TEST_CASE(SlicedSimpleStrassenMultiplication)
+{
+    Matrix<int> A(2, 2, 1);
+
+    std::cout << A << std::endl;
+    SlicedMatrix<int> SA(std::make_shared<Matrix<int>>(A), 2, 2);
+    std::cout << SA << std::endl;
+
+    auto B = SA * SA;
+    BOOST_CHECK_EQUAL(B.rows_, 2);
+    BOOST_CHECK_EQUAL(B.columns_, 2);
+    BOOST_CHECK_EQUAL(B(0, 0), 2);
+    BOOST_CHECK_EQUAL(B(1, 1), 2);
+    BOOST_CHECK_EQUAL(B(0, 1), 2);
+    BOOST_CHECK_EQUAL(B(1, 0), 2);
+
+    auto C = SA.strassen_multiplication(SA);
+    BOOST_CHECK_EQUAL(C.rows_, 2);
+    BOOST_CHECK_EQUAL(C.columns_, 2);
+    BOOST_CHECK_EQUAL(C(0, 0), 2);
+    BOOST_CHECK_EQUAL(C(1, 1), 2);
+    BOOST_CHECK_EQUAL(C(0, 1), 2);
+    BOOST_CHECK_EQUAL(C(1, 0), 2);
+}
+
+BOOST_AUTO_TEST_CASE(SlicedToMatrix)
+{
+    Matrix<int> A(3, 3, 0);
+    A(0, 0) = 2;
+    A(0, 1) = 1;
+    A(0, 2) = 5;
+    A(1, 0) = 3;
+    A(1, 1) = 2;
+    A(1, 2) = 6;
+    std::cout << A << std::endl;
+    SlicedMatrix<int> SA(std::make_shared<Matrix<int>>(A), 2, 2);
+    std::cout << SA << std::endl;
+    Matrix<int> M = SA.toMatrix();
+    std::cout << M << std::endl;
+
+    BOOST_CHECK_EQUAL(M(0, 0), 2);
+    BOOST_CHECK_EQUAL(M(0, 1), 1);
+    BOOST_CHECK_EQUAL(M(1, 0), 3);
+    BOOST_CHECK_EQUAL(M(1, 1), 2);
+}
+
+
 BOOST_AUTO_TEST_SUITE_END();

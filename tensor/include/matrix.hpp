@@ -37,9 +37,10 @@ namespace tensor
         T *matrix_ = nullptr;
 
     public:
-        Matrix(size_t rows, size_t columns) : rows_(rows), columns_(columns)
+        Matrix(size_t rows, size_t columns, T init = 0) : rows_(rows), columns_(columns)
         {
-            matrix_ = new T[len_]{0};
+            matrix_ = new T[len_];
+            std::fill_n(matrix_, len_, init);
         }
 
         Matrix(const Matrix<T> &m) : rows_(m.rows_), columns_(m.columns_), transposed_(m.transposed_)
@@ -61,6 +62,20 @@ namespace tensor
                 if (transposed_)
                     return matrix_[r + c * rows_];
                 return matrix_[r * columns_ + c];
+            }
+            else
+            {
+                throw std::invalid_argument("Requested index for row or column invalid!");
+            }
+        }
+
+        T *pointer(size_t r, size_t c)
+        {
+            if (r < rows_ && c < columns_)
+            {
+                if (transposed_)
+                    return matrix_ + r + c * rows_;
+                return matrix_ + r * columns_ + c;
             }
             else
             {
@@ -245,9 +260,10 @@ namespace tensor
     template <Arithmetic T>
     class SlicedMatrix : public IMatrix<T>
     {
-    private:
+    public:
         std::shared_ptr<Matrix<T>> matrix;
 
+    private:
         // start inclusive, end exclusive;
         size_t row_start = 0, row_end = 0, column_start = 0, column_end = 0;
 
@@ -262,7 +278,7 @@ namespace tensor
             size_t column_end_) : matrix(mat),
                                   row_end(row_end_), column_end(column_end_)
         {
-            if (row_end_ >= mat->rows_ || column_end_ >= mat->columns_)
+            if (row_end_ > mat->rows_ || column_end_ > mat->columns_)
             {
                 throw std::invalid_argument("Could not init sliced matrix because dimensions given.");
             }
@@ -279,7 +295,7 @@ namespace tensor
                                   column_start(column_start_),
                                   column_end(column_end_)
         {
-            if (row_end_ >= mat->rows_ || column_end_ >= mat->columns_)
+            if (row_end_ > mat->rows_ || column_end_ > mat->columns_)
             {
                 throw std::invalid_argument("Could not init sliced matrix because dimensions given.");
             }
@@ -293,6 +309,86 @@ namespace tensor
         inline const T &operator()(size_t r, size_t c) const override
         {
             return matrix->operator()(r + row_start, c + column_start);
+        }
+
+        template <Arithmetic S>
+        auto strassen_multiplication(const SlicedMatrix<S> &v) -> Matrix<decltype(operator()(0, 0) * v(0, 0))>
+        {
+            using MT = decltype(operator()(0, 0) * v(0, 0));
+            if (columns_ == v.rows_ && rows_ == v.columns_ && v.columns_ == columns_ && !(rows_ & (rows_ - 1)))
+            {
+                Matrix<MT>
+                    m(rows_, v.columns_);
+
+                if (columns_ == 2)
+                {
+                    const auto a11 = (*this)(0, 0);
+                    const auto a12 = (*this)(0, 1);
+                    const auto a21 = (*this)(1, 0);
+                    const auto a22 = (*this)(1, 1);
+
+                    const auto b11 = v(0, 0);
+                    const auto b12 = v(0, 1);
+                    const auto b21 = v(1, 0);
+                    const auto b22 = v(1, 1);
+
+                    auto I = (a11 + a22) * (b11 + b22);
+                    auto II = (a21 + a22) * b11;
+                    auto III = a11 * (b12 - b22);
+                    auto IV = a22 * (-b11 + b21);
+                    auto V = (a11 + a12) * b22;
+                    auto VI = (-a11 + a21) * (b11 + b12);
+                    auto VII = (a12 - a22) * (b21 + b22);
+
+                    m(0, 0) = I + IV - V + VII;
+                    m(1, 0) = II + IV;
+                    m(0, 1) = III + V;
+                    m(1, 1) = I + III - II + VI;
+
+                    return m;
+                }
+
+                size_t k = columns_;
+
+                SlicedMatrix<MT> a11(matrix, k, k);
+                SlicedMatrix<MT> a12(matrix, 0, k, k, columns_);
+                SlicedMatrix<MT> a21(matrix, k, columns_, 0, k);
+                SlicedMatrix<MT> a22(matrix, k, columns_, k, columns_);
+
+                SlicedMatrix<MT> b11(v.matrix, k, k);
+                SlicedMatrix<MT> b12(v.matrix, 0, k, k, columns_);
+                SlicedMatrix<MT> b21(v.matrix, k, columns_, 0, k);
+                SlicedMatrix<MT> b22(v.matrix, k, columns_, k, columns_);
+
+                // auto I = (a11 + a22) * (b11 + b22);
+                // auto II = (a21 + a22) * b11;
+                // auto III = a11 * (b12 - b22);
+                // auto IV = a22 * (-b11 + b21);
+                // auto V = (a11 + a12) * b22;
+                // auto VI = (-a11 + a21) * (b11 + b12);
+                // auto VII = (a12 - a22) * (b21 + b22);
+                return m;
+            }
+            else
+            {
+                throw std::invalid_argument("Strassen Multiplication: needs square matrices atm");
+            }
+        }
+
+        Matrix<T> toMatrix()
+        {
+            Matrix<T>
+                m(rows_, columns_);
+
+            const auto T_size = sizeof(T);
+            const auto len = T_size * columns_;
+            for (size_t i = 0; i < rows_; i++)
+            {
+                // r + row_start, c + column_start;
+                memcpy(m.matrix_ + columns_ * i, matrix->pointer(i, column_start), len);
+            }
+
+            return m;
         }
 
         template <Arithmetic S>
