@@ -9,6 +9,7 @@
 #include <iostream>
 #include <memory>
 #include <bit>
+#include <cstring>
 
 namespace tensor
 {
@@ -141,27 +142,10 @@ namespace tensor
         template <Arithmetic S>
         auto strassen_multiplication(const Matrix<S> &v) -> Matrix<decltype(operator()(0, 0) * v(0, 0))>
         {
-            using MT = decltype(operator()(0, 0) * v(0, 0));
-            if (columns_ == v.rows_ && rows_ == v.columns_ == columns_ && !(rows_ & (rows_ - 1)))
-            {
-                Matrix<MT>
-                    m(rows_, v.columns_);
+            SlicedMatrix<T> A(std::make_shared<Matrix<T>>(*this));
+            SlicedMatrix<S> B(std::make_shared<Matrix<S>>(v));
 
-                size_t k = columns_;
-                for (size_t i = 2; i < columns_; i <<= 1)
-                {
-                    size_t sub_mat_size = i >> 1;
-                    for (size_t j = 0; j < columns_; j++)
-                    {
-                    }
-                }
-
-                return m;
-            }
-            else
-            {
-                throw std::invalid_argument("Strassen Multiplication: needs square matrices atm");
-            }
+            return A.strassen_multiplication(B);
         }
 
         template <Arithmetic S>
@@ -408,13 +392,13 @@ namespace tensor
                 Matrix<MT> b21 = B21.toMatrix();
                 Matrix<MT> b22 = B22.toMatrix();
 
-                Matrix<MT> I = (a11 + a22) * (b11 + b22);
-                Matrix<MT> II = (a21 + a22) * b11;
-                Matrix<MT> III = a11 * (b12 - b22);
-                Matrix<MT> IV = a22 * (b21 - b11);
-                Matrix<MT> V = (a11 + a12) * b22;
-                Matrix<MT> VI = (a21 - a11) * (b11 + b12);
-                Matrix<MT> VII = (a12 - a22) * (b21 + b22);
+                Matrix<MT> I = (a11 + a22).strassen_multiplication(b11 + b22);
+                Matrix<MT> II = (a21 + a22).strassen_multiplication(b11);
+                Matrix<MT> III = a11.strassen_multiplication(b12 - b22);
+                Matrix<MT> IV = a22.strassen_multiplication(b21 - b11);
+                Matrix<MT> V = (a11 + a12).strassen_multiplication(b22);
+                Matrix<MT> VI = (a21 - a11).strassen_multiplication(b11 + b12);
+                Matrix<MT> VII = (a12 - a22).strassen_multiplication(b21 + b22);
 
                 auto c1 = I + IV - V + VII;
                 auto c2 = III + V;

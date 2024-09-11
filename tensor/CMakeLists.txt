@@ -7,11 +7,20 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 endif()
 
 include_directories(include)
-message("Hello: " ${CMAKE_CXX_STANDARD})
 add_library(
   tensor    
   src/matrix.cpp
 )
+add_executable(
+  profile_normal_test
+  src/profile_normal_test.cpp
+)
+add_executable(
+  profile_strassens_test
+  src/profile_strassens_test.cpp
+)
+target_link_libraries(profile_normal_test tensor)
+target_link_libraries(profile_strassens_test tensor)
 
 target_include_directories(
     tensor

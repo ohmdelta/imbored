@@ -353,4 +353,54 @@ BOOST_AUTO_TEST_CASE(StrassenMultiplicationSmall)
 
 }
 
+BOOST_AUTO_TEST_CASE(StrassenMultiplicationMedium)
+{
+    Matrix<int> A(32, 32, 0);
+    Matrix<int> B(32, 32, 0);
+    for (size_t i = 0; i < A.len_; i++)
+    {
+        A.matrix_[i] = i + 1;
+        B.matrix_[i] = A.len_ - i;
+    }
+
+    auto C = A * B;
+    BOOST_CHECK_EQUAL(C.rows_, 32);
+    BOOST_CHECK_EQUAL(C.columns_, 32);
+
+
+    auto D = A * B;
+    BOOST_CHECK_EQUAL(D.rows_, 32);
+    BOOST_CHECK_EQUAL(D.columns_, 32);
+    for (size_t i = 0; i < C.len_; i++)
+    {
+        BOOST_CHECK_EQUAL(C.matrix_[i], D.matrix_[i]);
+    }
+
+}
+
+BOOST_AUTO_TEST_CASE(StrassenMultiplicationLarge)
+{
+    Matrix<int> A(512, 512, 0);
+    Matrix<int> B(512, 512, 0);
+    for (size_t i = 0; i < A.len_; i++)
+    {
+        A.matrix_[i] = i + 1;
+        B.matrix_[i] = A.len_ - i;
+    }
+
+    auto C = A * B;
+    BOOST_CHECK_EQUAL(C.rows_, 512);
+    BOOST_CHECK_EQUAL(C.columns_, 512);
+
+
+    auto D = A * B;
+    BOOST_CHECK_EQUAL(D.rows_, 512);
+    BOOST_CHECK_EQUAL(D.columns_, 512);
+    for (size_t i = 0; i < C.len_; i++)
+    {
+        BOOST_CHECK_EQUAL(C.matrix_[i], D.matrix_[i]);
+    }
+
+}
+
 BOOST_AUTO_TEST_SUITE_END();
