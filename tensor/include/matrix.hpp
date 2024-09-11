@@ -83,6 +83,20 @@ namespace tensor
             }
         }
 
+        const T *pointer(size_t r, size_t c) const
+        {
+            if (r < rows_ && c < columns_)
+            {
+                if (transposed_)
+                    return matrix_ + r + c * rows_;
+                return matrix_ + r * columns_ + c;
+            }
+            else
+            {
+                throw std::invalid_argument("Requested index for row or column invalid!");
+            }
+        }
+
         const T &operator()(size_t r, size_t c) const override
         {
             if (r < rows_ && c < columns_)
@@ -171,8 +185,23 @@ namespace tensor
         }
         // END: MATRIX - MATRIX Operations
 
+        void insert_matrix(Matrix<T> const & m, size_t r, size_t c)
+        {
+            if (r < rows_ && c < columns_)
+            {
+                auto s_ = sizeof(T);
+                auto r_ = std::min(r, rows_ - r);
+                auto c_ = std::min(c, columns_ - c);
+                std::cout << r_ << " " << c_ << std::endl;
+                for (size_t i = 0; i < r_; i++)
+                {
+                    memcpy(pointer(r + i, c), m.pointer(i, 0), c_ * s_);
+                }
+            }
+        }
+
         template <Arithmetic S>
-        auto operator*(S c) -> Matrix<decltype(operator()(0, 0) * c)>
+        auto operator*(S c) const -> Matrix<decltype(operator()(0, 0) * c)>
         {
             Matrix<decltype(operator()(0, 0) * c)>
                 m(rows_, columns_);
@@ -197,6 +226,11 @@ namespace tensor
             return m;
         }
 
+        Matrix<T> operator-() const
+        {
+            return operator* <T>(-1);
+        }
+
         template <Arithmetic S>
         auto operator-(S c) -> Matrix<decltype(operator()(0, 0) + c)>
         {
@@ -204,9 +238,9 @@ namespace tensor
         }
 
         template <Arithmetic S>
-        Matrix<T> operator-()
+        auto operator-(const Matrix<S> &c) -> Matrix<decltype(operator()(0, 0) + c(0, 0))>
         {
-            return operator*(-1);
+            return operator+(-c);
         }
 
         template <Arithmetic S>
@@ -350,23 +384,34 @@ namespace tensor
 
                 size_t k = columns_;
 
-                SlicedMatrix<MT> a11(matrix, k, k);
-                SlicedMatrix<MT> a12(matrix, 0, k, k, columns_);
-                SlicedMatrix<MT> a21(matrix, k, columns_, 0, k);
-                SlicedMatrix<MT> a22(matrix, k, columns_, k, columns_);
+                SlicedMatrix<MT> A11(matrix, k, k);
+                SlicedMatrix<MT> A12(matrix, 0, k, k, columns_);
+                SlicedMatrix<MT> A21(matrix, k, columns_, 0, k);
+                SlicedMatrix<MT> A22(matrix, k, columns_, k, columns_);
 
-                SlicedMatrix<MT> b11(v.matrix, k, k);
-                SlicedMatrix<MT> b12(v.matrix, 0, k, k, columns_);
-                SlicedMatrix<MT> b21(v.matrix, k, columns_, 0, k);
-                SlicedMatrix<MT> b22(v.matrix, k, columns_, k, columns_);
+                SlicedMatrix<MT> B11(v.matrix, k, k);
+                SlicedMatrix<MT> B12(v.matrix, 0, k, k, columns_);
+                SlicedMatrix<MT> B21(v.matrix, k, columns_, 0, k);
+                SlicedMatrix<MT> B22(v.matrix, k, columns_, k, columns_);
 
-                // auto I = (a11 + a22) * (b11 + b22);
-                // auto II = (a21 + a22) * b11;
-                // auto III = a11 * (b12 - b22);
-                // auto IV = a22 * (-b11 + b21);
-                // auto V = (a11 + a12) * b22;
-                // auto VI = (-a11 + a21) * (b11 + b12);
-                // auto VII = (a12 - a22) * (b21 + b22);
+                Matrix<MT> a11 = A11.toMatrix();
+                Matrix<MT> a12 = A12.toMatrix();
+                Matrix<MT> a21 = A21.toMatrix();
+                Matrix<MT> a22 = A22.toMatrix();
+
+                Matrix<MT> b11 = B11.toMatrix();
+                Matrix<MT> b12 = B12.toMatrix();
+                Matrix<MT> b21 = B21.toMatrix();
+                Matrix<MT> b22 = B22.toMatrix();
+
+                auto I = (a11 + a22) * (b11 + b22);
+                auto II = (a21 + a22) * b11;
+                auto III = a11 * (b12 - b22);
+                auto IV = a22 * (-b11 + b21);
+                auto V = (a11 + a12) * b22;
+                auto VI = (-a11 + a21) * (b11 + b12);
+                auto VII = (a12 - a22) * (b21 + b22);
+
                 return m;
             }
             else

@@ -268,5 +268,53 @@ BOOST_AUTO_TEST_CASE(SlicedToMatrix)
     BOOST_CHECK_EQUAL(M(1, 1), 2);
 }
 
+BOOST_AUTO_TEST_CASE(MatrixMatrixInsert)
+{
+    Matrix<int> A(2, 2, 1);
 
+    std::cout << A << std::endl;
+    SlicedMatrix<int> SA(std::make_shared<Matrix<int>>(A), 2, 2);
+    std::cout << SA << std::endl;
+
+    auto B = SA * SA;
+    BOOST_CHECK_EQUAL(B.rows_, 2);
+    BOOST_CHECK_EQUAL(B.columns_, 2);
+    BOOST_CHECK_EQUAL(B(0, 0), 2);
+    BOOST_CHECK_EQUAL(B(1, 1), 2);
+    BOOST_CHECK_EQUAL(B(0, 1), 2);
+    BOOST_CHECK_EQUAL(B(1, 0), 2);
+
+    auto C = SA.strassen_multiplication(SA);
+    BOOST_CHECK_EQUAL(C.rows_, 2);
+    BOOST_CHECK_EQUAL(C.columns_, 2);
+    BOOST_CHECK_EQUAL(C(0, 0), 2);
+    BOOST_CHECK_EQUAL(C(1, 1), 2);
+    BOOST_CHECK_EQUAL(C(0, 1), 2);
+    BOOST_CHECK_EQUAL(C(1, 0), 2);
+}
+
+BOOST_AUTO_TEST_CASE(MatrixInsert)
+{
+    Matrix<int> A(3, 3, 1);
+
+    std::cout << A << std::endl;
+    Matrix<int> B(2, 2, 2);
+    A.insert_matrix(B, 2, 2);
+
+    std::cout << A << std::endl;
+    for (size_t i = 0; i < 3; i++)
+    {
+        for (size_t j = 0; j < 3; j++)
+        {
+            if(i == 2 && j == 2)
+            {
+                BOOST_CHECK_EQUAL(A(i, j), 2);
+            }
+            else
+                BOOST_CHECK_EQUAL(A(i, j), 1);
+        }
+        
+    }
+
+}
 BOOST_AUTO_TEST_SUITE_END();
