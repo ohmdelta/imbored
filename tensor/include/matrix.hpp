@@ -21,6 +21,10 @@ using intv = stdx::rebind_simd_t<int, floatv>;
 using longv = stdx::rebind_simd_t<long, floatv>;
 #endif
 
+#ifndef BLOCK_SIZE
+#define BLOCK_SIZE 64
+#endif
+
 namespace tensor
 {
 
@@ -206,9 +210,15 @@ namespace tensor
                 }
 
 #else
-                for (size_t i = 0; i < len_; i++)
+                for (size_t i = 0; i < len_ / BLOCK_SIZE; i++)
                 {
-                    m.matrix_[i] += v.matrix_[i];
+                    size_t n = i * BLOCK_SIZE;
+#pragma omp simd
+                    for (size_t j = 0; j < BLOCK_SIZE; j++)
+                    {
+                        size_t k = n + j;
+                        m.matrix_[k] += v.matrix_[k];
+                    }
                 }
 #endif
                 return m;
